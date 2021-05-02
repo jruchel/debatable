@@ -5,8 +5,13 @@ import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
+let provide = {
+    backendAddress: 'http://localhost:8080'
+}
+
 new Vue({
-  router,
-  vuetify,
-  render: h => h(App)
+    router,
+    provide,
+    vuetify,
+    render: h => h(App)
 }).$mount('#app')

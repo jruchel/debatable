@@ -55,12 +55,13 @@
 
 <script>
 import Option from "@/components/Option";
+import EventBus from "@/event-bus";
 
 export default {
   name: "QuestionView",
   components: {Option},
   mounted() {
-    this.ready = true
+    this.setQuestion(this.nextQuestion())
   },
   data() {
     return {
@@ -72,13 +73,24 @@ export default {
     }
   },
   methods: {
+    setQuestion(question) {
+      this.question = question.question
+      this.question.firstAnswer = question.firstAnswer
+      this.question.secondAnswer = question.secondAnswer
+    },
     nextQuestion() {
       this.showResults = false
-      this.ready = false
       this.getRandomQuestion()
     },
+    handleResponse(response) {
+      let question = JSON.parse(response)
+      this.setQuestion(question)
+    },
     getRandomQuestion() {
-      this.ready = true
+      EventBus.$emit('send-http-request', '/question', JSON.stringify(this.toQuestion()), this.handleResponse)
+    },
+    toQuestion() {
+      return {question: this.question, firstAnswer: this.firstAnswer, secondAnswer: this.secondAnswer}
     },
     handleAnswer(answer) {
       this.userAnswer = answer
