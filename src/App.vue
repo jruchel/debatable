@@ -22,9 +22,8 @@ export default {
     })
   },
   methods: {
-    sendRequest(endpoint, onComplete) {
-      let address = this.backendAddress
-      axios.get(address).then(value => onComplete(value.data))
+    sendRequest(endpoint, body, onComplete) {
+      axios.post(this.backendAddress, body).then(response => onComplete(response.data))
     }
   }
 };
