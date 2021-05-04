@@ -22,8 +22,13 @@ export default {
     })
   },
   methods: {
-    sendRequest(endpoint, body, onComplete) {
-      axios.post(this.backendAddress, body).then(response => onComplete(response.data))
+    sendRequest(endpoint, method, body, onComplete) {
+      if (method === 'POST') {
+        axios.post(this.backendAddress + endpoint, body).then(response => onComplete(response.data))
+      }
+      if (method === 'GET') {
+        axios.get(this.backendAddress + endpoint).then(response => onComplete(response.data))
+      }
     }
   }
 };
