@@ -61,7 +61,7 @@ export default {
         headers: headers,
         data: JSON.parse(JSON.stringify(body))
       }).then(response => onComplete(response.data)).catch(function (error) {
-        onComplete(error)
+        onComplete(error.response.data)
       })
     }
   }
