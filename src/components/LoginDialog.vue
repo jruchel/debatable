@@ -16,7 +16,7 @@
         <v-text-field type="password" outlined style="margin-left: 10px; margin-right: 10px"
                       label="password" v-model="user.password"
         ></v-text-field>
-        <v-card-actions >
+        <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn" :loading="loading" @click="performLogin">
             Login
@@ -53,7 +53,7 @@ export default {
     },
     performLogin() {
       this.loading = true
-      EventBus.$emit('send-http-request', ['/security/authenticate', 'POST', this.user, this.handleLoginResponse])
+      EventBus.$emit('send-http-request', ['/security/authenticate', 'POST', this.user, {}, this.handleLoginResponse])
     },
     handleLoginResponse(response) {
       try {

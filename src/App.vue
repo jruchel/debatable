@@ -30,7 +30,7 @@ export default {
   },
   mounted() {
     EventBus.$on('send-http-request', args => {
-      this.sendRequest(args[0], args[1], args[2], args[3])
+      this.sendRequest(args[0], args[1], args[2], args[3], args[4])
     })
   },
   data() {
@@ -43,13 +43,8 @@ export default {
       this.authToken.token = ''
       this.loggedIn = false
     },
-    sendRequest(endpoint, method, body, onComplete) {
-      let headers
-      if (this.authToken.token !== '') {
-        headers = {'Content-Type': 'application/json', 'token': this.authToken.token}
-      } else {
-        headers = {'Content-Type': 'application/json'}
-      }
+    sendRequest(endpoint, method, body, headers, onComplete) {
+      headers['Content-Type'] = 'application/json'
       axios({
         method: method.toLowerCase(),
         url: this.backendAddress + endpoint,

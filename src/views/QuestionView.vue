@@ -96,7 +96,7 @@ export default {
       this.setQuestion(question)
     },
     getRandomQuestion() {
-      EventBus.$emit('send-http-request', ['/question/random', 'POST', this.toQuestion(), this.handleResponse])
+      EventBus.$emit('send-http-request', ['/question/random', 'POST', this.toQuestion(), {}, this.handleResponse])
     },
     toQuestion() {
       return {question: this.question, firstAnswer: this.firstAnswer, secondAnswer: this.secondAnswer}
