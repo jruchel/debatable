@@ -4,7 +4,7 @@
       <v-col cols="12" lg="6">
         <v-slide-x-transition>
           <v-card>
-            <v-card-title class="justify-center" style="height: 100%">{{ this.question }}</v-card-title>
+            <v-card-title class="justify-center" style="height: 100%">{{ getQuestionContent() }}</v-card-title>
           </v-card>
         </v-slide-x-transition>
       </v-col>
@@ -61,7 +61,13 @@ export default {
   name: "QuestionView",
   components: {Option},
   mounted() {
-    this.setQuestion(this.nextQuestion())
+
+    try {
+      this.setQuestion(this.nextQuestion())
+
+    } catch (ex) {
+      console.log(ex)
+    }
   },
   data() {
     return {
@@ -73,6 +79,9 @@ export default {
     }
   },
   methods: {
+    getQuestionContent() {
+      return this.question
+    },
     setQuestion(question) {
       this.question = question.question
       this.question.firstAnswer = question.firstAnswer
@@ -87,7 +96,7 @@ export default {
       this.setQuestion(question)
     },
     getRandomQuestion() {
-      EventBus.$emit('send-http-request', '/question', JSON.stringify(this.toQuestion()), this.handleResponse)
+      EventBus.$emit('send-http-request', ['/question/random', 'POST', this.toQuestion(), this.handleResponse])
     },
     toQuestion() {
       return {question: this.question, firstAnswer: this.firstAnswer, secondAnswer: this.secondAnswer}

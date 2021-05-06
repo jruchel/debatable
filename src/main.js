@@ -6,7 +6,9 @@ import vuetify from './plugins/vuetify'
 Vue.config.productionTip = false
 
 let provide = {
-    backendAddress: 'http://localhost:8081'
+    backendAddress: 'http://localhost:8081',
+    authToken: {token: ""},
+    loggedIn: false
 }
 
 new Vue({
