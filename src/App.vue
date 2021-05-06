@@ -4,8 +4,8 @@
       <v-toolbar-title style="width: 100%; height: 100%; text-align: center; margin-top: 20px">Debatable
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <LoginDialog></LoginDialog>
-      <v-btn v-if="loggedIn" outlined @click="performLogout">Logout</v-btn>
+      <LoginDialog v-if="!loggedIn.value"></LoginDialog>
+      <v-btn v-if="loggedIn.value" outlined @click="performLogout">Logout</v-btn>
     </v-app-bar>
     <v-spacer></v-spacer>
     <v-main data-app>
@@ -24,9 +24,11 @@ import LoginDialog from "@/components/LoginDialog";
 export default {
   name: 'App',
   components: {LoginDialog, QuestionView},
-  inject: ['backendAddress', 'authToken', 'loggedIn'],
-  updated() {
-    console.log(this.loggedIn)
+  inject: ['backendAddress'],
+  provide() {
+    return {
+      loggedIn: this.loggedIn
+    }
   },
   mounted() {
     EventBus.$on('send-http-request', args => {
@@ -35,13 +37,18 @@ export default {
   },
   data() {
     return {
-      loggedIn: this.loggedIn
+      authToken: {token: ""},
+      loggedIn: {value: false}
     }
   },
   methods: {
     performLogout() {
       this.authToken.token = ''
-      this.loggedIn = false
+      this.loggedIn.value = false
+    },
+    performLogin(token) {
+      this.authToken.token = token
+      this.loggedIn.value = true
     },
     sendRequest(endpoint, method, body, headers, onComplete) {
       headers['Content-Type'] = 'application/json'

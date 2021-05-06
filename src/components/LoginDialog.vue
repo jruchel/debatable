@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="loginDialog" width="500">
-    <template v-slot:activator="{ on, attrs }" v-if="!this.loggedIn">
+    <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" outlined @click=showLoginDialog>Login</v-btn>
     </template>
     <v-card>
@@ -18,10 +18,10 @@
         ></v-text-field>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn" :loading="loading" @click="performLogin">
+          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loading" @click="performLogin">
             Login
           </v-btn>
-          <v-icon v-if="this.loggedIn" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle</v-icon>
+          <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle</v-icon>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -62,7 +62,7 @@ export default {
           alert('Username or password is incorrect.')
         } else {
           this.saveToken(token)
-          this.loggedIn = true
+          this.loggedIn.value = true
         }
 
       } catch (ex) {
