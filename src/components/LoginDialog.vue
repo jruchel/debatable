@@ -21,7 +21,8 @@
           <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loading" @click="performLogin">
             Login
           </v-btn>
-          <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle</v-icon>
+          <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle
+          </v-icon>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -58,11 +59,10 @@ export default {
     handleLoginResponse(response) {
       try {
         let token = response.token
-        if (token === '') {
+        if (token === undefined || token === null || token === '') {
           alert('Username or password is incorrect.')
         } else {
           this.saveToken(token)
-          this.loggedIn.value = true
         }
 
       } catch (ex) {
@@ -72,7 +72,7 @@ export default {
       this.loading = false
     },
     saveToken(token) {
-      this.authToken.token = token
+      EventBus.$emit('login', [token])
     },
   }
 }

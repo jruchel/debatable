@@ -34,6 +34,9 @@ export default {
     EventBus.$on('send-http-request', args => {
       this.sendRequest(args[0], args[1], args[2], args[3], args[4])
     })
+    EventBus.$on('login', args => {
+      this.performLogin(args[0])
+    })
   },
   data() {
     return {
