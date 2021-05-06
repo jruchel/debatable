@@ -75,6 +75,7 @@ export default {
     },
     performLogin() {
       this.emailInput = false
+      this.user.email = ''
       this.loadingLogin = true
       EventBus.$emit('send-http-request', ['/security/authenticate', 'POST', this.user, {}, this.handleLoginResponse])
     },
