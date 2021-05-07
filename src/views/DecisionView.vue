@@ -11,14 +11,14 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="6" xl="3">
-        <v-card @click="changeRoutes('/answer')">
+        <v-card @click="changeRoutes('/answer')" color="green lighten-1">
           <v-card-title class="justify-center">
             Answer
           </v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" xl="3">
-        <v-card @click="changeRoutes('/ask')">
+        <v-card @click="changeRoutes('/ask')" color="red lighten-1">
           <v-card-title class="justify-center">
             Ask
           </v-card-title>

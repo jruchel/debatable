@@ -18,7 +18,7 @@ export default new Vuex.Store({
         },
         loggedIn: {value: false},
         authToken: {token: ""},
-        user: Object
+        user: {username: "", password: "", email: ""}
     },
     mutations: {
         logIn(state, payload) {
