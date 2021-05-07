@@ -4,12 +4,12 @@
         top
         style="margin-top: 2%"
         v-model="snackbar.show"
-        color="indigo darken-1"
+        color="blue-grey darken-2"
         timeout="3500"
     >
       {{ snackbar.text }}
     </v-snackbar>
-    <v-toolbar dark flat class="sticky-toolbar">
+    <v-toolbar dark flat class="sticky-toolbar" color="blue-grey darken-4">
       <v-spacer></v-spacer>
       <span>Please log in</span>
       <v-spacer></v-spacer>

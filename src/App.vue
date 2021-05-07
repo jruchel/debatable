@@ -1,6 +1,6 @@
 <template>
-  <v-app style="background-color: #880E4F">
-    <v-app-bar dark color="grey darken-4" absolute>
+  <v-app style="background-color: #BCAAA4">
+    <v-app-bar dark color="blue-grey darken-4" absolute>
       <v-toolbar-title style="width: 100%; height: 100%; text-align: center; margin-top: 20px">Debatable
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -67,3 +67,18 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+
+@mixin setFont($font-name) {
+  font-family: $font-name;
+  src: local($font-name),
+  url(./assets/fonts/#{$font-name}.ttf) format("truetype");
+}
+@font-face {
+  @include setFont("Nunito-Black")
+}
+*{
+  font-family: Nunito-Black,serif;
+}
+
+</style>

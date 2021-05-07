@@ -24,7 +24,7 @@
     <v-slide-x-transition>
       <v-row class="justify-center" v-if="showResults">
         <v-col cols="12" lg="6">
-          <h2 style="text-align: center; color: white">
+          <h2 style="text-align: center; color: #191919">
             {{ calculateUserAnswerPercentage(firstAnswer.count, secondAnswer.count, userAnswer.count) }}% of people
             agree
             with you!</h2>
