@@ -18,6 +18,7 @@ export default new Vuex.Store({
         },
         loggedIn: {value: false},
         authToken: {token: ""},
+        user: Object
     },
     mutations: {
         logIn(state, payload) {
@@ -74,6 +75,9 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getUser(state) {
+            return state.user
+        },
         getBackendAddress(state) {
             return state.backendAddress
         },

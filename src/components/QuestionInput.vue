@@ -57,7 +57,7 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="8" xl="6">
-        <v-card @click="postQuestion">
+        <v-card @click="postQuestion" color="blue-grey darken-3" dark>
           <v-card-title class="justify-center">
             Post question
           </v-card-title>
@@ -66,7 +66,7 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="3" xl="2">
-        <v-card @click="reset">
+        <v-card @click="reset" color="blue-grey darken-1" dark>
           <v-card-title style="height: 100%" class="justify-center">
             <span>Reset</span>
           </v-card-title>

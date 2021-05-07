@@ -40,6 +40,7 @@ export default {
     performLogout() {
       this.$store.commit('setCurrentToken', {token: ''})
       this.$store.commit('setLoggedIn', {value: false})
+      this.$store.commit('setUser', {})
     },
     sendRequest(endpoint, method, body, headers, onComplete) {
       headers['Content-Type'] = 'application/json'

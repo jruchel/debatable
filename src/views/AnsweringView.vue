@@ -43,7 +43,7 @@
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
-          <v-card color="red" @click="nextQuestion">
+          <v-card color="blue-grey darken-3" dark @click="nextQuestion">
             <v-card-title class="justify-center" style="height: 100%">
               Next
             </v-card-title>

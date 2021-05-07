@@ -28,15 +28,17 @@
       </v-fade-transition>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingLogin" @click="performLogin">
-          Login
-        </v-btn>
-        <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingRegister"
-               @click="performRegistration">
-          Register
-        </v-btn>
-        <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle
-        </v-icon>
+          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingLogin" @click="performLogin">
+            Login
+          </v-btn>
+          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingRegister"
+                 @click="performRegistration">
+            Register
+          </v-btn>
+        <v-fade-transition mode="in">
+          <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle
+          </v-icon>
+        </v-fade-transition>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -53,15 +55,13 @@ export default {
     },
     authToken() {
       return this.$store.getters.getAuthToken;
+    },
+    user() {
+      return this.$store.getters.getUser
     }
   },
   data() {
     return {
-      user: {
-        username: "",
-        password: "",
-        email: ""
-      },
       loginDialog: false,
       loadingLogin: false,
       loadingRegister: false,

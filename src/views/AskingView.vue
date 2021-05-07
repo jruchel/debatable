@@ -1,12 +1,9 @@
 <template>
   <v-container>
-    <v-row v-if="!loggedIn.value">
-      <v-col cols="12">
-        <LoginPrompt></LoginPrompt>
-      </v-col>
-    </v-row>
+
     <v-row>
       <v-col cols="12">
+        <LoginPrompt></LoginPrompt>
         <QuestionInput></QuestionInput>
       </v-col>
     </v-row>
