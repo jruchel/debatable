@@ -2,10 +2,6 @@
   <v-app style="background-color: #BCAAA4">
     <v-app-bar dark color="blue-grey darken-4" absolute>
       <Return></Return>
-      <v-spacer></v-spacer>
-      <v-toolbar-title style="width: 100%; height: 100%; text-align: center; margin-top: 20px">Debatable
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
       <LoginDialog></LoginDialog>
       <v-btn v-if="loggedIn.value" outlined @click="performLogout">Logout</v-btn>
     </v-app-bar>
@@ -21,7 +17,6 @@
 
 <script>
 
-import EventBus from "@/event-bus";
 import axios from "axios";
 import LoginDialog from "@/components/LoginDialog";
 import Return from "@/components/Return";
@@ -29,11 +24,6 @@ import Return from "@/components/Return";
 export default {
   name: 'App',
   components: {Return, LoginDialog},
-  mounted() {
-    EventBus.$on('send-http-request', args => {
-      this.sendRequest(args[0], args[1], args[2], args[3], args[4])
-    })
-  },
   computed: {
     loggedIn() {
       return this.$store.getters.getLoggedIn;
