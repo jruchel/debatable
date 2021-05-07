@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="loginDialog" width="500">
-    <template v-slot:activator="{ on, attrs }">
+    <template v-slot:activator="{ on, attrs }" v-if="buttonVisible">
       <v-btn v-bind="attrs" v-on="on" outlined @click=showLoginDialog>Login</v-btn>
     </template>
   <LoginCard></LoginCard>
@@ -14,6 +14,7 @@ import LoginCard from "@/components/LoginCard";
 export default {
   name: "LoginDialog",
   components: {LoginCard},
+  props: ['buttonVisible'],
   data() {
     return {
       loginDialog: false,

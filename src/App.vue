@@ -1,29 +1,35 @@
 <template>
   <v-app style="background-color: #BCAAA4">
     <v-app-bar dark color="blue-grey darken-4" absolute>
+      <Return></Return>
+      <v-spacer></v-spacer>
       <v-toolbar-title style="width: 100%; height: 100%; text-align: center; margin-top: 20px">Debatable
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <LoginDialog v-if="!loggedIn.value"></LoginDialog>
+      <LoginDialog :button-visible="!loggedIn.value"></LoginDialog>
       <v-btn v-if="loggedIn.value" outlined @click="performLogout">Logout</v-btn>
     </v-app-bar>
     <v-spacer></v-spacer>
     <v-main data-app>
-      <QuestionView></QuestionView>
+      <v-fade-transition mode="out-in">
+        <router-view></router-view>
+      </v-fade-transition>
     </v-main>
+    <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
   </v-app>
 </template>
 
 <script>
 
-import QuestionView from "@/views/QuestionView";
 import EventBus from "@/event-bus";
 import axios from "axios";
 import LoginDialog from "@/components/LoginDialog";
+import Return from "@/components/Return";
 
 export default {
   name: 'App',
-  components: {LoginDialog, QuestionView},
+  components: {Return, LoginDialog},
   inject: ['backendAddress'],
   provide() {
     return {
@@ -74,11 +80,13 @@ export default {
   src: local($font-name),
   url(./assets/fonts/#{$font-name}.ttf) format("truetype");
 }
+
 @font-face {
   @include setFont("Nunito-Black")
 }
-*{
-  font-family: Nunito-Black,serif;
+
+* {
+  font-family: Nunito-Black, serif;
 }
 
 </style>
