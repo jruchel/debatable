@@ -3,7 +3,7 @@
     <v-app-bar dark color="blue-grey darken-4" absolute>
       <Return></Return>
       <v-spacer></v-spacer>
-      <LoginDialog v-if="!loggedIn.value"></LoginDialog>
+      <LoginDialog></LoginDialog>
       <v-btn v-if="loggedIn.value" outlined @click="performLogout">Logout</v-btn>
     </v-app-bar>
     <v-spacer></v-spacer>
