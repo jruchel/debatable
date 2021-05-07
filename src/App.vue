@@ -16,7 +16,6 @@
       </v-fade-transition>
     </v-main>
     <v-spacer></v-spacer>
-    <v-spacer></v-spacer>
   </v-app>
 </template>
 
@@ -26,6 +25,7 @@ import EventBus from "@/event-bus";
 import axios from "axios";
 import LoginDialog from "@/components/LoginDialog";
 import Return from "@/components/Return";
+import Store from "@/store/index"
 
 export default {
   name: 'App',
@@ -43,6 +43,8 @@ export default {
     EventBus.$on('login', args => {
       this.performLogin(args[0])
     })
+    this.authToken = Store.getters.getToken
+    this.loggedIn = Store.getters.getLoggedIn
   },
   data() {
     return {

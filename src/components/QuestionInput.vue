@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="6">
+      <v-col cols="8" xl="6">
         <v-card>
           <v-card-title style="height: 100%" class="justify-center">
             <v-text-field height="100%"
@@ -14,14 +14,16 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="1">
+      <v-col cols="2" xl="1">
         <v-select
+            :color="firstAnswer.color"
             v-model="firstAnswer.color"
             :items="colors"
             label="Color"
+            solo
         ></v-select>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="4" xl="3">
         <v-card :color="firstAnswer.color">
           <v-card-title>
             <v-text-field
@@ -32,7 +34,7 @@
           </v-card-title>
         </v-card>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="4" xl="3">
         <v-card :color="secondAnswer.color">
           <v-card-title>
             <v-text-field
@@ -43,16 +45,18 @@
           </v-card-title>
         </v-card>
       </v-col>
-      <v-col cols="1">
+      <v-col cols="2" xl="1">
         <v-select
+            :color="secondAnswer.color"
             v-model="secondAnswer.color"
             :items="colors"
             label="Color"
+            solo
         ></v-select>
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="6">
+      <v-col cols="8" xl="6">
         <v-card @click="postQuestion">
           <v-card-title class="justify-center">
             Post question
@@ -61,8 +65,8 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="4" md="2">
-        <v-card height="70%" @click="reset">
+      <v-col cols="3" xl="2">
+        <v-card @click="reset">
           <v-card-title style="height: 100%" class="justify-center">
             <span>Reset</span>
           </v-card-title>

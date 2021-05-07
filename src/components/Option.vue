@@ -1,14 +1,14 @@
 <template>
-  <v-card :color="this.answer.color" @click="onPick">
+  <v-card v-if="answer" :color="answer.color" @click="onPick">
     <v-card-title class="justify-center" style="height: 100%">
-      {{ this.answer.answer }}
+      {{ answer.answer }}
     </v-card-title>
   </v-card>
 </template>
 
 <script>
 export default {
-  name: "Question",
+  name: "Option",
   props: ['answer'],
   methods: {
     onPick() {
