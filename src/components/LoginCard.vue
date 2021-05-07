@@ -44,11 +44,17 @@
 </template>
 
 <script>
-import EventBus from "@/event-bus";
 
 export default {
   name: "LoginCard",
-  inject: ['authToken', 'loggedIn'],
+  computed: {
+    loggedIn() {
+      return this.$store.getters.getLoggedIn;
+    },
+    authToken() {
+      return this.$store.getters.getAuthToken;
+    }
+  },
   data() {
     return {
       user: {
@@ -59,7 +65,6 @@ export default {
       loginDialog: false,
       loadingLogin: false,
       loadingRegister: false,
-      loggedIn: this.loggedIn,
       emailInput: false,
       snackbar: {show: false, text: "d00pa"}
     }
@@ -77,20 +82,32 @@ export default {
       this.emailInput = false
       this.user.email = ''
       this.loadingLogin = true
-      EventBus.$emit('send-http-request', ['/security/authenticate', 'POST', this.user, {}, this.handleLoginResponse])
+      this.$store.commit('logIn', {
+        endpoint: '/security/authenticate',
+        method: 'POST',
+        body: this.user,
+        headers: {},
+        onComplete: this.handleLoginResponse
+      })
     },
     performRegistration() {
       if (this.emailInput === false) {
         this.emailInput = true
       } else {
         this.loadingRegister = true
-        EventBus.$emit('send-http-request', ['/security/register', 'POST', this.user, {}, this.handleLoginResponse])
+        this.$store.commit('logIn', {
+          endpoint: '/security/register',
+          method: 'POST',
+          body: this.user,
+          headers: {},
+          onComplete: this.handleLoginResponse
+        })
       }
     },
     handleLoginResponse(response) {
       try {
-        let token = response.token
-        if (token === undefined || token === null || token === '') {
+        let token = response
+        if (token.token === undefined || token.token === null || token.token === '') {
           this.showSnackbar(response)
         } else {
           this.saveToken(token)
@@ -106,7 +123,8 @@ export default {
       this.loadingRegister = false
     },
     saveToken(token) {
-      EventBus.$emit('login', [token])
+      this.$store.commit('setCurrentToken', token)
+      this.$store.commit('setLoggedIn', {value: true})
     },
   }
 }

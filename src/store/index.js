@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        backendAddress: 'http://localhost:8081',
         question: {
             question: 'Pepsi or Coke?',
             firstAnswer: {answer: "Pepsi", color: "blue", count: 10},
@@ -15,20 +16,40 @@ export default new Vuex.Store({
         authToken: {token: ""},
     },
     mutations: {
+        logIn(state, payload) {
+            function sendRequest(endpoint, method, body, headers, onComplete) {
+                headers['Content-Type'] = 'application/json'
+                axios({
+                    method: method.toLowerCase(),
+                    url: state.backendAddress + endpoint,
+                    headers: headers,
+                    data: JSON.parse(JSON.stringify(body))
+                }).then(response => onComplete(response.data)).catch(function (error) {
+                    onComplete(error.response.data)
+                })
+            }
+
+            sendRequest(payload.endpoint, payload.method, payload.body, payload.headers, payload.onComplete)
+        },
+        setUser(state, payload) {
+            state.user = payload
+        },
         setCurrentQuestion(state, payload) {
             state.question = payload
         },
         setCurrentToken(state, payload) {
             state.authToken = payload
+        },
+        setLoggedIn(state, payload) {
+            state.loggedIn = payload
         }
-
     },
     actions: {
-        sendRequest(endpoint, method, body, headers, onComplete) {
+        sendRequest(context, endpoint, method, body, headers, onComplete) {
             headers['Content-Type'] = 'application/json'
             axios({
                 method: method.toLowerCase(),
-                url: this.backendAddress + endpoint,
+                url: context.getters.getBackendAddress + endpoint,
                 headers: headers,
                 data: JSON.parse(JSON.stringify(body))
             }).then(response => onComplete(response.data)).catch(function (error) {
@@ -36,7 +57,7 @@ export default new Vuex.Store({
             })
         },
         fetchQuestion(context) {
-            this.sendRequest(
+            context.sendRequest(context,
                 '/questions/random',
                 'POST',
                 {},
@@ -49,10 +70,13 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getBackendAddress(state) {
+            return state.backendAddress
+        },
         getCurrentQuestion(state) {
             return state.question
         },
-        getToken(state) {
+        getAuthToken(state) {
             return state.authToken
         },
         getLoggedIn(state) {

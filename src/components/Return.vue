@@ -11,11 +11,6 @@ import router from "@/router";
 
 export default {
   name: "Return",
-  data() {
-    return {
-      arrow: '<-'
-    }
-  },
   methods: {
     goBack: function () {
       router.go(-1)

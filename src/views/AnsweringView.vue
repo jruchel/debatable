@@ -58,7 +58,7 @@
 import Option from "@/components/Option";
 
 export default {
-  name: "QuestionView",
+  name: "AnsweringView",
   components: {Option},
   mounted() {
     this.question = this.$store.getters.getCurrentQuestion

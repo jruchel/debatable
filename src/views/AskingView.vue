@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row v-if="!loggedIn">
+    <v-row v-if="!loggedIn.value">
       <v-col cols="12">
         <LoginPrompt></LoginPrompt>
       </v-col>
@@ -20,12 +20,11 @@ import QuestionInput from "@/components/QuestionInput";
 export default {
   name: "AskingView",
   components: {QuestionInput, LoginPrompt},
-  inject: ['loggedIn'],
-  data() {
-    return {
-      loggedIn: this.loggedIn.value
-    }
-  }
+  computed: {
+    loggedIn() {
+      return this.$store.getters.getLoggedIn;
+    },
+  },
 }
 </script>
 

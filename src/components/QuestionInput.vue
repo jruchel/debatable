@@ -96,7 +96,7 @@ export default {
       this.firstAnswer.content = ''
       this.firstAnswer.color = 'red'
       this.secondAnswer.content = ''
-      this.second.color = 'blue'
+      this.secondAnswer.color = 'blue'
     }
   }
 }
