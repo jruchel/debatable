@@ -5,6 +5,9 @@ import axios from "axios";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+    plugins: [createPersistedState({
+        storage: window.sessionStorage,
+    })],
     state: {
         backendAddress: 'http://localhost:8081',
         question: {

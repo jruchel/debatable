@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="loginDialog" width="500">
-    <template v-slot:activator="{ on, attrs }" v-if="!loggedIn.value">
+    <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" outlined @click=showLoginDialog>Login</v-btn>
     </template>
     <LoginCard></LoginCard>
