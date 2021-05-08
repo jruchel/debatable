@@ -63,7 +63,6 @@ export default {
   components: {Option},
   computed: {
     question() {
-      console.log(this.$store.getters.getCurrentQuestion.answers)
       return this.$store.getters.getCurrentQuestion
     }
   },

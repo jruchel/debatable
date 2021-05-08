@@ -82,7 +82,7 @@ export default {
       this.emailInput = false
       this.user.email = ''
       this.loadingLogin = true
-      this.$store.commit('logIn', {
+      this.$store.commit('sendRequest', {
         endpoint: '/security/authenticate',
         method: 'POST',
         body: this.user,
@@ -95,7 +95,7 @@ export default {
         this.emailInput = true
       } else {
         this.loadingRegister = true
-        this.$store.commit('logIn', {
+        this.$store.commit('sendRequest', {
           endpoint: '/security/register',
           method: 'POST',
           body: this.user,

@@ -86,11 +86,16 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "QuestionInput",
   computed: {
     backendAddress() {
       return this.$store.getters.getBackendAddress
+    },
+    authToken() {
+      return this.$store.getters.getAuthToken
     }
   },
   data() {
@@ -120,20 +125,28 @@ export default {
       this.snackbar.show = true
     },
     postQuestion: function () {
-      this.$store.dispatch('sendRequestWithAuth', {
-        endpoint: '/questions',
-        method: 'POST',
-        body: {},
-        headers: {},
-        onComplete: this.handleResponse
+      let actualHeaders = {}
+      actualHeaders['Content-Type'] = 'application/json'
+      actualHeaders['token'] = this.authToken.token
+      console.log(actualHeaders)
+      axios({
+        method: 'post',
+        url: this.backendAddress + '/questions',
+        headers: actualHeaders,
+        data: this.question
+      }).then(response => {
+        this.handleResponse(response.data)
+      }).catch(error => {
+        this.handleResponse(error)
       })
+
     },
     handleResponse(response) {
-      if (response === this.question) {
+      if (response.question === this.question.question) {
         this.showSnackbar('Question added!')
         this.reset()
       } else {
-        this.showSnackbar('Could not add question, please try again in a moment')
+        this.showSnackbar(response)
       }
     },
     reset: function () {

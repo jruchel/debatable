@@ -20,7 +20,7 @@ export default new Vuex.Store({
         user: {username: "", password: "", email: ""}
     },
     mutations: {
-        logIn(state, payload) {
+        sendRequest(state, payload) {
             function sendRequest(endpoint, method, body, headers, onComplete) {
                 headers['Content-Type'] = 'application/json'
                 axios({

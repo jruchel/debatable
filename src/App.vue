@@ -18,13 +18,15 @@
 
 <script>
 
-import axios from "axios";
 import LoginDialog from "@/components/LoginDialog";
 import Return from "@/components/Return";
 
 export default {
   name: 'App',
   components: {Return, LoginDialog},
+  mounted() {
+    this.$store.dispatch('fetchQuestion')
+  },
   computed: {
     loggedIn() {
       return this.$store.getters.getLoggedIn;
@@ -41,17 +43,6 @@ export default {
       this.$store.commit('setCurrentToken', {token: ''})
       this.$store.commit('setLoggedIn', {value: false})
       this.$store.commit('setUser', {})
-    },
-    sendRequest(endpoint, method, body, headers, onComplete) {
-      headers['Content-Type'] = 'application/json'
-      axios({
-        method: method.toLowerCase(),
-        url: this.backendAddress + endpoint,
-        headers: headers,
-        data: JSON.parse(JSON.stringify(body))
-      }).then(response => onComplete(response.data)).catch(function (error) {
-        onComplete(error.response.data)
-      })
     }
   }
 };
@@ -73,3 +64,4 @@ export default {
 }
 
 </style>
+
