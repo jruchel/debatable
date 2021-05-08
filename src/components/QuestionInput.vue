@@ -124,7 +124,6 @@ export default {
     },
     postQuestion: function () {
       let actualHeaders = {}
-      console.log(this.question)
       actualHeaders['token'] = this.authToken.token
       this.$store.commit('sendRequest', {
         endpoint: '/questions',
