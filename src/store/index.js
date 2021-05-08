@@ -27,7 +27,7 @@ export default new Vuex.Store({
                     method: method.toLowerCase(),
                     url: state.backendAddress + endpoint,
                     headers: headers,
-                    data: JSON.parse(JSON.stringify(body))
+                    data: body
                 }).then(response => onComplete(response.data)).catch(function (error) {
                     onComplete(error.response.data)
                 })

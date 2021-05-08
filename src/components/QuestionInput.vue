@@ -86,7 +86,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   name: "QuestionInput",
@@ -102,7 +101,6 @@ export default {
     return {
       question: {
         question: "",
-        commentCount: 0,
         answers: [
           {
             color: 'blue',
@@ -126,20 +124,15 @@ export default {
     },
     postQuestion: function () {
       let actualHeaders = {}
-      actualHeaders['Content-Type'] = 'application/json'
+      console.log(this.question)
       actualHeaders['token'] = this.authToken.token
-      console.log(actualHeaders)
-      axios({
-        method: 'post',
-        url: this.backendAddress + '/questions',
+      this.$store.commit('sendRequest', {
+        endpoint: '/questions',
+        method: 'POST',
+        body: this.question,
         headers: actualHeaders,
-        data: this.question
-      }).then(response => {
-        this.handleResponse(response.data)
-      }).catch(error => {
-        this.handleResponse(error)
+        onComplete: this.handleResponse
       })
-
     },
     handleResponse(response) {
       if (response.question === this.question.question) {

@@ -13,3 +13,6 @@ new Vue({
     store,
     render: h => h(App)
 }).$mount('#app')
+
+//TODO: if a request is made to a secured endpoint and the auth token is no longer valid,
+// authenticate the user automatically with the last saved details, if authentication fails, log them out
