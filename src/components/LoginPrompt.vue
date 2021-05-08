@@ -1,7 +1,7 @@
 <template>
   <v-container class="justify-center">
     <v-row class="justify-center">
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="8">
         <v-slide-x-transition>
           <v-card v-if="!loggedIn.value">
             <v-card-title class="text-xs-center">

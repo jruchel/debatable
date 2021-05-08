@@ -13,8 +13,7 @@ export default new Vuex.Store({
         backendAddress: 'http://localhost:8081',
         question: {
             question: 'Pepsi or Coke?',
-            firstAnswer: {answer: "Pepsi", color: "blue", count: 10},
-            secondAnswer: {answer: "Coke", color: "red", count: 20},
+            answers: [{content: "Pepsi", color: "blue", count: 10}, {content: "Coke", color: "red", count: 20}]
         },
         loggedIn: {value: false},
         authToken: {token: ""},
@@ -50,27 +49,24 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        sendRequest(context, endpoint, method, body, headers, onComplete) {
+        fetchQuestion(context) {
+            let headers = {}
             headers['Content-Type'] = 'application/json'
             axios({
-                method: method.toLowerCase(),
-                url: context.getters.getBackendAddress + endpoint,
+                method: 'post',
+                url: context.getters.getBackendAddress + '/questions/random',
                 headers: headers,
-                data: JSON.parse(JSON.stringify(body))
-            }).then(response => onComplete(response.data)).catch(function (error) {
-                onComplete(error.response.data)
+                data: context.getters.getCurrentQuestion
+            }).then(response => {
+                context.commit('setCurrentQuestion', response.data)
+            }).catch(function (ex) {
+                console.log(JSON.stringify(ex))
+                context.commit('setCurrentQuestion', {
+                    question: 'Pepsi or Coke?',
+                    answers: [{content: "Pepsi", color: "blue", count: 10}, {content: "Coke", color: "red", count: 20}],
+                    commentCount: 0,
+                })
             })
-        },
-        fetchQuestion(context) {
-            context.sendRequest(context,
-                '/questions/random',
-                'POST',
-                {},
-                {},
-                function (response) {
-                    context.commit('setCurrentQuestion', response)
-                }
-            )
         }
     },
     modules: {},

@@ -12,31 +12,32 @@
     <v-row class="justify-center">
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.firstAnswer" v-on:option-picked="handleAnswer"></Option>
+          <Option :answer="question.answers[0]" v-on:option-picked="handleAnswer"></Option>
         </v-slide-x-transition>
       </v-col>
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.secondAnswer" v-on:option-picked="handleAnswer"></Option>
+          <Option :answer="question.answers[1]" v-on:option-picked="handleAnswer"></Option>
         </v-slide-x-transition>
       </v-col>
     </v-row>
     <v-slide-x-transition>
       <v-row class="justify-center" v-if="showResults">
         <v-col cols="12" xl="6">
-          <h2 style="text-align: center; color: #191919">
-            {{
-              calculateUserAnswerPercentage(question.firstAnswer.count, question.secondAnswer.count, userAnswer.count)
-            }}% of people
-            agree
-            with you!</h2>
-          <v-progress-linear
-              :background-color="this.secondAnswer.color"
-              :color="this.firstAnswer.color"
-              :value="this.calculateAnswerRatios(question.firstAnswer.count, question.secondAnswer.count)"
-              height="15"
-          >
-          </v-progress-linear>
+            <h2 v-if="question.answers[0].count > 0 || question.answers[1].color > 0" style="text-align: center; color: #191919">
+              {{
+                calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count)
+              }}% of people
+              agree
+              with you!</h2>
+            <v-progress-linear v-if="question.answers[0].count > 0 || question.answers[1].color > 0"
+                :background-color="getAnswerColor(1)"
+                :color="getAnswerColor(0)"
+                :value="calculateAnswerRatios(getAnswerCount(0), getAnswerCount(1))"
+                height="15"
+            >
+            </v-progress-linear>
+            <h2 v-if="!(question.answers[0].count > 0 || question.answers[1].color > 0)" style="text-align: center; color: #191919">No results to show, your answer was the first one!</h2>
         </v-col>
       </v-row>
     </v-slide-x-transition>
@@ -60,18 +61,27 @@ import Option from "@/components/Option";
 export default {
   name: "AnsweringView",
   components: {Option},
-  mounted() {
-    this.question = this.$store.getters.getCurrentQuestion
+  computed: {
+    question() {
+      console.log(this.$store.getters.getCurrentQuestion.answers)
+      return this.$store.getters.getCurrentQuestion
+    }
   },
   data() {
     return {
       userAnswer: null,
       showResults: false,
-      question: Object
     }
   },
   methods: {
+    getAnswerCount(number) {
+      return this.question.answers[number].count
+    },
+    getAnswerColor(number) {
+      return this.question.answers[number].color
+    },
     nextQuestion() {
+      this.showResults = false
       this.$store.dispatch('fetchQuestion')
     },
     getQuestionContent() {
@@ -82,10 +92,18 @@ export default {
       this.showResults = true
     },
     calculateUserAnswerPercentage(first, second, user) {
-      return Math.ceil(user / (first + second) * 100)
+      let result = Math.ceil(user / (first + second) * 100)
+      if (result === Infinity || isNaN(result)) {
+        return 0
+      }
+      return result
     },
     calculateAnswerRatios(first, second) {
-      return first / (first + second) * 100
+      let result = first / (first + second) * 100
+      if (isNaN(result) || result === Infinity) {
+        return 0
+      }
+      return result
     }
   }
 }

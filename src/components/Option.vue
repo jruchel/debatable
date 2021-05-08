@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="answer" :color="answer.color" @click="onPick">
     <v-card-title class="justify-center" style="height: 100%">
-      {{ answer.answer }}
+      {{ answer.content }}
     </v-card-title>
   </v-card>
 </template>

@@ -3,9 +3,18 @@
     <v-row class="justify-center">
       <v-col cols="8" xl="6">
         <v-card>
+          <v-snackbar
+              top
+              style="margin-top: 2%"
+              v-model="snackbar.show"
+              color="blue-grey darken-2"
+              timeout="3500"
+          >
+            {{ snackbar.text }}
+          </v-snackbar>
           <v-card-title style="height: 100%" class="justify-center">
             <v-text-field height="100%"
-                          v-model="question"
+                          v-model="question.question"
                           label="Question"
                           required
             ></v-text-field>
@@ -16,18 +25,18 @@
     <v-row class="justify-center">
       <v-col cols="2" xl="1">
         <v-select
-            :color="firstAnswer.color"
-            v-model="firstAnswer.color"
+            :color="question.answers[0].color"
+            v-model="question.answers[0].color"
             :items="colors"
             label="Color"
             solo
         ></v-select>
       </v-col>
       <v-col cols="4" xl="3">
-        <v-card :color="firstAnswer.color">
+        <v-card :color="question.answers[0].color">
           <v-card-title>
             <v-text-field
-                v-model="firstAnswer.content"
+                v-model="question.answers[0].content"
                 label="First option"
                 required
             ></v-text-field>
@@ -35,10 +44,10 @@
         </v-card>
       </v-col>
       <v-col cols="4" xl="3">
-        <v-card :color="secondAnswer.color">
+        <v-card :color="question.answers[1].color">
           <v-card-title>
             <v-text-field
-                v-model="secondAnswer.content"
+                v-model="question.answers[1].content"
                 label="Second option"
                 required
             ></v-text-field>
@@ -47,8 +56,8 @@
       </v-col>
       <v-col cols="2" xl="1">
         <v-select
-            :color="secondAnswer.color"
-            v-model="secondAnswer.color"
+            :color="question.answers[1].color"
+            v-model="question.answers[1].color"
             :items="colors"
             label="Color"
             solo
@@ -79,24 +88,60 @@
 <script>
 export default {
   name: "QuestionInput",
+  computed: {
+    backendAddress() {
+      return this.$store.getters.getBackendAddress
+    }
+  },
   data() {
     return {
-      question: '',
-      firstAnswer: {content: '', color: 'red'},
-      secondAnswer: {content: '', color: 'blue'},
+      question: {
+        question: "",
+        commentCount: 0,
+        answers: [
+          {
+            color: 'blue',
+            content: ''
+          },
+          {
+            color: 'red',
+            content: ''
+          }
+        ]
+      },
+      snackbar: {show: false, text: "d00pa"},
       colors: ['red', 'blue', 'green', 'grey', 'white']
     }
   },
   methods: {
+    showSnackbar(text) {
+      this.snackbar.show = false
+      this.snackbar.text = text
+      this.snackbar.show = true
+    },
     postQuestion: function () {
-
+      this.$store.dispatch('sendRequestWithAuth', {
+        endpoint: '/questions',
+        method: 'POST',
+        body: {},
+        headers: {},
+        onComplete: this.handleResponse
+      })
+    },
+    handleResponse(response) {
+      if (response === this.question) {
+        this.showSnackbar('Question added!')
+        this.reset()
+      } else {
+        this.showSnackbar('Could not add question, please try again in a moment')
+      }
     },
     reset: function () {
-      this.question = ''
-      this.firstAnswer.content = ''
-      this.firstAnswer.color = 'red'
-      this.secondAnswer.content = ''
-      this.secondAnswer.color = 'blue'
+      this.question.question = ''
+      this.question.answers[0].content = ''
+      this.question.answers[0].color = 'blue'
+      this.question.answers[1].content = ''
+      this.question.answers[1].color = 'red'
     }
   }
 }
