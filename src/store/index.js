@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios";
 import createPersistedState from "vuex-persistedstate"
+import {sendRequest} from "@/utils/requests"
 
 Vue.use(Vuex)
 
@@ -20,21 +20,6 @@ export default new Vuex.Store({
         user: {username: "", password: "", email: ""}
     },
     mutations: {
-        sendRequest(state, payload) {
-            function sendRequest(endpoint, method, body, headers, onComplete) {
-                headers['Content-Type'] = 'application/json'
-                axios({
-                    method: method.toLowerCase(),
-                    url: state.backendAddress + endpoint,
-                    headers: headers,
-                    data: body
-                }).then(response => onComplete(response.data)).catch(function (error) {
-                    onComplete(error.response.data)
-                })
-            }
-
-            sendRequest(payload.endpoint, payload.method, payload.body, payload.headers, payload.onComplete)
-        },
         setUser(state, payload) {
             state.user = payload
         },
@@ -50,23 +35,26 @@ export default new Vuex.Store({
     },
     actions: {
         fetchQuestion(context) {
-            let headers = {}
-            headers['Content-Type'] = 'application/json'
-            axios({
-                method: 'post',
-                url: context.getters.getBackendAddress + '/questions/random',
-                headers: headers,
-                data: context.getters.getCurrentQuestion
-            }).then(response => {
-                context.commit('setCurrentQuestion', response.data)
-            }).catch(function (ex) {
-                console.log(JSON.stringify(ex))
-                context.commit('setCurrentQuestion', {
-                    question: 'Pepsi or Coke?',
-                    answers: [{content: "Pepsi", color: "blue", count: 10}, {content: "Coke", color: "red", count: 20}],
-                    commentCount: 0,
+            sendRequest(
+                context.getters.getBackendAddress,
+                '/questions/random',
+                'post',
+                context.getters.getCurrentQuestion,
+                {},
+                function (response) {
+                    context.commit('setCurrentQuestion', response.data)
+                },
+                function () {
+                    context.commit('setCurrentQuestion', {
+                        question: 'Pepsi or Coke?',
+                        answers: [{content: "Pepsi", color: "blue", count: 10}, {
+                            content: "Coke",
+                            color: "red",
+                            count: 20
+                        }],
+                        commentCount: 0,
+                    })
                 })
-            })
         }
     },
     modules: {},

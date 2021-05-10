@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import {sendRequest} from "@/utils/requests";
 
 export default {
   name: "QuestionInput",
@@ -130,32 +131,26 @@ export default {
       }
     },
     postTrialQuestion: function () {
-      let actualHeaders = {}
-      this.$store.commit('sendRequest', {
-        endpoint: '/questions/trial',
-        method: 'POST',
-        body: this.question,
-        headers: actualHeaders,
-        onComplete: this.handleResponse
-      })
+      sendRequest(this.backendAddress, '/questions/trial', 'post', this.question, {}, this.handleResponse, this.handleResponse)
     },
     postQuestionToUser: function () {
       let actualHeaders = {}
       actualHeaders['token'] = this.authToken.token
-      this.$store.commit('sendRequest', {
-        endpoint: '/questions',
-        method: 'POST',
-        body: this.question,
-        headers: actualHeaders,
-        onComplete: this.handleResponse
-      })
+      sendRequest(this.backendAddress,
+          '/questions',
+          'post',
+          this.question,
+          this.authToken,
+          this.handleResponse,
+          this.handleResponse
+      )
     },
     handleResponse(response) {
-      if (response.question === this.question.question) {
+      if (response.status === 201) {
         this.showSnackbar('Question added!')
         this.reset()
       } else {
-        this.showSnackbar(response)
+        this.showSnackbar(response.data)
       }
     },
     reset: function () {

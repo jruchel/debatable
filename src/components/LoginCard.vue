@@ -28,13 +28,13 @@
       </v-fade-transition>
       <v-card-actions>
         <v-spacer></v-spacer>
-          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingLogin" @click="performLogin">
-            Login
-          </v-btn>
-          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingRegister"
-                 @click="performRegistration">
-            Register
-          </v-btn>
+        <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingLogin" @click="performLogin">
+          Login
+        </v-btn>
+        <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingRegister"
+               @click="performRegistration">
+          Register
+        </v-btn>
         <v-fade-transition mode="in">
           <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle
           </v-icon>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import {sendRequest} from "@/utils/requests";
 
 export default {
   name: "LoginCard",
@@ -82,42 +83,38 @@ export default {
       this.emailInput = false
       this.user.email = ''
       this.loadingLogin = true
-      this.$store.commit('sendRequest', {
-        endpoint: '/security/authenticate',
-        method: 'POST',
-        body: this.user,
-        headers: {},
-        onComplete: this.handleLoginResponse
-      })
+      sendRequest(this.$store.getters.getBackendAddress,
+          '/security/authenticate',
+          'POST',
+          this.user,
+          {},
+          this.handleLoginResponse,
+          this.handleLoginResponse
+      )
     },
     performRegistration() {
       if (this.emailInput === false) {
         this.emailInput = true
       } else {
         this.loadingRegister = true
-        this.$store.commit('sendRequest', {
-          endpoint: '/security/register',
-          method: 'POST',
-          body: this.user,
-          headers: {},
-          onComplete: this.handleLoginResponse
-        })
+        sendRequest(this.$store.getters.getBackendAddress,
+            '/security/register',
+            'POST',
+            this.user,
+            {},
+            this.handleLoginResponse,
+            this.handleLoginResponse
+        )
       }
     },
     handleLoginResponse(response) {
-      try {
-        let token = response
-        if (token.token === undefined || token.token === null || token.token === '') {
-          this.showSnackbar(response)
-        } else {
-          this.saveToken(token)
-          this.showSnackbar("Login successful")
-        }
-
+      if (response.status === 200) {
+        this.saveToken(response.data)
+        this.showSnackbar("Login successful")
+      } else try {
+        this.showSnackbar(response.data)
       } catch (ex) {
-        this.loadingLogin = false
-        this.loadingRegister = false
-        this.showSnackbar(response)
+        this.showSnackbar(ex)
       }
       this.loadingLogin = false
       this.loadingRegister = false
