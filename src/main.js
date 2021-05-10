@@ -16,3 +16,4 @@ new Vue({
 
 //TODO: if a request is made to a secured endpoint and the auth token is no longer valid,
 // authenticate the user automatically with the last saved details, if authentication fails, log them out
+//TODO: Redesign /ask page for mobile

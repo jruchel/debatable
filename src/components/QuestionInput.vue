@@ -123,6 +123,23 @@ export default {
       this.snackbar.show = true
     },
     postQuestion: function () {
+      if (this.$store.getters.getLoggedIn.value === true) {
+        this.postQuestionToUser()
+      } else {
+        this.postTrialQuestion()
+      }
+    },
+    postTrialQuestion: function () {
+      let actualHeaders = {}
+      this.$store.commit('sendRequest', {
+        endpoint: '/questions/trial',
+        method: 'POST',
+        body: this.question,
+        headers: actualHeaders,
+        onComplete: this.handleResponse
+      })
+    },
+    postQuestionToUser: function () {
       let actualHeaders = {}
       actualHeaders['token'] = this.authToken.token
       this.$store.commit('sendRequest', {
