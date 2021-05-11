@@ -66,7 +66,14 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="8" xl="6">
-        <v-card @click="postQuestion" color="blue-grey darken-3" dark>
+        <v-card @click="postQuestion" color="blue-grey darken-3" dark :loading="postingQuestion">
+          <template slot="progress">
+            <v-progress-linear
+                color="green"
+                height="5"
+                indeterminate
+            ></v-progress-linear>
+          </template>
           <v-card-title class="justify-center">
             Post question
           </v-card-title>
@@ -114,7 +121,8 @@ export default {
         ]
       },
       snackbar: {show: false, text: "d00pa"},
-      colors: ['red', 'blue', 'green', 'grey', 'white']
+      colors: ['red', 'blue', 'green', 'grey', 'white'],
+      postingQuestion: false
     }
   },
   methods: {
@@ -124,8 +132,11 @@ export default {
       this.snackbar.show = true
     },
     postQuestion: function () {
+      this.postingQuestion = true
+      setTimeout(this.stopPostingAnim, 1000)
+      console.log(this.postingQuestion)
       if (this.$store.getters.getLoggedIn.value === true) {
-        this.postQuestionToUser()
+        this.$store.dispatch('reauthenticate').then(this.postQuestionToUser)
       } else {
         this.postTrialQuestion()
       }
@@ -144,6 +155,9 @@ export default {
           this.handleResponse,
           this.handleResponse
       )
+    },
+    stopPostingAnim() {
+      this.postingQuestion = false
     },
     handleResponse(response) {
       if (response.status === 201) {

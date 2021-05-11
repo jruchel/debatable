@@ -34,8 +34,26 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        reauthenticate(context) {
+            return sendRequest(
+                context.getters.getBackendAddress,
+                '/security/authenticate',
+                'post',
+                context.getters.getUser,
+                {},
+                function (response) {
+                    console.log(response)
+                    context.commit('setCurrentToken', response.data)
+                },
+                function () {
+                    console.log('Login error')
+                    context.commit('setCurrentToken', {token: ''})
+                    context.commit('setLoggedIn', {value: false})
+                }
+            )
+        },
         fetchQuestion(context) {
-            sendRequest(
+            return sendRequest(
                 context.getters.getBackendAddress,
                 '/questions/random',
                 'post',
