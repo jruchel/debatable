@@ -133,8 +133,6 @@ export default {
     },
     postQuestion: function () {
       this.postingQuestion = true
-      setTimeout(this.stopPostingAnim, 1000)
-      console.log(this.postingQuestion)
       if (this.$store.getters.getLoggedIn.value === true) {
         this.$store.dispatch('reauthenticate').then(this.postQuestionToUser)
       } else {
@@ -156,9 +154,6 @@ export default {
           this.handleResponse
       )
     },
-    stopPostingAnim() {
-      this.postingQuestion = false
-    },
     handleResponse(response) {
       if (response.status === 201) {
         this.showSnackbar('Question added!')
@@ -166,6 +161,7 @@ export default {
       } else {
         this.showSnackbar(response.data)
       }
+      this.postingQuestion = false
     },
     reset: function () {
       this.question.question = ''
