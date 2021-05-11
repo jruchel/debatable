@@ -10,7 +10,7 @@ export default new Vuex.Store({
         storage: window.sessionStorage,
     })],
     state: {
-        backendAddress: 'http://localhost:8081',
+        backendAddress: 'http://server:8081',
         question: {
             question: 'Pepsi or Coke?',
             answers: [{content: "Pepsi", color: "blue", count: 10}, {content: "Coke", color: "red", count: 20}]
