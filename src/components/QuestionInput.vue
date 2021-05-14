@@ -5,7 +5,7 @@
         <v-card>
           <v-snackbar
               top
-              style="margin-top: 2%"
+              :style="marginTop()"
               v-model="snackbar.show"
               color="blue-grey darken-2"
               timeout="3500"
@@ -167,10 +167,16 @@ export default {
       },
       snackbar: {show: false, text: "d00pa"},
       colors: ['red', 'blue', 'green', 'grey', 'white'],
-      postingQuestion: false
+      postingQuestion: false,
     }
   },
   methods: {
+    marginTop() {
+      if(this.isMobile()) {
+        return "margin-top: 15%"
+      }
+      return "margin-top: 2%"
+    },
     isMobile() {
       return /xs|sm/i.test(this.$vuetify.breakpoint.name)
     },

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="justify-center">
+  <v-container class="justify-center" :style="marginTop()">
     <v-row class="justify-center">
       <v-col cols="12" md="8">
         <v-slide-x-transition>
@@ -28,6 +28,17 @@ export default {
     loggedIn() {
       return this.$store.getters.getLoggedIn
     }
+  },
+  methods: {
+    marginTop() {
+      if(this.isMobile()) {
+        return "margin-top: 15%"
+      }
+      return "margin-top: 0%"
+    },
+    isMobile() {
+      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
+    },
   }
 }
 </script>
