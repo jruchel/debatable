@@ -24,27 +24,36 @@
     <v-slide-x-transition>
       <v-row class="justify-center" v-if="showResults">
         <v-col cols="12" xl="6">
-            <h2 v-if="question.answers[0].count > 0 || question.answers[1].color > 0" style="text-align: center; color: #191919">
-              {{
-                calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count)
-              }}% of people
-              agree
-              with you!</h2>
-            <v-progress-linear v-if="question.answers[0].count > 0 || question.answers[1].color > 0"
-                :background-color="getAnswerColor(1)"
-                :color="getAnswerColor(0)"
-                :value="calculateAnswerRatios(getAnswerCount(0), getAnswerCount(1))"
-                height="15"
-            >
-            </v-progress-linear>
-            <h2 v-if="!(question.answers[0].count > 0 || question.answers[1].color > 0)" style="text-align: center; color: #191919">No results to show, your answer was the first one!</h2>
+          <h2 v-if="question.answers[0].count > 0 || question.answers[1].color > 0"
+              style="text-align: center; color: #191919">
+            {{
+              calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count)
+            }}% of people
+            agree
+            with you!</h2>
+          <v-progress-linear v-if="question.answers[0].count > 0 || question.answers[1].color > 0"
+                             :background-color="getAnswerColor(1)"
+                             :color="getAnswerColor(0)"
+                             :value="calculateAnswerRatios(getAnswerCount(0), getAnswerCount(1))"
+                             height="15"
+          >
+          </v-progress-linear>
+          <h2 v-if="!(question.answers[0].count > 0 || question.answers[1].color > 0)"
+              style="text-align: center; color: #191919">No results to show, your answer was the first one!</h2>
         </v-col>
       </v-row>
     </v-slide-x-transition>
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
-          <v-card color="blue-grey darken-3" dark @click="nextQuestion">
+          <v-card color="blue-grey darken-3" dark @click="nextQuestion" :loading="loadingNextQuestion">
+            <template slot="progress">
+              <v-progress-linear
+                  color="green"
+                  height="5"
+                  indeterminate
+              ></v-progress-linear>
+            </template>
             <v-card-title class="justify-center" style="height: 100%">
               Next
             </v-card-title>
@@ -70,6 +79,7 @@ export default {
     return {
       userAnswer: null,
       showResults: false,
+      loadingNextQuestion: false
     }
   },
   methods: {
@@ -80,8 +90,12 @@ export default {
       return this.question.answers[number].color
     },
     nextQuestion() {
+      this.loadingNextQuestion = true
       this.showResults = false
-      this.$store.dispatch('fetchQuestion')
+      this.$store.dispatch('fetchQuestion').then(this.stopLoading)
+    },
+    stopLoading() {
+      this.loadingNextQuestion = false
     },
     getQuestionContent() {
       return this.question.question
