@@ -1,6 +1,7 @@
 <template>
   <v-card>
     <v-snackbar
+        v-if="snackbar.show"
         top
         :style="marginTop()"
         v-model="snackbar.show"
@@ -72,7 +73,7 @@ export default {
   },
   methods: {
     marginTop() {
-      if(this.isMobile()) {
+      if (this.isMobile()) {
         return "margin-top: 15%"
       }
       return "margin-top: 0%"
@@ -137,5 +138,7 @@ export default {
 </script>
 
 <style scoped>
-
+html {
+  overflow-y: auto !important;
+}
 </style>
