@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="8" xl="6">
+      <v-col cols="12" sm="8" xl="6">
         <v-card>
           <v-snackbar
               top
@@ -22,7 +22,52 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row class="justify-center">
+    <v-row class="justify-center" v-if="isMobile()">
+      <v-col cols="6" sm="4" xl="3">
+        <v-card :color="question.answers[0].color">
+          <v-card-title>
+            <v-text-field
+                v-model="question.answers[0].content"
+                label="First option"
+                required
+            ></v-text-field>
+          </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6" sm="4" xl="3">
+        <v-card :color="question.answers[1].color">
+          <v-card-title>
+            <v-text-field
+                v-model="question.answers[1].content"
+                label="Second option"
+                required
+            ></v-text-field>
+          </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center" v-if="isMobile()">
+      <v-col cols="6" sm="4" xl="1">
+        <v-select
+            :color="question.answers[0].color"
+            v-model="question.answers[0].color"
+            :items="colors"
+            label="Color"
+            solo
+        ></v-select>
+      </v-col>
+      <v-spacer v-if="this.$vuetify.breakpoint.name === 'xs'"></v-spacer>
+      <v-col cols="6" sm="4" xl="1">
+        <v-select
+            :color="question.answers[1].color"
+            v-model="question.answers[1].color"
+            :items="colors"
+            label="Color"
+            solo
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center" v-if="!isMobile()">
       <v-col cols="2" xl="1">
         <v-select
             :color="question.answers[0].color"
@@ -81,7 +126,7 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="3" xl="2">
+      <v-col cols="6" md="3" xl="2">
         <v-card @click="reset" color="blue-grey darken-1" dark>
           <v-card-title style="height: 100%" class="justify-center">
             <span>Reset</span>
@@ -126,6 +171,9 @@ export default {
     }
   },
   methods: {
+    isMobile() {
+      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
+    },
     showSnackbar(text) {
       this.snackbar.show = false
       this.snackbar.text = text
