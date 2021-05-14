@@ -10,7 +10,7 @@ export default new Vuex.Store({
         storage: window.sessionStorage,
     })],
     state: {
-        backendAddress: 'http://server:8081',
+        backendAddress: 'https://debatable-server.herokuapp.com',
         question: {
             question: 'Pepsi or Coke?',
             answers: [{content: "Pepsi", color: "blue", count: 10}, {content: "Coke", color: "red", count: 20}]
