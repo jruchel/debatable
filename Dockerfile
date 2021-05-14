@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 RUN npm install -g http-server
 
-WORKDIR /jazzarno
+WORKDIR /debatable
 
 COPY package*.json ./
 
