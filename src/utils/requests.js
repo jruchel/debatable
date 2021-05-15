@@ -7,7 +7,9 @@ export function sendRequest(address, endpoint, method, body, headers, onComplete
         url: address + endpoint,
         headers: headers,
         data: body
-    }).then(response => onComplete(response)).catch(function (error) {
+    }).then(function(response) {
+        onComplete(response)
+    }).catch(function (error) {
         onError(error.response)
     })
 }

@@ -14,6 +14,7 @@ new Vue({
     render: h => h(App)
 }).$mount('#app')
 
-//TODO: if a request is made to a secured endpoint and the auth token is no longer valid,
-// authenticate the user automatically with the last saved details, if authentication fails, log them out
-//TODO: Redesign /ask page for mobile
+//TODO: use forms wherever it makes sense
+//TODO: fetch batches of comments as pages and keep adding more pages as the user scrolls down
+//TODO: color the comments of each users by the answer they have given
+//TODO: allow only logged in users to comment

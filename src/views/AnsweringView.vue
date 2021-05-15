@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container style="margin-top: 200px">
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
@@ -61,18 +61,26 @@
         </v-slide-x-transition>
       </v-col>
     </v-row>
+    <v-spacer></v-spacer>
+    <v-fade-transition>
+      <CommentSection v-if="showResults" :comments="comments"></CommentSection>
+    </v-fade-transition>
   </v-container>
 </template>
 
 <script>
 import Option from "@/components/Option";
+import CommentSection from "@/components/CommentSection";
 
 export default {
   name: "AnsweringView",
-  components: {Option},
+  components: {CommentSection, Option},
   computed: {
     question() {
       return this.$store.getters.getCurrentQuestion
+    },
+    comments() {
+      return this.$store.getters.getComments
     }
   },
   data() {
@@ -92,7 +100,13 @@ export default {
     nextQuestion() {
       this.loadingNextQuestion = true
       this.showResults = false
-      this.$store.dispatch('fetchQuestion').then(this.stopLoading)
+      this.$store.dispatch('fetchQuestion').then(this.stopLoading).then(this.fetchComments).then(this.printComments)
+
+    },
+    printComments() {
+    },
+    fetchComments() {
+      return this.$store.dispatch('fetchComments')
     },
     stopLoading() {
       this.loadingNextQuestion = false

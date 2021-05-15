@@ -10,16 +10,17 @@ export default new Vuex.Store({
         storage: window.sessionStorage,
     })],
     state: {
-        backendAddress: 'https://debatable-server.herokuapp.com',
-        question: {
-            question: 'Pepsi or Coke?',
-            answers: [{answer: "Pepsi", color: "blue", count: 10}, {answer: "Coke", color: "red", count: 20}]
-        },
+        backendAddress: 'http://localhost:8081',
+        question: {},
+        comments: [],
         loggedIn: {value: false},
         authToken: {token: ""},
         user: {username: "", password: "", email: ""}
     },
     mutations: {
+        setComments(state, payload) {
+            state.comments = payload
+        },
         setUser(state, payload) {
             state.user = payload
         },
@@ -42,13 +43,26 @@ export default new Vuex.Store({
                 context.getters.getUser,
                 {},
                 function (response) {
-                    console.log(response)
                     context.commit('setCurrentToken', response.data)
                 },
                 function () {
-                    console.log('Login error')
                     context.commit('setCurrentToken', {token: ''})
                     context.commit('setLoggedIn', {value: false})
+                }
+            )
+        },
+        fetchComments(context) {
+            return sendRequest(
+                context.getters.getBackendAddress,
+                '/questions/comments',
+                'post',
+                context.getters.getCurrentQuestion,
+                {},
+                function (response) {
+                    context.commit('setComments', response.data)
+                },
+                function () {
+                    context.commit('setComments', [])
                 }
             )
         },
@@ -77,6 +91,9 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getComments(state) {
+            return state.comments
+        },
         getUser(state) {
             return state.user
         },
