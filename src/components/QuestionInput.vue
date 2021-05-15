@@ -27,7 +27,7 @@
         <v-card :color="question.answers[0].color">
           <v-card-title>
             <v-text-field
-                v-model="question.answers[0].content"
+                v-model="question.answers[0].answer"
                 label="First option"
                 required
             ></v-text-field>
@@ -38,7 +38,7 @@
         <v-card :color="question.answers[1].color">
           <v-card-title>
             <v-text-field
-                v-model="question.answers[1].content"
+                v-model="question.answers[1].answer"
                 label="Second option"
                 required
             ></v-text-field>
@@ -81,7 +81,7 @@
         <v-card :color="question.answers[0].color">
           <v-card-title>
             <v-text-field
-                v-model="question.answers[0].content"
+                v-model="question.answers[0].answer"
                 label="First option"
                 required
             ></v-text-field>
@@ -92,7 +92,7 @@
         <v-card :color="question.answers[1].color">
           <v-card-title>
             <v-text-field
-                v-model="question.answers[1].content"
+                v-model="question.answers[1].answer"
                 label="Second option"
                 required
             ></v-text-field>
@@ -157,11 +157,11 @@ export default {
         answers: [
           {
             color: 'blue',
-            content: ''
+            answer: ''
           },
           {
             color: 'red',
-            content: ''
+            answer: ''
           }
         ]
       },
@@ -219,9 +219,9 @@ export default {
     },
     reset: function () {
       this.question.question = ''
-      this.question.answers[0].content = ''
+      this.question.answers[0].answer = ''
       this.question.answers[0].color = 'blue'
-      this.question.answers[1].content = ''
+      this.question.answers[1].answer = ''
       this.question.answers[1].color = 'red'
     }
   }

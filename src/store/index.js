@@ -13,7 +13,7 @@ export default new Vuex.Store({
         backendAddress: 'https://debatable-server.herokuapp.com',
         question: {
             question: 'Pepsi or Coke?',
-            answers: [{content: "Pepsi", color: "blue", count: 10}, {content: "Coke", color: "red", count: 20}]
+            answers: [{answer: "Pepsi", color: "blue", count: 10}, {answer: "Coke", color: "red", count: 20}]
         },
         loggedIn: {value: false},
         authToken: {token: ""},
@@ -65,8 +65,8 @@ export default new Vuex.Store({
                 function () {
                     context.commit('setCurrentQuestion', {
                         question: 'Pepsi or Coke?',
-                        answers: [{content: "Pepsi", color: "blue", count: 10}, {
-                            content: "Coke",
+                        answers: [{answer: "Pepsi", color: "blue", count: 10}, {
+                            answer: "Coke",
                             color: "red",
                             count: 20
                         }],
