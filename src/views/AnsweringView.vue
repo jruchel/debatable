@@ -3,7 +3,7 @@
     <v-snackbar
         v-if="snackbar.show"
         top
-        :style="marginTop()"
+        :style="marginTop"
         v-model="snackbar.show"
         :color=$store.getters.getColor.snackbar.name
         timeout="3500"
@@ -88,6 +88,15 @@ export default {
   name: "AnsweringView",
   components: {CommentSection, Option},
   computed: {
+    marginTop() {
+      if (this.isMobile) {
+        return "margin-top: 15%"
+      }
+      return "margin-top: 0%"
+    },
+    isMobile() {
+      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
+    },
     question() {
       return this.$store.getters.getCurrentQuestion
     },
@@ -108,8 +117,7 @@ export default {
   },
   methods: {
     deleteComment(args) {
-
-      deleteComment(args[0], this.token, this.fetchComments, this.handleErrorResponse).then(args[1])
+      deleteComment(args[0], this.token, this.handleCommentDeleteResponse, this.handleErrorResponse).then(args[1])
     },
     getAnswerCount(number) {
       return this.question.answers[number].count
@@ -120,9 +128,11 @@ export default {
     nextQuestion() {
       this.loadingNextQuestion = true
       this.showResults = false
-      this.$store.dispatch('fetchQuestion').then(this.stopLoading).then(this.fetchComments).then(this.printComments)
+      this.$store.dispatch('fetchQuestion').then(this.stopLoading).then(this.fetchComments)
     },
-    printComments() {
+    handleCommentDeleteResponse() {
+      this.showSnackbar('Comment deleted')
+      this.fetchComments()
     },
     fetchComments() {
       return this.$store.dispatch('fetchComments')
@@ -137,15 +147,6 @@ export default {
       this.snackbar.show = false
       this.snackbar.text = text
       this.snackbar.show = true
-    },
-    marginTop() {
-      if (this.isMobile()) {
-        return "margin-top: 15%"
-      }
-      return "margin-top: 0%"
-    },
-    isMobile() {
-      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
     },
     handleErrorResponse(response) {
       this.showSnackbar(response.data)

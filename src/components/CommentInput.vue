@@ -15,7 +15,7 @@
         required
         solo
         clearable
-        @click:append="reauthenticateAndPost"
+        @click:append="validateReauthenticateAndPost"
         full-width
         :loading=loading
     >
@@ -62,8 +62,12 @@ export default {
       this.snackbar.text = text
       this.snackbar.show = true
     },
-    reauthenticateAndPost() {
-      this.$store.dispatch('reauthenticate').then(this.postComment)
+    validateReauthenticateAndPost() {
+      if (this.validateComment() === false) this.showSnackbar('Comment cannot be empty')
+      else this.$store.dispatch('reauthenticate').then(this.postComment)
+    },
+    validateComment() {
+      return (this.comment === null || this.comment === undefined || this.comment === '' || this.comment.trim() === '') === false
     },
     postComment() {
       this.loading = true
@@ -81,7 +85,7 @@ export default {
       this.loading = false
     },
     handleResponse() {
-      this.showSnackbar('Comment added')
+      this.showSnackbar('Comment posted')
       this.loading = false
     }
   }
