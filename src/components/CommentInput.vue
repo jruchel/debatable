@@ -3,32 +3,37 @@
     <v-snackbar
         :color=$store.getters.getColor.snackbar.name
         top
-        :style="marginTop()"
-        v-model="snackbar.show"
+        :style='marginTop()'
+        v-model='snackbar.show'
     >
       {{ snackbar.text }}
     </v-snackbar>
-    <v-text-field
-        append-icon="mdi-send"
-        v-model="comment"
-        label="Add a comment"
-        required
-        solo
-        clearable
-        @click:append="validateReauthenticateAndPost"
-        full-width
-        :loading=loading
-    >
-    </v-text-field>
+    <v-form v-model='valid' ref='form'>
+      <v-text-field
+          append-icon='mdi-send'
+          v-model='comment'
+          label='Add a comment'
+          solo
+          @click:append='reauthenticateAndPost'
+          full-width
+          :loading=loading
+          :rules='rules.comment'
+      >
+      </v-text-field>
+    </v-form>
   </v-container>
 </template>
 
 <script>
 
-import {postComment} from "@/api/api";
+import {postComment} from '@/api/api';
 
 export default {
-  name: "CommentInput",
+  name: 'CommentInput',
+  mounted() {
+    this.$store.dispatch('fetchComments')
+    this.comment = ''
+  },
   computed: {
     user() {
       return this.$store.getters.getUser
@@ -42,17 +47,26 @@ export default {
   },
   data() {
     return {
+      valid: false,
       comment: '',
-      snackbar: {show: false, text: "d00pa"},
-      loading: false
+      snackbar: {show: false, text: 'd00pa'},
+      loading: false,
+      rules: {
+        comment: [
+          v => v !== undefined || 'Comment cannot be empty',
+          v => v !== null || 'Comment cannot be empty',
+          v => !!v || 'Comment cannot be empty',
+          v => v !== '' || 'Comment cannot be empty',
+        ]
+      }
     }
   },
   methods: {
     marginTop() {
       if (this.isMobile()) {
-        return "margin-top: 15%"
+        return 'margin-top: 15%'
       }
-      return "margin-top: 2%"
+      return 'margin-top: 2%'
     },
     isMobile() {
       return /xs|sm/i.test(this.$vuetify.breakpoint.name)
@@ -62,22 +76,29 @@ export default {
       this.snackbar.text = text
       this.snackbar.show = true
     },
-    validateReauthenticateAndPost() {
-      if (this.validateComment() === false) this.showSnackbar('Comment cannot be empty')
-      else this.$store.dispatch('reauthenticate').then(this.postComment)
+    reauthenticateAndPost() {
+      if (this.comment === undefined) {
+        console.log(this.comment)
+        this.comment = ''
+      }
+      this.$refs.form.validate()
+      if (this.valid === true) {
+        this.$store.dispatch('reauthenticate').then(this.postComment).then(this.resetForm)
+      }
     },
-    validateComment() {
-      return (this.comment === null || this.comment === undefined || this.comment === '' || this.comment.trim() === '') === false
+    resetForm() {
+      this.$refs.form.reset()
+      this.comment = ''
     },
     postComment() {
       this.loading = true
       if (this.comment === null || this.comment === undefined) {
         this.comment = ''
       }
-      postComment(this.question, this.comment, this.token, this.handleResponse, this.handleErrorResponse).then(this.fetchComments)
+      return postComment(this.question, this.comment, this.token, this.handleResponse, this.handleErrorResponse).then(this.fetchComments)
     },
     fetchComments() {
-      this.$store.dispatch('fetchComments')
+      return this.$store.dispatch('fetchComments')
     },
     handleErrorResponse(response) {
       this.showSnackbar(response.data)
