@@ -107,6 +107,7 @@ export default {
     handleLoginResponse(response) {
       if (response.status === 200) {
         this.saveToken(response.data)
+        this.$store.dispatch('fetchUser')
         this.showSnackbar("Login successful")
       } else try {
         this.showSnackbar(response.data)

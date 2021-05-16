@@ -17,6 +17,7 @@
         clearable
         @click:append="postComment"
         full-width
+        :loading=loading
     >
     </v-text-field>
   </v-container>
@@ -43,6 +44,7 @@ export default {
     return {
       comment: '',
       snackbar: {show: false, text: "d00pa"},
+      loading: false
     }
   },
   methods: {
@@ -61,6 +63,7 @@ export default {
       this.snackbar.show = true
     },
     postComment() {
+      this.loading = true
       postComment(this.question, this.comment, this.token, this.handleResponse, this.handleErrorResponse).then(this.fetchComments)
     },
     fetchComments() {
@@ -69,9 +72,11 @@ export default {
     handleErrorResponse(response) {
       this.showSnackbar(response.data)
       this.comment = ''
+      this.loading = false
     },
-    handleResponse(response) {
-      this.showSnackbar(response.data)
+    handleResponse() {
+      this.showSnackbar('Comment added')
+      this.loading = false
     }
   }
 }

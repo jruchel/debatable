@@ -82,3 +82,26 @@ export function postComment(question, comment, token, onComplete, onError) {
         onError
     )
 }
+
+export function deleteComment(comment, token, onComplete, onError) {
+    return sendRequest(backendAddress,
+        '/comments',
+        'delete',
+        comment,
+        token,
+        onComplete,
+        onError
+    )
+}
+
+export function getUser(token, onComplete, onError) {
+    return sendRequest(
+        backendAddress,
+        '/user',
+        'get',
+        {},
+        token,
+        onComplete,
+        onError
+    )
+}

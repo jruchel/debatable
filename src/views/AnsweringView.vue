@@ -1,5 +1,15 @@
 <template>
   <v-container style="margin-top: 200px">
+    <v-snackbar
+        v-if="snackbar.show"
+        top
+        :style="marginTop()"
+        v-model="snackbar.show"
+        :color=$store.getters.getColor.snackbar.name
+        timeout="3500"
+    >
+      {{ snackbar.text }}
+    </v-snackbar>
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
@@ -46,7 +56,8 @@
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
-          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="nextQuestion" :loading="loadingNextQuestion">
+          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="nextQuestion"
+                  :loading="loadingNextQuestion">
             <template slot="progress">
               <v-progress-linear
                   color="green"
@@ -63,7 +74,7 @@
     </v-row>
     <v-spacer></v-spacer>
     <v-fade-transition>
-      <CommentSection v-if="showResults" :comments="comments"></CommentSection>
+      <CommentSection v-on:delete-comment="deleteComment" v-if="showResults" :comments="comments"></CommentSection>
     </v-fade-transition>
   </v-container>
 </template>
@@ -71,6 +82,7 @@
 <script>
 import Option from "@/components/Option";
 import CommentSection from "@/components/CommentSection";
+import {deleteComment} from "@/api/api";
 
 export default {
   name: "AnsweringView",
@@ -81,16 +93,24 @@ export default {
     },
     comments() {
       return this.$store.getters.getComments
+    },
+    token() {
+      return this.$store.getters.getAuthToken
     }
   },
   data() {
     return {
       userAnswer: null,
       showResults: false,
-      loadingNextQuestion: false
+      loadingNextQuestion: false,
+      snackbar: {show: false, text: "d00pa"}
     }
   },
   methods: {
+    deleteComment(args) {
+
+      deleteComment(args[0], this.token, this.fetchComments, this.handleErrorResponse).then(args[1])
+    },
     getAnswerCount(number) {
       return this.question.answers[number].count
     },
@@ -101,7 +121,6 @@ export default {
       this.loadingNextQuestion = true
       this.showResults = false
       this.$store.dispatch('fetchQuestion').then(this.stopLoading).then(this.fetchComments).then(this.printComments)
-
     },
     printComments() {
     },
@@ -113,6 +132,23 @@ export default {
     },
     getQuestionContent() {
       return this.question.question
+    },
+    showSnackbar(text) {
+      this.snackbar.show = false
+      this.snackbar.text = text
+      this.snackbar.show = true
+    },
+    marginTop() {
+      if (this.isMobile()) {
+        return "margin-top: 15%"
+      }
+      return "margin-top: 0%"
+    },
+    isMobile() {
+      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
+    },
+    handleErrorResponse(response) {
+      this.showSnackbar(response.data)
     },
     handleAnswer(answer) {
       this.userAnswer = answer

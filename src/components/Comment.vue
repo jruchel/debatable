@@ -21,7 +21,7 @@
       </v-btn>
       <v-spacer>
       </v-spacer>
-      <v-btn v-if="isCurrentUsers" icon @click="$emit('delete-comment', comment)">
+      <v-btn v-if="isCurrentUsers" icon @click="emitDeleteEvent" :loading="loading">
         <v-icon color="red" size="300%">
           mdi-close-circle-outline
         </v-icon>
@@ -43,6 +43,20 @@ export default {
       return this.user.email === this.comment.user.email
     }
   },
+  data() {
+    return {
+      loading: false
+    }
+  },
+  methods: {
+    emitDeleteEvent() {
+      this.loading = true
+      this.$emit('delete-comment', [this.comment, this.finishLoading])
+    },
+    finishLoading() {
+      this.loading = false
+    }
+  }
 }
 </script>
 

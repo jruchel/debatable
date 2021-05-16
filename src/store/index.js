@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import {authenticate, getCommentsOfQuestion, getRandomQuestion} from "@/api/api";
+import {authenticate, getCommentsOfQuestion, getRandomQuestion, getUser} from "@/api/api";
 
 Vue.use(Vuex)
 
@@ -58,6 +58,13 @@ export default new Vuex.Store({
                 function () {
                     context.commit('setComments', [])
                 })
+        },
+        fetchUser(context) {
+            return getUser(context.getters.getAuthToken, function (response) {
+                context.commit('setUser', response.data)
+            }, function () {
+                context.commit('setUser', {username: "", password: "", email: ""})
+            })
         },
         fetchQuestion(context) {
             return getRandomQuestion(

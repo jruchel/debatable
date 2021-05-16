@@ -8,7 +8,7 @@
     <v-row v-for="comment in comments" :key="comment.id" class="justify-center">
       <v-col cols="12" lg="6">
         <v-slide-x-transition>
-          <Comment :comment="comment"></Comment>
+          <Comment :comment="comment" v-on:delete-comment="deleteComment"></Comment>
         </v-slide-x-transition>
       </v-col>
     </v-row>
@@ -26,6 +26,14 @@ export default {
   computed: {
     loggedIn() {
       return this.$store.getters.getLoggedIn
+    },
+    token() {
+      return this.$store.getters.getAuthToken
+    }
+  },
+  methods: {
+    deleteComment(comment) {
+      this.$emit('delete-comment', comment)
     }
   }
 }
