@@ -7,7 +7,7 @@
               top
               :style="marginTop()"
               v-model="snackbar.show"
-              color="blue-grey darken-2"
+              :color=$store.getters.getColor.snackbar.name
               timeout="3500"
           >
             {{ snackbar.text }}
@@ -111,7 +111,7 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="8" xl="6">
-        <v-card @click="postQuestion" color="blue-grey darken-3" dark :loading="postingQuestion">
+        <v-card @click="postQuestion" :color=$store.getters.getColor.buttonPrimary.name dark :loading="postingQuestion">
           <template slot="progress">
             <v-progress-linear
                 color="green"
@@ -127,7 +127,7 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="6" md="3" xl="2">
-        <v-card @click="reset" color="blue-grey darken-1" dark>
+        <v-card @click="reset" :color=$store.getters.getColor.buttonSecondary.name dark>
           <v-card-title style="height: 100%" class="justify-center">
             <span>Reset</span>
           </v-card-title>
@@ -138,14 +138,11 @@
 </template>
 
 <script>
-import {sendRequest} from "@/utils/requests";
+import {postQuestion, postTrialQuestion} from "@/api/api";
 
 export default {
   name: "QuestionInput",
   computed: {
-    backendAddress() {
-      return this.$store.getters.getBackendAddress
-    },
     authToken() {
       return this.$store.getters.getAuthToken
     }
@@ -172,7 +169,7 @@ export default {
   },
   methods: {
     marginTop() {
-      if(this.isMobile()) {
+      if (this.isMobile()) {
         return "margin-top: 15%"
       }
       return "margin-top: 2%"
@@ -194,19 +191,10 @@ export default {
       }
     },
     postTrialQuestion: function () {
-      sendRequest(this.backendAddress, '/questions/trial', 'post', this.question, {}, this.handleResponse, this.handleResponse)
+      postTrialQuestion(this.question, this.handleResponse, this.handleResponse)
     },
     postQuestionToUser: function () {
-      let actualHeaders = {}
-      actualHeaders['token'] = this.authToken.token
-      sendRequest(this.backendAddress,
-          '/questions',
-          'post',
-          this.question,
-          this.authToken,
-          this.handleResponse,
-          this.handleResponse
-      )
+      postQuestion(this.question, this.authToken, this.handleResponse, this.handleResponse)
     },
     handleResponse(response) {
       if (response.status === 201) {

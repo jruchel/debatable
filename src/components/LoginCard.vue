@@ -5,12 +5,12 @@
         top
         :style="marginTop()"
         v-model="snackbar.show"
-        color="blue-grey darken-2"
+        :color=$store.getters.getColor.snackbar.name
         timeout="3500"
     >
       {{ snackbar.text }}
     </v-snackbar>
-    <v-toolbar dark flat class="sticky-toolbar" color="blue-grey darken-4">
+    <v-toolbar dark flat class="sticky-toolbar" :color=$store.getters.getColor.primary.name>
       <v-spacer></v-spacer>
       <span>Please log in</span>
       <v-spacer></v-spacer>
@@ -47,7 +47,8 @@
 </template>
 
 <script>
-import {sendRequest} from "@/utils/requests";
+import {authenticate, register} from "@/api/api";
+
 
 export default {
   name: "LoginCard",
@@ -93,28 +94,14 @@ export default {
       this.emailInput = false
       this.user.email = ''
       this.loadingLogin = true
-      sendRequest(this.$store.getters.getBackendAddress,
-          '/security/authenticate',
-          'POST',
-          this.user,
-          {},
-          this.handleLoginResponse,
-          this.handleLoginResponse
-      )
+      authenticate(this.user, this.handleLoginResponse, this.handleLoginResponse)
     },
     performRegistration() {
       if (this.emailInput === false) {
         this.emailInput = true
       } else {
         this.loadingRegister = true
-        sendRequest(this.$store.getters.getBackendAddress,
-            '/security/register',
-            'POST',
-            this.user,
-            {},
-            this.handleLoginResponse,
-            this.handleLoginResponse
-        )
+        register(this.user, this.handleLoginResponse, this.handleLoginResponse)
       }
     },
     handleLoginResponse(response) {

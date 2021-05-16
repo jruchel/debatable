@@ -17,4 +17,4 @@ new Vue({
 //TODO: use forms wherever it makes sense
 //TODO: fetch batches of comments as pages and keep adding more pages as the user scrolls down
 //TODO: color the comments of each users by the answer they have given
-//TODO: allow only logged in users to comment
+//TODO: Highlight the answer that the user has given

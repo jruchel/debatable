@@ -1,6 +1,6 @@
 <template>
-  <v-app style="background-color: #BCAAA4">
-    <v-app-bar dark color="blue-grey darken-4" absolute>
+  <v-app :style=backgroundStyle>
+    <v-app-bar dark :color=$store.getters.getColor.primary.name absolute>
       <Return></Return>
       <v-spacer></v-spacer>
       <LoginDialog></LoginDialog>
@@ -36,6 +36,12 @@ export default {
     },
     backendAddress() {
       return this.$store.getters.getBackendAddress;
+    },
+    backgroundColor() {
+      return this.$store.getters.getColor.background.hex
+    },
+    backgroundStyle() {
+      return 'background-color: ' + this.backgroundColor
     }
   },
   methods: {

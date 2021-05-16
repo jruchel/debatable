@@ -7,7 +7,9 @@
     </v-row>
     <v-row v-for="comment in comments" :key="comment.id" class="justify-center">
       <v-col cols="12" lg="6">
-        <Comment :comment="comment"></Comment>
+        <v-slide-x-transition>
+          <Comment :comment="comment"></Comment>
+        </v-slide-x-transition>
       </v-col>
     </v-row>
   </v-container>

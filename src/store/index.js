@@ -1,16 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import {sendRequest} from "@/utils/requests"
+import {authenticate, getCommentsOfQuestion, getRandomQuestion} from "@/api/api";
 
 Vue.use(Vuex)
+
 
 export default new Vuex.Store({
     plugins: [createPersistedState({
         storage: window.sessionStorage,
     })],
     state: {
-        backendAddress: 'http://localhost:8081',
+        color: {
+            primary: {name: 'blue-grey darken-4', hex: '#263238'},
+            background: {name: 'brown lighten-3', hex: '#BCAAA4'},
+            buttonPrimary: {name: 'blue-grey darken-3', hex: '#455A64'},
+            buttonSecondary: {name: 'blue-grey darken-1', hex: '#546E7A'},
+            snackbar: {name: 'blue-grey darken-2', hex: '#455A64'}
+        },
         question: {},
         comments: [],
         loggedIn: {value: false},
@@ -36,43 +43,25 @@ export default new Vuex.Store({
     },
     actions: {
         reauthenticate(context) {
-            return sendRequest(
-                context.getters.getBackendAddress,
-                '/security/authenticate',
-                'post',
-                context.getters.getUser,
-                {},
-                function (response) {
+            return authenticate(context.getters.getUser, function (response) {
                     context.commit('setCurrentToken', response.data)
                 },
                 function () {
                     context.commit('setCurrentToken', {token: ''})
                     context.commit('setLoggedIn', {value: false})
-                }
-            )
+                })
         },
         fetchComments(context) {
-            return sendRequest(
-                context.getters.getBackendAddress,
-                '/questions/comments',
-                'post',
-                context.getters.getCurrentQuestion,
-                {},
-                function (response) {
+            return getCommentsOfQuestion(context.getters.getCurrentQuestion, function (response) {
                     context.commit('setComments', response.data)
                 },
                 function () {
                     context.commit('setComments', [])
-                }
-            )
+                })
         },
         fetchQuestion(context) {
-            return sendRequest(
-                context.getters.getBackendAddress,
-                '/questions/random',
-                'post',
+            return getRandomQuestion(
                 context.getters.getCurrentQuestion,
-                {},
                 function (response) {
                     context.commit('setCurrentQuestion', response.data)
                 },
@@ -86,19 +75,20 @@ export default new Vuex.Store({
                         }],
                         commentCount: 0,
                     })
-                })
+                }
+            )
         }
     },
     modules: {},
     getters: {
+        getColor(state) {
+            return state.color
+        },
         getComments(state) {
             return state.comments
         },
         getUser(state) {
             return state.user
-        },
-        getBackendAddress(state) {
-            return state.backendAddress
         },
         getCurrentQuestion(state) {
             return state.question
@@ -111,3 +101,4 @@ export default new Vuex.Store({
         }
     }
 })
+

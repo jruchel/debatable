@@ -46,7 +46,7 @@
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
-          <v-card color="blue-grey darken-3" dark @click="nextQuestion" :loading="loadingNextQuestion">
+          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="nextQuestion" :loading="loadingNextQuestion">
             <template slot="progress">
               <v-progress-linear
                   color="green"
