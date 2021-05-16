@@ -64,6 +64,9 @@ export default {
     },
     postComment() {
       this.loading = true
+      if (this.comment === null || this.comment === undefined) {
+        this.comment = ''
+      }
       postComment(this.question, this.comment, this.token, this.handleResponse, this.handleErrorResponse).then(this.fetchComments)
     },
     fetchComments() {
