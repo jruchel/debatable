@@ -54,6 +54,9 @@ import {authenticate, register} from "@/api/api";
 
 export default {
   name: "LoginCard",
+  mounted() {
+    this.$refs.form.resetValidation()
+  },
   computed: {
     loggedIn() {
       return this.$store.getters.getLoggedIn;
@@ -132,6 +135,7 @@ export default {
         this.validate()
         if (this.valid === true) {
           this.loadingRegister = true
+          this.$refs.form.resetValidation()
           register(this.user, this.handleLoginResponse, this.handleLoginResponse)
         }
       }
