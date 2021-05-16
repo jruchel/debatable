@@ -111,7 +111,8 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="8" xl="6">
-        <v-card @click="postQuestion" :color=$store.getters.getColor.buttonPrimary.name dark :loading="postingQuestion">
+        <v-card @click="reauthenticateAndPost" :color=$store.getters.getColor.buttonPrimary.name dark
+                :loading="postingQuestion">
           <template slot="progress">
             <v-progress-linear
                 color="green"
@@ -182,7 +183,10 @@ export default {
       this.snackbar.text = text
       this.snackbar.show = true
     },
-    postQuestion: function () {
+    reauthenticateAndPost() {
+      this.$store.dispatch('reauthenticate').then(this.postQuestion)
+    },
+    postQuestion() {
       this.postingQuestion = true
       if (this.$store.getters.getLoggedIn.value === true) {
         this.$store.dispatch('reauthenticate').then(this.postQuestionToUser)
@@ -190,10 +194,10 @@ export default {
         this.postTrialQuestion()
       }
     },
-    postTrialQuestion: function () {
+    postTrialQuestion() {
       postTrialQuestion(this.question, this.handleResponse, this.handleResponse)
     },
-    postQuestionToUser: function () {
+    postQuestionToUser() {
       postQuestion(this.question, this.authToken, this.handleResponse, this.handleResponse)
     },
     handleResponse(response) {

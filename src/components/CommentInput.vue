@@ -15,7 +15,7 @@
         required
         solo
         clearable
-        @click:append="postComment"
+        @click:append="reauthenticateAndPost"
         full-width
         :loading=loading
     >
@@ -61,6 +61,9 @@ export default {
       this.snackbar.show = false
       this.snackbar.text = text
       this.snackbar.show = true
+    },
+    reauthenticateAndPost() {
+      this.$store.dispatch('reauthenticate').then(this.postComment)
     },
     postComment() {
       this.loading = true

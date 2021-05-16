@@ -21,7 +21,7 @@
       </v-btn>
       <v-spacer>
       </v-spacer>
-      <v-btn v-if="isCurrentUsers" icon @click="emitDeleteEvent" :loading="loading">
+      <v-btn v-if="isCurrentUsers" icon @click="handleDelete" :loading="loading">
         <v-icon color="red" size="300%">
           mdi-close-circle-outline
         </v-icon>
@@ -38,8 +38,12 @@ export default {
     user() {
       return this.$store.getters.getUser
     },
+    loggedIn() {
+      return this.$store.getters.getLoggedIn
+    },
     isCurrentUsers() {
-      if(!this.user) return false
+      if (this.loggedIn === false) return false
+      if (!this.user) return false
       return this.user.email === this.comment.user.email
     }
   },
@@ -49,8 +53,11 @@ export default {
     }
   },
   methods: {
-    emitDeleteEvent() {
+    handleDelete() {
       this.loading = true
+      this.$store.dispatch('reauthenticate').then(this.emitDeleteEvent)
+    },
+    emitDeleteEvent() {
       this.$emit('delete-comment', [this.comment, this.finishLoading])
     },
     finishLoading() {

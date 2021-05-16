@@ -60,7 +60,9 @@ export default new Vuex.Store({
                 })
         },
         fetchUser(context) {
+            let password = context.getters.getUser.password
             return getUser(context.getters.getAuthToken, function (response) {
+                response.data['password'] = password
                 context.commit('setUser', response.data)
             }, function () {
                 context.commit('setUser', {username: "", password: "", email: ""})
