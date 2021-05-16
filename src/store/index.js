@@ -29,7 +29,8 @@ export default new Vuex.Store({
             state.comments = payload
         },
         setUser(state, payload) {
-            state.user = payload
+            if (payload === undefined || payload === null || payload === {}) state.user = {username: "", password: "", email: ""}
+            else state.user = payload
         },
         setCurrentQuestion(state, payload) {
             state.question = payload

@@ -16,32 +16,34 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-card style="margin-top: 30px">
-      <v-text-field outlined style="margin-left: 10px; margin-right: 10px"
-                    label="username" v-model="user.username"
-      ></v-text-field>
-      <v-text-field type="password" outlined style="margin-left: 10px; margin-right: 10px"
-                    label="password" v-model="user.password"
-      ></v-text-field>
-      <v-fade-transition>
-        <v-text-field v-if="emailInput" outlined style="margin-left: 10px; margin-right: 10px"
-                      label="email" v-model="user.email"
+      <v-form v-model="valid" lazy-validation ref="form">
+        <v-text-field outlined style="margin-left: 10px; margin-right: 10px"
+                      label="username" v-model="user.username" :rules="rules.username"
         ></v-text-field>
-      </v-fade-transition>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingLogin" @click="performLogin">
-          Login
-        </v-btn>
-        <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingRegister"
-               @click="performRegistration">
-          Register
-        </v-btn>
-        <v-fade-transition mode="in">
-          <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle
-          </v-icon>
+        <v-text-field type="password" outlined style="margin-left: 10px; margin-right: 10px"
+                      label="password" v-model="user.password" :rules="rules.password"
+        ></v-text-field>
+        <v-fade-transition>
+          <v-text-field v-if="emailInput" outlined style="margin-left: 10px; margin-right: 10px"
+                        label="email" v-model="user.email" :rules="rules.email"
+          ></v-text-field>
         </v-fade-transition>
-        <v-spacer></v-spacer>
-      </v-card-actions>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingLogin" @click="performLogin">
+            Login
+          </v-btn>
+          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingRegister"
+                 @click="performRegistration">
+            Register
+          </v-btn>
+          <v-fade-transition mode="in">
+            <v-icon v-if="this.loggedIn.value" color="green" style="margin-bottom: 10px" size="45">mdi-check-circle
+            </v-icon>
+          </v-fade-transition>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-card>
 </template>
@@ -69,7 +71,28 @@ export default {
       loadingLogin: false,
       loadingRegister: false,
       emailInput: false,
-      snackbar: {show: false, text: "d00pa"}
+      snackbar: {show: false, text: "d00pa"},
+      valid: false,
+      rules: {
+        email: [
+          v => v !== undefined || 'E-mail is required',
+          v => !!v || 'E-mail is required',
+          v => /.+@.+/.test(v) || 'E-mail must be valid',
+        ],
+        password: [
+          v => v !== undefined || 'Password is required',
+          v => !!v || 'Password is required',
+          v => v.length > 5 || 'Password must be longer than 5 characters',
+          v => v.length < 15 || 'Password must be shorter than 20 characters',
+          v => /[a-zA-Z0-9]+/.test(v) || 'Password must contain upper and lower case letters and at least one number'
+        ],
+        username: [
+          v => v !== undefined || 'Username is required',
+          v => !!v || 'Username is required',
+          v => v.length > 3 || 'Username must be longer than 3 characters',
+          v => v.length < 15 || 'Username must be shorter than 15 characters'
+        ]
+      }
     }
   },
   methods: {
@@ -92,16 +115,25 @@ export default {
     },
     performLogin() {
       this.emailInput = false
+      this.validate()
+      if (this.valid === false) return
       this.user.email = ''
       this.loadingLogin = true
       authenticate(this.user, this.handleLoginResponse, this.handleLoginResponse)
+    },
+    validate() {
+      this.$refs.form.validate()
+      return this.valid === true
     },
     performRegistration() {
       if (this.emailInput === false) {
         this.emailInput = true
       } else {
-        this.loadingRegister = true
-        register(this.user, this.handleLoginResponse, this.handleLoginResponse)
+        this.validate()
+        if (this.valid === true) {
+          this.loadingRegister = true
+          register(this.user, this.handleLoginResponse, this.handleLoginResponse)
+        }
       }
     },
     handleLoginResponse(response) {

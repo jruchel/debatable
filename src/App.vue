@@ -34,9 +34,6 @@ export default {
     authToken() {
       return this.$store.getters.getAuthToken;
     },
-    backendAddress() {
-      return this.$store.getters.getBackendAddress;
-    },
     backgroundColor() {
       return this.$store.getters.getColor.background.hex
     },
@@ -48,7 +45,7 @@ export default {
     performLogout() {
       this.$store.commit('setCurrentToken', {token: ''})
       this.$store.commit('setLoggedIn', {value: false})
-      this.$store.commit('setUser', {})
+      this.$store.commit('setUser', {username: "", password: "", email: ""})
     }
   }
 };
