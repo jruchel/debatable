@@ -240,7 +240,10 @@ export default {
       this.postingQuestion = false
     },
     reset() {
-      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
+      this.question.question = ''
+      this.question.answers[0].answer = ''
+      this.question.answers[1].answer = ''
       this.question.answers[0].color = 'blue'
       this.question.answers[1].color = 'red'
     }
