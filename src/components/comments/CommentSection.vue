@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import Comment from "@/components/Comment";
-import CommentInput from "@/components/CommentInput";
+import Comment from "@/components/comments/Comment";
+import CommentInput from "@/components/comments/CommentInput";
 
 export default {
   name: "CommentSection",

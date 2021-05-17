@@ -18,7 +18,7 @@
 
 <script>
 
-import LoginDialog from "@/components/LoginDialog";
+import LoginDialog from "@/components/login/LoginDialog";
 import Return from "@/components/Return";
 
 export default {

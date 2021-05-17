@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import Option from "@/components/Option";
-import CommentSection from "@/components/CommentSection";
+import Option from "@/components/questions/Option";
+import CommentSection from "@/components/comments/CommentSection";
 import {deleteComment} from "@/api/api";
 
 export default {

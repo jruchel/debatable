@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import LoginPrompt from "@/components/LoginPrompt";
-import QuestionInput from "@/components/QuestionInput";
+import LoginPrompt from "@/components/login/LoginPrompt";
+import QuestionInput from "@/components/questions/QuestionInput";
 
 export default {
   name: "AskingView",
