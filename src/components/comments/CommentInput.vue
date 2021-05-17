@@ -78,11 +78,11 @@ export default {
     },
     reauthenticateAndPost() {
       if (this.comment === undefined) {
-        console.log(this.comment)
         this.comment = ''
       }
       this.$refs.form.validate()
       if (this.valid === true) {
+        this.loading = true
         this.$store.dispatch('reauthenticate').then(this.postComment).then(this.resetForm)
       }
     },
@@ -91,21 +91,22 @@ export default {
       this.comment = ''
     },
     postComment() {
-      this.loading = true
       if (this.comment === null || this.comment === undefined) {
         this.comment = ''
       }
-      return postComment(this.question, this.comment, this.token).then(this.handleResponse).catch(this.handleErrorResponse).then(this.fetchComments)
+      return postComment(this.question, this.comment, this.token).then(this.notifyCommentPosted)
+          .catch(this.notifyError)
+          .then(this.fetchComments)
     },
     fetchComments() {
       return this.$store.dispatch('fetchComments')
     },
-    handleErrorResponse(response) {
-      this.showSnackbar(response.data)
+    notifyError(error) {
+      this.showSnackbar(error.response.data)
       this.comment = ''
       this.loading = false
     },
-    handleResponse() {
+    notifyCommentPosted() {
       this.showSnackbar('Comment posted')
       this.loading = false
     }

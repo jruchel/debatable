@@ -16,7 +16,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-card style="margin-top: 30px">
-      <v-form v-model="valid" lazy-validation ref="form">
+      <v-form v-model="valid" ref="form">
         <v-text-field outlined style="margin-left: 10px; margin-right: 10px"
                       label="username" v-model="user.username" :rules="rules.username"
         ></v-text-field>
@@ -119,10 +119,14 @@ export default {
     performLogin() {
       this.emailInput = false
       this.validate()
-      if (this.valid === false) return
-      this.user.email = ''
-      this.loadingLogin = true
-      authenticate(this.user).then(this.handleLoginResponse).catch(this.handleLoginResponse)
+      if (this.valid === true) {
+        this.user.email = ''
+        this.loadingLogin = true
+        authenticate(this.user).then(this.handleLoginSuccess).catch(this.handleLoginError).then(() => {
+          this.loadingLogin = false
+          this.loadingRegister = false
+        })
+      }
     },
     validate() {
       this.$refs.form.validate()
@@ -136,22 +140,24 @@ export default {
         if (this.valid === true) {
           this.loadingRegister = true
           this.$refs.form.resetValidation()
-          register(this.user).then(this.handleLoginResponse).catch(this.handleLoginResponse)
+          register(this.user).then(this.handleLoginSuccess).catch(this.handleLoginError).then(() => {
+            this.loadingLogin = false
+            this.loadingRegister = false
+          })
         }
       }
     },
-    handleLoginResponse(response) {
-      if (response.status === 200) {
-        this.saveToken(response.data)
-        this.$store.dispatch('fetchUser')
-        this.showSnackbar("Login successful")
-      } else try {
-        this.showSnackbar(response.data)
+    handleLoginError(error) {
+      try {
+        this.showSnackbar(error.response.data)
       } catch (ex) {
         this.showSnackbar(ex)
       }
-      this.loadingLogin = false
-      this.loadingRegister = false
+    },
+    handleLoginSuccess(response) {
+      this.saveToken(response.data)
+      this.$store.dispatch('fetchUser')
+      this.showSnackbar("Login successful")
     },
     saveToken(token) {
       this.$store.commit('setCurrentToken', token)

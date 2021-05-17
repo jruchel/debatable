@@ -210,19 +210,20 @@ export default {
       this.snackbar.show = true
     },
     reauthenticateAndPost() {
-      this.$store.dispatch('reauthenticate').then(this.postQuestion)
+      this.postingQuestion = true
+      this.postQuestion()
     },
     postQuestion() {
       this.$refs.form.validate()
       if (this.valid) {
-        this.postingQuestion = true
         if (this.$store.getters.getLoggedIn.value === true) {
           this.$store.dispatch('reauthenticate').then(this.postQuestionToUser)
         } else {
           this.postTrialQuestion()
         }
+      } else {
+        this.postingQuestion = false
       }
-
     },
     postTrialQuestion() {
       postTrialQuestion(this.question).then(this.handleResponse).catch(this.handleResponse)

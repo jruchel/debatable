@@ -56,8 +56,8 @@
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
-          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="nextQuestion"
-                  :loading="loadingNextQuestion">
+          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="getNextQuestion"
+                  :loading="loading.nextQuestion">
             <template slot="progress">
               <v-progress-linear
                   color="green"
@@ -109,15 +109,23 @@ export default {
   },
   data() {
     return {
+      loading: {
+        nextQuestion: false,
+        firstAnswer: false,
+        secondAnswer: false
+      },
       userAnswer: null,
       showResults: false,
-      loadingNextQuestion: false,
       snackbar: {show: false, text: "d00pa"}
     }
   },
   methods: {
     deleteComment(args) {
-      deleteComment(args[0], this.token).then(this.handleCommentDeleteResponse).catch(this.handleErrorResponse).then(args[1])
+      deleteComment(args[0], this.token)
+          .then(() => this.showSnackbar('Comment deleted'))
+          .then(this.fetchComments)
+          .catch(this.showErrorSnackbar)
+          .then(args[1])
     },
     getAnswerCount(number) {
       return this.question.answers[number].count
@@ -125,20 +133,19 @@ export default {
     getAnswerColor(number) {
       return this.question.answers[number].color
     },
-    nextQuestion() {
-      this.loadingNextQuestion = true
+    getNextQuestion() {
+      this.loading.nextQuestion = true
       this.showResults = false
-      this.$store.dispatch('fetchQuestion').then(this.stopLoading).then(this.fetchComments)
-    },
-    handleCommentDeleteResponse() {
-      this.showSnackbar('Comment deleted')
-      this.fetchComments()
+      this.$store.dispatch('fetchQuestion')
+          .then(this.fetchComments)
+          .then(this.stopLoading)
+          .catch(() => this.showSnackbar('Error downloading questions'))
     },
     fetchComments() {
       return this.$store.dispatch('fetchComments')
     },
     stopLoading() {
-      this.loadingNextQuestion = false
+      this.loading.nextQuestion = false
     },
     getQuestionContent() {
       return this.question.question
@@ -148,7 +155,7 @@ export default {
       this.snackbar.text = text
       this.snackbar.show = true
     },
-    handleErrorResponse(response) {
+    showErrorSnackbar(response) {
       this.showSnackbar(response.data)
     },
     showAnswerResults() {

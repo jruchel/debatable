@@ -50,7 +50,10 @@ export default new Vuex.Store({
         reauthenticate(context) {
             return authenticate(context.getters.getUser)
                 .then(response => context.commit('setCurrentToken', response.data))
-                .catch()
+                .catch(() => {
+                    context.commit('setUser', {username: "", password: "", email: ""})
+                    context.commit('setLoggedIn', {value: false})
+                })
 
         },
         fetchComments(context) {
