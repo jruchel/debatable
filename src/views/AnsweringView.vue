@@ -22,12 +22,12 @@
     <v-row class="justify-center">
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.answers[0]" v-on:option-picked="handleAnswer"></Option>
+          <Option :answer="question.answers[0]" v-on:option-picked="handleAnswer(0)"></Option>
         </v-slide-x-transition>
       </v-col>
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.answers[1]" v-on:option-picked="handleAnswer"></Option>
+          <Option :answer="question.answers[1]" v-on:option-picked="handleAnswer(1)"></Option>
         </v-slide-x-transition>
       </v-col>
     </v-row>
@@ -82,7 +82,7 @@
 <script>
 import Option from "@/components/Option";
 import CommentSection from "@/components/CommentSection";
-import {deleteComment} from "@/api/api";
+import {deleteComment, postAnswer} from "@/api/api";
 
 export default {
   name: "AnsweringView",
@@ -119,6 +119,9 @@ export default {
     deleteComment(args) {
       deleteComment(args[0], this.token, this.handleCommentDeleteResponse, this.handleErrorResponse).then(args[1])
     },
+    handleAnswerPostResponse() {
+      this.showSnackbar('Answer submitted!');
+    },
     getAnswerCount(number) {
       return this.question.answers[number].count
     },
@@ -151,8 +154,16 @@ export default {
     handleErrorResponse(response) {
       this.showSnackbar(response.data)
     },
-    handleAnswer(answer) {
-      this.userAnswer = answer
+    postAnswer(answerNumber) {
+      console.log('token', JSON.stringify(this.token))
+      return postAnswer(this.question, answerNumber, this.token, this.handleAnswerPostResponse, this.handleErrorResponse)
+    },
+    handleAnswer(answerNumber) {
+      console.log('answer nr', answerNumber)
+      this.userAnswer = this.question.answers[answerNumber]
+      this.postAnswer(answerNumber).then(this.showAnswerResults)
+    },
+    showAnswerResults() {
       this.showResults = true
     },
     calculateUserAnswerPercentage(first, second, user) {

@@ -105,3 +105,15 @@ export function getUser(token, onComplete, onError) {
         onError
     )
 }
+
+export function postAnswer(question, answerNumber, token, onComplete, onError) {
+    return sendRequest(
+        backendAddress,
+        '/questions/answers',
+        'post',
+        {key: question, value: answerNumber},
+        token,
+        onComplete,
+        onError
+    )
+}
