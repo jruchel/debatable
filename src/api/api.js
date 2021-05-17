@@ -1,119 +1,90 @@
 import {sendRequest} from "@/utils/requests";
 
 
-let backendAddress = 'https://debatable-server.herokuapp.com'
+let backendAddress = 'http://localhost:8081'
 
-export function getRandomQuestion(currentQuestion, onComplete, onError) {
+export function getRandomQuestion(currentQuestion) {
     return sendRequest(
         backendAddress,
         '/questions/random',
         'post',
         currentQuestion,
         {},
-        onComplete,
-        onError)
+    )
 }
 
-export function getCommentsOfQuestion(question, onComplete, onError) {
+export function getCommentsOfQuestion(question) {
     return sendRequest(
         backendAddress,
         '/questions/comments',
         'post',
         question,
         {},
-        onComplete,
-        onError
     )
 }
 
-export function register(user, onComplete, onError) {
+export function register(user) {
     return sendRequest(
         backendAddress,
         '/security/register',
         'post',
         user,
         {},
-        onComplete,
-        onError
     )
 }
 
-export function authenticate(user, onComplete, onError) {
+export function authenticate(user) {
     return sendRequest(
         backendAddress,
         '/security/authenticate',
         'post',
         user,
         {},
-        onComplete,
-        onError
     )
 }
 
-export function postTrialQuestion(question, onComplete, onError) {
+export function postTrialQuestion(question) {
     return sendRequest(backendAddress,
         '/questions/trial',
         'post',
         question,
         {},
-        onComplete,
-        onError
     )
 }
 
-export function postQuestion(question, token, onComplete, onError) {
+export function postQuestion(question, token) {
     return sendRequest(backendAddress,
         '/questions',
         'post',
         question,
         token,
-        onComplete,
-        onError
     )
 }
 
-export function postComment(question, comment, token, onComplete, onError) {
+export function postComment(question, comment, token) {
     return sendRequest(backendAddress,
         '/comments',
         'post',
         {key: question, value: {content: comment}},
         token,
-        onComplete,
-        onError
     )
 }
 
-export function deleteComment(comment, token, onComplete, onError) {
+export function deleteComment(comment, token) {
     return sendRequest(backendAddress,
         '/comments',
         'delete',
         comment,
         token,
-        onComplete,
-        onError
     )
 }
 
-export function getUser(token, onComplete, onError) {
+export function getUser(token) {
     return sendRequest(
         backendAddress,
         '/user',
         'get',
         {},
         token,
-        onComplete,
-        onError
-    )
-}
-
-export function postAnswer(question, answerNumber, token, onComplete, onError) {
-    return sendRequest(
-        backendAddress,
-        '/questions/answers',
-        'post',
-        {key: question, value: answerNumber},
-        token,
-        onComplete,
-        onError
     )
 }

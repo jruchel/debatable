@@ -122,7 +122,7 @@ export default {
       if (this.valid === false) return
       this.user.email = ''
       this.loadingLogin = true
-      authenticate(this.user, this.handleLoginResponse, this.handleLoginResponse)
+      authenticate(this.user).then(this.handleLoginResponse).catch(this.handleLoginResponse)
     },
     validate() {
       this.$refs.form.validate()
@@ -136,7 +136,7 @@ export default {
         if (this.valid === true) {
           this.loadingRegister = true
           this.$refs.form.resetValidation()
-          register(this.user, this.handleLoginResponse, this.handleLoginResponse)
+          register(this.user).then(this.handleLoginResponse).catch(this.handleLoginResponse)
         }
       }
     },

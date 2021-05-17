@@ -225,10 +225,10 @@ export default {
 
     },
     postTrialQuestion() {
-      postTrialQuestion(this.question, this.handleResponse, this.handleResponse)
+      postTrialQuestion(this.question).then(this.handleResponse).catch(this.handleResponse)
     },
     postQuestionToUser() {
-      postQuestion(this.question, this.authToken, this.handleResponse, this.handleResponse)
+      postQuestion(this.question, this.authToken).then(this.handleResponse).catch(this.handleResponse)
     },
     handleResponse(response) {
       if (response.status === 201) {

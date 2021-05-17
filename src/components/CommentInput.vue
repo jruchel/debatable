@@ -95,7 +95,7 @@ export default {
       if (this.comment === null || this.comment === undefined) {
         this.comment = ''
       }
-      return postComment(this.question, this.comment, this.token, this.handleResponse, this.handleErrorResponse).then(this.fetchComments)
+      return postComment(this.question, this.comment, this.token).then(this.handleResponse).catch(this.handleErrorResponse).then(this.fetchComments)
     },
     fetchComments() {
       return this.$store.dispatch('fetchComments')

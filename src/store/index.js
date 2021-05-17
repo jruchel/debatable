@@ -48,38 +48,31 @@ export default new Vuex.Store({
     },
     actions: {
         reauthenticate(context) {
-            return authenticate(context.getters.getUser, function (response) {
-                    context.commit('setCurrentToken', response.data)
-                },
-                function () {
-                    context.commit('setCurrentToken', {token: ''})
-                    context.commit('setLoggedIn', {value: false})
-                })
+            return authenticate(context.getters.getUser)
+                .then(response => context.commit('setCurrentToken', response.data))
+                .catch()
+
         },
         fetchComments(context) {
-            return getCommentsOfQuestion(context.getters.getCurrentQuestion, function (response) {
-                    context.commit('setComments', response.data)
-                },
-                function () {
-                    context.commit('setComments', [])
-                })
+            return getCommentsOfQuestion(context.getters.getCurrentQuestion)
+                .then(response => context.commit('setComments', response.data))
+                .catch(() => context.commit('setComments', []))
+
         },
         fetchUser(context) {
             let password = context.getters.getUser.password
-            return getUser(context.getters.getAuthToken, function (response) {
+            return getUser(context.getters.getAuthToken).then(response => {
                 response.data['password'] = password
                 context.commit('setUser', response.data)
-            }, function () {
-                context.commit('setUser', {username: "", password: "", email: ""})
-            })
+            }).catch(() => {
+                    context.commit('setUser', {username: "", password: "", email: ""})
+                }
+            )
         },
         fetchQuestion(context) {
-            return getRandomQuestion(
-                context.getters.getCurrentQuestion,
-                function (response) {
-                    context.commit('setCurrentQuestion', response.data)
-                },
-                function () {
+            return getRandomQuestion(context.getters.getCurrentQuestion)
+                .then(response => context.commit('setCurrentQuestion', response.data))
+                .catch(() => {
                     context.commit('setCurrentQuestion', {
                         question: 'Pepsi or Coke?',
                         answers: [{answer: "Pepsi", color: "blue", count: 10}, {
@@ -89,8 +82,8 @@ export default new Vuex.Store({
                         }],
                         commentCount: 0,
                     })
-                }
-            )
+                })
+
         }
     },
     modules: {},
