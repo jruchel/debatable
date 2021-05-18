@@ -226,19 +226,18 @@ export default {
       }
     },
     postTrialQuestion() {
-      postTrialQuestion(this.question).then(this.handleResponse).catch(this.handleResponse)
+      postTrialQuestion(this.question).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
     },
     postQuestionToUser() {
-      postQuestion(this.question, this.authToken).then(this.handleResponse).catch(this.handleResponse)
+      postQuestion(this.question, this.authToken).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
+          .then(() => this.postingQuestion = false)
     },
-    handleResponse(response) {
-      if (response.status === 201) {
-        this.showSnackbar('Question added!')
-        this.reset()
-      } else {
-        this.showSnackbar(response.data)
-      }
-      this.postingQuestion = false
+    handleErrorResponse(error) {
+      this.showSnackbar(error.response.data)
+    },
+    handleSuccessResponse() {
+      this.showSnackbar('Question added!')
+      this.reset()
     },
     reset() {
       this.$refs.form.resetValidation()

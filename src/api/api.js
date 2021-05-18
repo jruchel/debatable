@@ -88,3 +88,23 @@ export function getUser(token) {
         token,
     )
 }
+
+export function submitAnswer(question, answerNumber, token) {
+    return sendRequest(
+        backendAddress,
+        '/answers',
+        'post',
+        {key: question, value: answerNumber},
+        token
+    )
+}
+
+export function updateQuestion(question) {
+    return sendRequest(
+        backendAddress,
+        '/questions/updated',
+        'post',
+        question,
+        {}
+    )
+}

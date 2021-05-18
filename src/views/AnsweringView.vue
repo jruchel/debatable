@@ -22,26 +22,28 @@
     <v-row class="justify-center">
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.answers[0]" v-on:option-picked="showAnswerResults"></Option>
+          <Option :loading="loading.firstAnswer" :answer="question.answers[0]"
+                  v-on:option-picked="submitAnswer(0)"></Option>
         </v-slide-x-transition>
       </v-col>
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.answers[1]" v-on:option-picked="showAnswerResults"></Option>
+          <Option :loading="loading.secondAnswer" :answer="question.answers[1]"
+                  v-on:option-picked="submitAnswer(1)"></Option>
         </v-slide-x-transition>
       </v-col>
     </v-row>
     <v-slide-x-transition>
       <v-row class="justify-center" v-if="showResults">
         <v-col cols="12" xl="6">
-          <h2 v-if="question.answers[0].count > 0 || question.answers[1].color > 0"
+          <h2 v-if="question.answers[0].count > 0 || question.answers[1].count > 0"
               style="text-align: center; color: #191919">
             {{
               calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count)
             }}% of people
             agree
             with you!</h2>
-          <v-progress-linear v-if="question.answers[0].count > 0 || question.answers[1].color > 0"
+          <v-progress-linear v-if="question.answers[0].count > 0 || question.answers[1].count > 0"
                              :background-color="getAnswerColor(1)"
                              :color="getAnswerColor(0)"
                              :value="calculateAnswerRatios(getAnswerCount(0), getAnswerCount(1))"
@@ -82,7 +84,7 @@
 <script>
 import Option from "@/components/questions/Option";
 import CommentSection from "@/components/comments/CommentSection";
-import {deleteComment} from "@/api/api";
+import {deleteComment, submitAnswer} from "@/api/api";
 
 export default {
   name: "AnsweringView",
@@ -126,6 +128,27 @@ export default {
           .then(this.fetchComments)
           .catch(this.showErrorSnackbar)
           .then(args[1])
+    },
+    submitAnswer(answerNumber) {
+      if (answerNumber === 0) {
+        this.loading.firstAnswer = true
+      } else {
+        this.loading.secondAnswer = true
+      }
+      this.$store.dispatch('reauthenticate')
+          .then(() => submitAnswer(this.question, answerNumber, this.token)
+              .then(() => this.showSnackbar('Answer submitted'))
+              .then(() => this.$store.dispatch('updateQuestion'))
+              .then(() => {
+                this.userAnswer = this.question.answers[answerNumber]
+                this.loading.firstAnswer = false
+                this.loading.secondAnswer = false
+              }).then(this.showAnswerResults)
+              .catch((error) => {
+                this.showSnackbar(error.response.data)
+                this.loading.firstAnswer = false
+                this.loading.secondAnswer = false
+              }))
     },
     getAnswerCount(number) {
       return this.question.answers[number].count

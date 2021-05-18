@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import {authenticate, getCommentsOfQuestion, getRandomQuestion, getUser} from "@/api/api";
+import {authenticate, getCommentsOfQuestion, getRandomQuestion, getUser, updateQuestion} from "@/api/api";
 
 Vue.use(Vuex)
 
@@ -22,7 +22,7 @@ export default new Vuex.Store({
         comments: [],
         loggedIn: {value: false},
         authToken: {token: ""},
-        user: {username: "", password: "", email: ""}
+        user: {username: "Kuba", password: "Akademik1", email: ""}
     },
     mutations: {
         setComments(state, payload) {
@@ -71,6 +71,11 @@ export default new Vuex.Store({
                     context.commit('setUser', {username: "", password: "", email: ""})
                 }
             )
+        },
+        updateQuestion(context) {
+            return updateQuestion(context.getters.getCurrentQuestion).then(response => {
+                context.commit('setCurrentQuestion', response.data)
+            }).catch(error => console.log('error', error.response.data))
         },
         fetchQuestion(context) {
             return getRandomQuestion(context.getters.getCurrentQuestion)
