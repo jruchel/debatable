@@ -2,8 +2,12 @@
   <v-card :loading="loading" v-if="answer" :color="answer.color" @click="onPick">
     <v-progress-linear slot="progress" indeterminate>
     </v-progress-linear>
-    <v-card-title class="justify-center" style="height: 100%">
+    <v-card-title style="height: 100%">
       {{ answer.answer }}
+      <v-spacer></v-spacer>
+      <v-icon v-if="userAnswer" color="black">
+        mdi-account-check-outline
+      </v-icon>
     </v-card-title>
   </v-card>
 </template>
@@ -11,7 +15,7 @@
 <script>
 export default {
   name: "Option",
-  props: ['answer', 'loading'],
+  props: ['answer', 'loading', 'userAnswer'],
   methods: {
     onPick() {
       this.$emit('option-picked', this.answer)

@@ -22,13 +22,13 @@
     <v-row class="justify-center">
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.answers[0]"
+          <Option :user-answer="isUserAnswer(0)" :answer="question.answers[0]"
                   v-on:option-picked="submitAnswer(0)"></Option>
         </v-slide-x-transition>
       </v-col>
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :answer="question.answers[1]"
+          <Option  :user-answer="isUserAnswer(1)" :answer="question.answers[1]"
                   v-on:option-picked="submitAnswer(1)"></Option>
         </v-slide-x-transition>
       </v-col>
@@ -123,6 +123,15 @@ export default {
     }
   },
   methods: {
+    isUserAnswer(answerNumber) {
+     return this.areAnswersEqual(this.question.answers[answerNumber], this.userAnswer)
+    },
+    areAnswersEqual(answer1, answer2) {
+      if(!answer1 || !answer2) {
+        return false
+      }
+      return (answer1.answer === answer2.answer && answer1.color === answer2.color && answer1.count === answer2.count && answer1.id === answer2.id)
+    },
     deleteComment(args) {
       deleteComment(args[0], this.token)
           .then(() => this.showSnackbar('Comment deleted'))
