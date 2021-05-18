@@ -34,24 +34,22 @@
       </v-col>
     </v-row>
     <v-slide-x-transition>
-      <v-row class="justify-center" v-if="showResults">
+      <v-row class="justify-center" v-if="userAnswer">
         <v-col cols="12" xl="6">
-          <h2 v-if="question.answers[0].count > 0 || question.answers[1].count > 0"
+          <h2 v-if="userAnswer"
               style="text-align: center; color: #191919">
             {{
               calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count)
             }}% of people
             agree
             with you!</h2>
-          <v-progress-linear v-if="question.answers[0].count > 0 || question.answers[1].count > 0"
+          <v-progress-linear v-if="userAnswer"
                              :background-color="getAnswerColor(1)"
                              :color="getAnswerColor(0)"
                              :value="calculateAnswerRatios(getAnswerCount(0), getAnswerCount(1))"
                              height="15"
           >
           </v-progress-linear>
-          <h2 v-if="!(question.answers[0].count > 0 || question.answers[1].color > 0)"
-              style="text-align: center; color: #191919">No results to show, your answer was the first one!</h2>
         </v-col>
       </v-row>
     </v-slide-x-transition>
@@ -76,7 +74,7 @@
     </v-row>
     <v-spacer></v-spacer>
     <v-fade-transition>
-      <CommentSection v-on:delete-comment="deleteComment" v-if="showResults" :comments="comments"></CommentSection>
+      <CommentSection v-on:delete-comment="deleteComment" v-if="userAnswer" :comments="comments"></CommentSection>
     </v-fade-transition>
   </v-container>
 </template>
@@ -107,7 +105,13 @@ export default {
     },
     token() {
       return this.$store.getters.getAuthToken
+    },
+    userAnswer() {
+      return this.$store.getters.getUserAnswer
     }
+  },
+  mounted() {
+    this.$store.dispatch('fetchQuestion')
   },
   data() {
     return {
@@ -116,8 +120,6 @@ export default {
         firstAnswer: false,
         secondAnswer: false
       },
-      userAnswer: null,
-      showResults: false,
       snackbar: {show: false, text: "d00pa"}
     }
   },
@@ -125,7 +127,6 @@ export default {
     deleteComment(args) {
       deleteComment(args[0], this.token)
           .then(() => this.showSnackbar('Comment deleted'))
-          .then(this.fetchComments)
           .catch(this.showErrorSnackbar)
           .then(args[1])
     },
@@ -140,11 +141,9 @@ export default {
               .then(() => this.showSnackbar('Answer submitted'))
               .then(() => this.$store.dispatch('updateQuestion'))
               .then(() => {
-                this.userAnswer = this.question.answers[answerNumber]
                 this.loading.firstAnswer = false
                 this.loading.secondAnswer = false
-              }).then(this.showAnswerResults)
-              .catch((error) => {
+              }).catch((error) => {
                 this.showSnackbar(error.response.data)
                 this.loading.firstAnswer = false
                 this.loading.secondAnswer = false
@@ -158,14 +157,9 @@ export default {
     },
     getNextQuestion() {
       this.loading.nextQuestion = true
-      this.showResults = false
       this.$store.dispatch('fetchQuestion')
-          .then(this.fetchComments)
           .then(this.stopLoading)
           .catch(() => this.showSnackbar('Error downloading questions'))
-    },
-    fetchComments() {
-      return this.$store.dispatch('fetchComments')
     },
     stopLoading() {
       this.loading.nextQuestion = false
@@ -180,9 +174,6 @@ export default {
     },
     showErrorSnackbar(response) {
       this.showSnackbar(response.data)
-    },
-    showAnswerResults() {
-      this.showResults = true
     },
     calculateUserAnswerPercentage(first, second, user) {
       let result = Math.ceil(user / (first + second) * 100)

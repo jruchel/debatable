@@ -1,7 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import {authenticate, getCommentsOfQuestion, getRandomQuestion, getUser, updateQuestion} from "@/api/api";
+import {
+    authenticate,
+    getCommentsOfQuestion,
+    getRandomQuestion,
+    getUser,
+    updateQuestion,
+    fetchUserAnswer
+} from "@/api/api";
 
 Vue.use(Vuex)
 
@@ -19,12 +26,16 @@ export default new Vuex.Store({
             snackbar: {name: 'blue-grey darken-2', hex: '#455A64'}
         },
         question: {},
+        userAnswer: undefined,
         comments: [],
         loggedIn: {value: false},
         authToken: {token: ""},
-        user: {username: "Kuba", password: "Akademik1", email: ""}
+        user: {username: "", password: "", email: ""}
     },
     mutations: {
+        setUserAnswer(state, payload) {
+            state.userAnswer = payload
+        },
         setComments(state, payload) {
             state.comments = payload
         },
@@ -47,6 +58,11 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        fetchUserAnswer(context) {
+            return fetchUserAnswer(context.getters.getCurrentQuestion, context.getters.getAuthToken)
+                .then(response => context.commit('setUserAnswer', response.data))
+                .catch(() => context.commit('setUserAnswer', undefined))
+        },
         reauthenticate(context) {
             return authenticate(context.getters.getUser)
                 .then(response => context.commit('setCurrentToken', response.data))
@@ -67,19 +83,25 @@ export default new Vuex.Store({
             return getUser(context.getters.getAuthToken).then(response => {
                 response.data['password'] = password
                 context.commit('setUser', response.data)
-            }).catch(() => {
-                    context.commit('setUser', {username: "", password: "", email: ""})
-                }
-            )
+            }).then(() => context.dispatch('updateQuestion'))
+                .catch(() => {
+                        context.commit('setUser', {username: "", password: "", email: ""})
+                    }
+                )
         },
         updateQuestion(context) {
             return updateQuestion(context.getters.getCurrentQuestion).then(response => {
                 context.commit('setCurrentQuestion', response.data)
+                    .then(() => context.dispatch('fetchUserAnswer'))
             }).catch(error => console.log('error', error.response.data))
         },
         fetchQuestion(context) {
+            let question = null
             return getRandomQuestion(context.getters.getCurrentQuestion)
-                .then(response => context.commit('setCurrentQuestion', response.data))
+                .then(response => question = response.data)
+                .then(() => context.dispatch('fetchUserAnswer'))
+                .then(() => context.dispatch('fetchComments'))
+                .then(() => context.commit('setCurrentQuestion', question))
                 .catch(() => {
                     context.commit('setCurrentQuestion', {
                         question: 'Pepsi or Coke?',
@@ -91,11 +113,13 @@ export default new Vuex.Store({
                         commentCount: 0,
                     })
                 })
-
         }
     },
     modules: {},
     getters: {
+        getUserAnswer(state) {
+            return state.userAnswer
+        },
         getColor(state) {
             return state.color
         },

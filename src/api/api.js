@@ -108,3 +108,13 @@ export function updateQuestion(question) {
         {}
     )
 }
+
+export function fetchUserAnswer(question, token) {
+    return sendRequest(
+        backendAddress,
+        '/answers/user',
+        'post',
+        question,
+        token
+    )
+}
