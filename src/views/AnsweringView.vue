@@ -28,7 +28,7 @@
       </v-col>
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option  :user-answer="isUserAnswer(1)" :answer="question.answers[1]"
+          <Option :user-answer="isUserAnswer(1)" :answer="question.answers[1]"
                   v-on:option-picked="submitAnswer(1)"></Option>
         </v-slide-x-transition>
       </v-col>
@@ -38,11 +38,8 @@
         <v-col cols="12" xl="6">
           <h2 v-if="userAnswer"
               style="text-align: center; color: #191919">
-            {{
-              calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count)
-            }}% of people
-            agree
-            with you!</h2>
+            {{ calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count) }}%
+            of people answered the same as you!</h2>
           <v-progress-linear v-if="userAnswer"
                              :background-color="getAnswerColor(1)"
                              :color="getAnswerColor(0)"
@@ -124,10 +121,10 @@ export default {
   },
   methods: {
     isUserAnswer(answerNumber) {
-     return this.areAnswersEqual(this.question.answers[answerNumber], this.userAnswer)
+      return this.areAnswersEqual(this.question.answers[answerNumber], this.userAnswer)
     },
     areAnswersEqual(answer1, answer2) {
-      if(!answer1 || !answer2) {
+      if (!answer1 || !answer2) {
         return false
       }
       return (answer1.answer === answer2.answer && answer1.color === answer2.color && answer1.count === answer2.count && answer1.id === answer2.id)
