@@ -117,8 +117,7 @@
       </v-row>
       <v-row class='justify-center'>
         <v-col cols='8' xl='6'>
-          <v-card @click='reauthenticateAndPost' :color=$store.getters.getColor.buttonPrimary.name dark
-                  :loading='postingQuestion'>
+          <v-card @click='reauthenticateAndPost' :color=$store.getters.getColor.buttonPrimary.name dark>
             <template slot='progress'>
               <v-progress-linear
                   color='green'
@@ -210,7 +209,7 @@ export default {
       this.snackbar.show = true
     },
     reauthenticateAndPost() {
-      this.postingQuestion = true
+      this.$store.commit('startLoading')
       this.postQuestion()
     },
     postQuestion() {
@@ -222,7 +221,7 @@ export default {
           this.postTrialQuestion()
         }
       } else {
-        this.postingQuestion = false
+        this.$store.commit('stopLoading')
       }
     },
     postTrialQuestion() {
@@ -230,7 +229,7 @@ export default {
     },
     postQuestionToUser() {
       postQuestion(this.question, this.authToken).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
-          .then(() => this.postingQuestion = false)
+          .then(() => this.$store.commit('stopLoading'))
     },
     handleErrorResponse(error) {
       this.showSnackbar(error.response.data)

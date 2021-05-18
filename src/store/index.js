@@ -30,9 +30,27 @@ export default new Vuex.Store({
         comments: [],
         loggedIn: {value: false},
         authToken: {token: ""},
-        user: {username: "", password: "", email: ""}
+        user: {username: "", password: "", email: ""},
+        loading: {
+            value: false,
+            color: {
+                default: 'green',
+                active: 'green'
+            }
+        }
     },
     mutations: {
+        startLoading(state, payload) {
+            if (!payload) {
+                state.loading.color.active = state.loading.color.default
+            } else {
+                state.loading.color.active = payload
+            }
+            state.loading.value = true
+        },
+        stopLoading(state) {
+            state.loading.value = false
+        },
         setUserAnswer(state, payload) {
             state.userAnswer = payload
         },
@@ -117,6 +135,9 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getLoading(state) {
+            return state.loading
+        },
         getUserAnswer(state) {
             return state.userAnswer
         },

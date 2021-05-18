@@ -1,6 +1,13 @@
 <template>
   <v-app :style=backgroundStyle>
     <v-app-bar dark :color=$store.getters.getColor.primary.name absolute>
+      <v-progress-linear
+          :active="loading.value"
+          :indeterminate="loading.value"
+          absolute
+          bottom
+          :color="loading.color.active"
+      ></v-progress-linear>
       <Return></Return>
       <v-spacer></v-spacer>
       <LoginDialog></LoginDialog>
@@ -28,6 +35,9 @@ export default {
     this.$store.dispatch('fetchQuestion')
   },
   computed: {
+    loading() {
+      return this.$store.getters.getLoading
+    },
     loggedIn() {
       return this.$store.getters.getLoggedIn;
     },

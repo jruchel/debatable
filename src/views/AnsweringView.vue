@@ -22,13 +22,13 @@
     <v-row class="justify-center">
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :loading="loading.firstAnswer" :answer="question.answers[0]"
+          <Option :answer="question.answers[0]"
                   v-on:option-picked="submitAnswer(0)"></Option>
         </v-slide-x-transition>
       </v-col>
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
-          <Option :loading="loading.secondAnswer" :answer="question.answers[1]"
+          <Option :answer="question.answers[1]"
                   v-on:option-picked="submitAnswer(1)"></Option>
         </v-slide-x-transition>
       </v-col>
@@ -56,8 +56,7 @@
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
-          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="getNextQuestion"
-                  :loading="loading.nextQuestion">
+          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="getNextQuestion">
             <template slot="progress">
               <v-progress-linear
                   color="green"
@@ -129,25 +128,20 @@ export default {
           .then(() => this.showSnackbar('Comment deleted'))
           .catch(this.showErrorSnackbar)
           .then(args[1])
+          .then(() => this.$store.dispatch('fetchComments'))
     },
     submitAnswer(answerNumber) {
-      if (answerNumber === 0) {
-        this.loading.firstAnswer = true
-      } else {
-        this.loading.secondAnswer = true
-      }
+      this.$store.commit('startLoading', this.question.answers[answerNumber].color)
       this.$store.dispatch('reauthenticate')
           .then(() => submitAnswer(this.question, answerNumber, this.token)
               .then(() => this.showSnackbar('Answer submitted'))
               .then(() => this.$store.dispatch('updateQuestion'))
               .then(() => this.$store.dispatch('fetchUserAnswer'))
               .then(() => {
-                this.loading.firstAnswer = false
-                this.loading.secondAnswer = false
+                this.$store.commit('stopLoading')
               }).catch((error) => {
                 this.showSnackbar(error.response.data)
-                this.loading.firstAnswer = false
-                this.loading.secondAnswer = false
+                this.$store.commit('stopLoading')
               }))
     },
     getAnswerCount(number) {
@@ -157,13 +151,13 @@ export default {
       return this.question.answers[number].color
     },
     getNextQuestion() {
-      this.loading.nextQuestion = true
+      this.$store.commit('startLoading')
       this.$store.dispatch('fetchQuestion')
           .then(this.stopLoading)
           .catch(() => this.showSnackbar('Error downloading questions'))
     },
     stopLoading() {
-      this.loading.nextQuestion = false
+      this.$store.commit('stopLoading')
     },
     getQuestionContent() {
       return this.question.question
