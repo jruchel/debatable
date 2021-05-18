@@ -125,7 +125,7 @@ export default {
         authenticate(this.user).then(this.handleLoginSuccess).catch(this.handleLoginError).then(() => {
           this.loadingLogin = false
           this.loadingRegister = false
-        })
+        }).then(() => this.$store.dispatch('fetchUserAnswer'))
       }
     },
     validate() {

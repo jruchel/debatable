@@ -79,29 +79,29 @@ export default new Vuex.Store({
 
         },
         fetchUser(context) {
-            let password = context.getters.getUser.password
             return getUser(context.getters.getAuthToken).then(response => {
-                response.data['password'] = password
+                response.data['password'] = context.getters.getUser.password
                 context.commit('setUser', response.data)
-            }).then(() => context.dispatch('updateQuestion'))
+            })
                 .catch(() => {
-                        context.commit('setUser', {username: "", password: "", email: ""})
-                    }
-                )
+                    context.commit('setUser', {username: "", password: "", email: ""})
+                })
+                .then(() => context.dispatch('updateQuestion'))
+
         },
         updateQuestion(context) {
             return updateQuestion(context.getters.getCurrentQuestion).then(response => {
                 context.commit('setCurrentQuestion', response.data)
-                    .then(() => context.dispatch('fetchUserAnswer'))
-            }).catch(error => console.log('error', error.response.data))
+            }).then(() => context.dispatch('fetchUserAnswer'))
+                .then(() => context.dispatch('fetchComments'))
         },
         fetchQuestion(context) {
             let question = null
             return getRandomQuestion(context.getters.getCurrentQuestion)
                 .then(response => question = response.data)
+                .then(() => context.commit('setCurrentQuestion', question))
                 .then(() => context.dispatch('fetchUserAnswer'))
                 .then(() => context.dispatch('fetchComments'))
-                .then(() => context.commit('setCurrentQuestion', question))
                 .catch(() => {
                     context.commit('setCurrentQuestion', {
                         question: 'Pepsi or Coke?',

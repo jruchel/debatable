@@ -140,6 +140,7 @@ export default {
           .then(() => submitAnswer(this.question, answerNumber, this.token)
               .then(() => this.showSnackbar('Answer submitted'))
               .then(() => this.$store.dispatch('updateQuestion'))
+              .then(() => this.$store.dispatch('fetchUserAnswer'))
               .then(() => {
                 this.loading.firstAnswer = false
                 this.loading.secondAnswer = false

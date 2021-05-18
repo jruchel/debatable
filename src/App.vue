@@ -46,6 +46,7 @@ export default {
       this.$store.commit('setCurrentToken', {token: ''})
       this.$store.commit('setLoggedIn', {value: false})
       this.$store.commit('setUser', {username: "", password: "", email: ""})
+      this.$store.dispatch('fetchUserAnswer')
     }
   }
 };
