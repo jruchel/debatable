@@ -1,7 +1,7 @@
 import {sendRequest} from "@/utils/requests";
 
 
-let backendAddress = 'http://localhost:8081'
+let backendAddress = 'https://debatable-server.herokuapp.com/'
 
 export function getRandomQuestion(currentQuestion) {
     return sendRequest(
