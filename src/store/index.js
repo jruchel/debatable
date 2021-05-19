@@ -18,7 +18,7 @@ export default new Vuex.Store({
         storage: window.sessionStorage,
     })],
     state: {
-        color: {
+        colors: {
             primary: {name: 'blue-grey darken-4', hex: '#263238'},
             background: {name: 'brown lighten-3', hex: '#BCAAA4'},
             buttonPrimary: {name: 'blue-grey darken-3', hex: '#455A64'},
@@ -141,8 +141,8 @@ export default new Vuex.Store({
         getUserAnswer(state) {
             return state.userAnswer
         },
-        getColor(state) {
-            return state.color
+        getColors(state) {
+            return state.colors
         },
         getComments(state) {
             return state.comments

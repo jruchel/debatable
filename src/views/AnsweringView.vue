@@ -5,7 +5,7 @@
         top
         :style="marginTop"
         v-model="snackbar.show"
-        :color=$store.getters.getColor.snackbar.name
+        :color=$store.getters.getColors.snackbar.name
         timeout="3500"
     >
       {{ snackbar.text }}
@@ -39,12 +39,13 @@
           <h2 v-if="userAnswer"
               style="text-align: center; color: #191919">
             {{ calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count) }}%
-            of people answered the same as you!</h2>
+            of people answered the same as you</h2>
           <v-progress-linear v-if="userAnswer"
                              :background-color="getAnswerColor(1)"
                              :color="getAnswerColor(0)"
                              :value="calculateAnswerRatios(getAnswerCount(0), getAnswerCount(1))"
                              height="15"
+                             rounded
           >
           </v-progress-linear>
         </v-col>
@@ -53,7 +54,7 @@
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
-          <v-card :color=$store.getters.getColor.buttonPrimary.name dark @click="getNextQuestion">
+          <v-card :color=$store.getters.getColors.buttonPrimary.name dark @click="getNextQuestion">
             <template slot="progress">
               <v-progress-linear
                   color="green"
@@ -158,6 +159,7 @@ export default {
     },
     getNextQuestion() {
       this.$store.commit('startLoading')
+      this.$store.commit('setUserAnswer', undefined)
       this.$store.dispatch('fetchQuestion')
           .then(this.stopLoading)
           .catch(() => this.showSnackbar('Error downloading questions'))

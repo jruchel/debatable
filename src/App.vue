@@ -1,6 +1,6 @@
 <template>
   <v-app :style=backgroundStyle>
-    <v-app-bar dark :color=$store.getters.getColor.primary.name absolute>
+    <v-app-bar dark :color=$store.getters.getColors.primary.name absolute>
       <v-progress-linear
           :active="loading.value"
           :indeterminate="loading.value"
@@ -45,7 +45,7 @@ export default {
       return this.$store.getters.getAuthToken;
     },
     backgroundColor() {
-      return this.$store.getters.getColor.background.hex
+      return this.$store.getters.getColors.background.hex
     },
     backgroundStyle() {
       return 'background-color: ' + this.backgroundColor

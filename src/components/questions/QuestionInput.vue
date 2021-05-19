@@ -8,7 +8,7 @@
                 top
                 :style='marginTop()'
                 v-model='snackbar.show'
-                :color=$store.getters.getColor.snackbar.name
+                :color=$store.getters.getColors.snackbar.name
                 timeout='3500'
             >
               {{ snackbar.text }}
@@ -117,7 +117,7 @@
       </v-row>
       <v-row class='justify-center'>
         <v-col cols='8' xl='6'>
-          <v-card @click='reauthenticateAndPost' :color=$store.getters.getColor.buttonPrimary.name dark>
+          <v-card @click='reauthenticateAndPost' :color=$store.getters.getColors.buttonPrimary.name dark>
             <template slot='progress'>
               <v-progress-linear
                   color='green'
@@ -133,7 +133,7 @@
       </v-row>
       <v-row class='justify-center'>
         <v-col cols='6' md='3' xl='2'>
-          <v-card @click='reset' :color=$store.getters.getColor.buttonSecondary.name dark>
+          <v-card @click='reset' :color=$store.getters.getColors.buttonSecondary.name dark>
             <v-card-title style='height: 100%' class='justify-center'>
               <span>Reset</span>
             </v-card-title>

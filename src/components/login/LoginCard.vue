@@ -5,12 +5,12 @@
         top
         :style="marginTop()"
         v-model="snackbar.show"
-        :color=$store.getters.getColor.snackbar.name
+        :color=$store.getters.getColors.snackbar.name
         timeout="3500"
     >
       {{ snackbar.text }}
     </v-snackbar>
-    <v-toolbar dark flat class="sticky-toolbar" :color=$store.getters.getColor.primary.name>
+    <v-toolbar dark flat class="sticky-toolbar" :color=$store.getters.getColors.primary.name>
       <v-spacer></v-spacer>
       <span>Please log in</span>
       <v-spacer></v-spacer>

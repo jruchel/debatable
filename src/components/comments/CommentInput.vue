@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-snackbar
-        :color=$store.getters.getColor.snackbar.name
+        :color=$store.getters.getColors.snackbar.name
         top
         :style='marginTop()'
         v-model='snackbar.show'
