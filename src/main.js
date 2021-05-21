@@ -17,3 +17,4 @@ new Vue({
 //TODO: fetch batches of comments as pages and keep adding more pages as the user scrolls down
 //TODO: color the comments of each user by the answer they have given
 //TODO: submitting answers for users that arent logged in works the same as always except results arent sent to the backend
+//TODO: add a splash screen

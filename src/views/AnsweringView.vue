@@ -39,7 +39,16 @@
           <h2 v-if="userAnswer"
               style="text-align: center; color: #191919">
             {{ calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count) }}%
-            of people answered the same as you</h2>
+            of people answered the same as you
+          </h2>
+          <v-row>
+            <v-col cols="6">
+              <span class="vote-count-left">Votes: {{ getAnswerCount(0) }}</span>
+            </v-col>
+            <v-col cols="6">
+              <span class="vote-count-right">Votes: {{ getAnswerCount(1) }}</span>
+            </v-col>
+          </v-row>
           <v-progress-linear v-if="userAnswer"
                              :background-color="getAnswerColor(1)"
                              :color="getAnswerColor(0)"
@@ -196,6 +205,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+@mixin vote-count-margin {
+  margin: 5px 2px 5px 2px
+}
+
+.vote-count-right {
+  @include vote-count-margin;
+  float: right;
+}
+
+.vote-count-left {
+  @include vote-count-margin;
+  float: left;
+}
+
 
 </style>
