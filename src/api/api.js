@@ -3,22 +3,22 @@ import {sendRequest} from "@/utils/requests";
 
 let backendAddress = 'https://debatable-server.herokuapp.com'
 
-export function getRandomQuestion(currentQuestion) {
+export function getRandomQuestion(questionId) {
     return sendRequest(
         backendAddress,
-        '/questions/random',
-        'post',
-        currentQuestion,
+        '/questions/random/' + questionId,
+        'get',
+        {},
         {},
     )
 }
 
-export function getCommentsOfQuestion(question) {
+export function getCommentsOfQuestion(questionId) {
     return sendRequest(
         backendAddress,
-        '/questions/comments',
-        'post',
-        question,
+        '/questions/comments/' + questionId,
+        'get',
+        {},
         {},
     )
 }
@@ -44,7 +44,8 @@ export function authenticate(user) {
 }
 
 export function postTrialQuestion(question) {
-    return sendRequest(backendAddress,
+    return sendRequest(
+        backendAddress,
         '/questions/trial',
         'post',
         question,
@@ -53,7 +54,8 @@ export function postTrialQuestion(question) {
 }
 
 export function postQuestion(question, token) {
-    return sendRequest(backendAddress,
+    return sendRequest(
+        backendAddress,
         '/questions',
         'post',
         question,
@@ -62,7 +64,8 @@ export function postQuestion(question, token) {
 }
 
 export function postComment(question, comment, token) {
-    return sendRequest(backendAddress,
+    return sendRequest(
+        backendAddress,
         '/comments',
         'post',
         {key: question, value: {content: comment}},
@@ -71,7 +74,8 @@ export function postComment(question, comment, token) {
 }
 
 export function deleteComment(comment, token) {
-    return sendRequest(backendAddress,
+    return sendRequest(
+        backendAddress,
         '/comments',
         'delete',
         comment,
@@ -99,22 +103,22 @@ export function submitAnswer(question, answerNumber, token) {
     )
 }
 
-export function updateQuestion(question) {
+export function updateQuestion(questionId) {
     return sendRequest(
         backendAddress,
-        '/questions/updated',
-        'post',
-        question,
+        '/questions/' + questionId,
+        'get',
+        {},
         {}
     )
 }
 
-export function fetchUserAnswer(question, token) {
+export function fetchUserAnswer(questionId, token) {
     return sendRequest(
         backendAddress,
-        '/answers/user',
-        'post',
-        question,
+        '/user/answer/' + questionId,
+        'get',
+        {},
         token
     )
 }

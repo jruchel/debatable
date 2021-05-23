@@ -115,7 +115,7 @@ export default new Vuex.Store({
         },
         fetchQuestion(context) {
             let question = null
-            return getRandomQuestion(context.getters.getCurrentQuestion)
+            return getRandomQuestion(context.getters.getCurrentQuestion.id)
                 .then(response => question = response.data)
                 .then(() => context.commit('setCurrentQuestion', question))
                 .then(() => context.dispatch('fetchUserAnswer'))
