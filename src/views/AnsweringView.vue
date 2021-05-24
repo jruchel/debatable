@@ -151,7 +151,9 @@ export default {
       this.$store.dispatch('reauthenticate')
           .then(() => submitAnswer(this.question, answerNumber, this.token)
               .then(() => this.showSnackbar('Answer submitted'))
-              .then(() => this.$store.dispatch('updateQuestion'))
+              .then(() => {
+                if (this.question !== undefined && this.question !== null) this.$store.dispatch('updateQuestion')
+              })
               .then(() => this.$store.dispatch('fetchUserAnswer'))
               .then(() => {
                 this.$store.commit('stopLoading')

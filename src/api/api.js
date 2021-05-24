@@ -4,13 +4,23 @@ import {sendRequest} from "@/utils/requests";
 let backendAddress = 'https://debatable-server.herokuapp.com'
 
 export function getRandomQuestion(questionId) {
-    return sendRequest(
-        backendAddress,
-        '/questions/random/' + questionId,
-        'get',
-        {},
-        {},
-    )
+    if (questionId === null || questionId === undefined) {
+        return sendRequest(
+            backendAddress,
+            '/questions/random',
+            'get',
+            {},
+            {},
+        )
+    } else {
+        return sendRequest(
+            backendAddress,
+            '/questions/random/' + questionId,
+            'get',
+            {},
+            {},
+        )
+    }
 }
 
 export function getCommentsOfQuestion(questionId) {

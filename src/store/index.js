@@ -77,7 +77,7 @@ export default new Vuex.Store({
     },
     actions: {
         fetchUserAnswer(context) {
-            return fetchUserAnswer(context.getters.getCurrentQuestion, context.getters.getAuthToken)
+            return fetchUserAnswer(context.getters.getCurrentQuestion.id, context.getters.getAuthToken)
                 .then(response => context.commit('setUserAnswer', response.data))
                 .catch(() => context.commit('setUserAnswer', undefined))
         },
@@ -91,7 +91,7 @@ export default new Vuex.Store({
 
         },
         fetchComments(context) {
-            return getCommentsOfQuestion(context.getters.getCurrentQuestion)
+            return getCommentsOfQuestion(context.getters.getCurrentQuestion.id)
                 .then(response => context.commit('setComments', response.data))
                 .catch(() => context.commit('setComments', []))
 
@@ -108,7 +108,7 @@ export default new Vuex.Store({
 
         },
         updateQuestion(context) {
-            return updateQuestion(context.getters.getCurrentQuestion).then(response => {
+            return updateQuestion(context.getters.getCurrentQuestion.id).then(response => {
                 context.commit('setCurrentQuestion', response.data)
             }).then(() => context.dispatch('fetchUserAnswer'))
                 .then(() => context.dispatch('fetchComments'))
