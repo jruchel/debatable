@@ -26,7 +26,7 @@ export function getRandomQuestion(questionId) {
 export function getCommentsOfQuestion(questionId) {
     return sendRequest(
         backendAddress,
-        '/questions/comments/' + questionId,
+        '/questions/' + questionId + '/comments',
         'get',
         {},
         {},
