@@ -119,6 +119,9 @@ export default {
       console.log(this.loggedIn.value === false || (!!this.userAnswer && this.answerSubmitted))
       return this.loggedIn.value === false || (!!this.userAnswer && this.answerSubmitted)
     },
+    answerSubmitted() {
+      return !!this.userAnswer
+    },
     userAnswer() {
       return this.$store.getters.getUserAnswer
     }
@@ -128,9 +131,6 @@ export default {
   },
   data() {
     return {
-      checkpoints: {
-        answerSubmitted: false
-      },
       loading: {
         nextQuestion: false,
         firstAnswer: false,
@@ -157,11 +157,11 @@ export default {
           .then(() => this.$store.dispatch('fetchComments'))
     },
     submitAnswerClicked(answerNumber) {
-      if (this.checkpoints.answerSubmitted) {
+      if (this.answerSubmitted) {
         this.showSnackbar('An answer was already submitted')
         return
       }
-      this.checkpoints.answerSubmitted = true
+      this.answerSubmitted = true
       if (this.loggedIn.value === false) {
         this.$store.commit('startLoading', this.question.answers[answerNumber].color)
         this.$store.dispatch('updateQuestion')
@@ -184,7 +184,7 @@ export default {
               .then(() => this.$store.dispatch('fetchUserAnswer'))
               .then(() => this.$store.commit('stopLoading'))
               .catch((error) => {
-                this.checkpoints.answerSubmitted = false
+                this.answerSubmitted = false
                 this.showSnackbar(error.response.data)
                 this.$store.commit('stopLoading')
               }))
@@ -200,7 +200,7 @@ export default {
       this.$store.commit('setUserAnswer', undefined)
       this.$store.dispatch('fetchQuestion')
           .then(this.stopLoading)
-          .then(() => this.checkpoints.answerSubmitted = false)
+          .then(() => this.answerSubmitted = false)
           .catch(() => this.showSnackbar('Error downloading questions'))
     },
     stopLoading() {

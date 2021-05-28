@@ -10,7 +10,7 @@
               <v-spacer></v-spacer>
             </v-card-title>
             <v-card-text style="text-align: center">
-              Questions you post while not logged in disappear after 30 days, so make sure you're logged in if you want
+              Questions you post while not logged in disappear after 24 hours, so make sure you're logged in if you want
               them to stay!
             </v-card-text>
           </v-card>
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     marginTop() {
-      if(this.isMobile()) {
+      if (this.isMobile()) {
         return "margin-top: 15%"
       }
       return "margin-top: 0%"
