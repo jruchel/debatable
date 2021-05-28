@@ -23,13 +23,13 @@
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
           <Option :user-answer="isUserAnswer(0)" :answer="question.answers[0]"
-                  v-on:option-picked="submitAnswer(0)"></Option>
+                  v-on:option-picked="submitAnswerClicked(0)"></Option>
         </v-slide-x-transition>
       </v-col>
       <v-col cols="6" xl="3">
         <v-slide-x-transition>
           <Option :user-answer="isUserAnswer(1)" :answer="question.answers[1]"
-                  v-on:option-picked="submitAnswer(1)"></Option>
+                  v-on:option-picked="submitAnswerClicked(1)"></Option>
         </v-slide-x-transition>
       </v-col>
     </v-row>
@@ -80,7 +80,7 @@
     </v-row>
     <v-spacer></v-spacer>
     <v-fade-transition>
-      <CommentSection v-on:delete-comment="deleteComment" v-if="userAnswer" :comments="comments"></CommentSection>
+      <CommentSection v-on:delete-comment="deleteComment" v-if="commentsVisible" :comments="comments"></CommentSection>
     </v-fade-transition>
   </v-container>
 </template>
@@ -109,8 +109,15 @@ export default {
     comments() {
       return this.$store.getters.getComments
     },
+    loggedIn() {
+      return this.$store.getters.getLoggedIn
+    },
     token() {
       return this.$store.getters.getAuthToken
+    },
+    commentsVisible() {
+      console.log(this.loggedIn.value === false || (!!this.userAnswer && this.answerSubmitted))
+      return this.loggedIn.value === false || (!!this.userAnswer && this.answerSubmitted)
     },
     userAnswer() {
       return this.$store.getters.getUserAnswer
@@ -121,6 +128,9 @@ export default {
   },
   data() {
     return {
+      checkpoints: {
+        answerSubmitted: false
+      },
       loading: {
         nextQuestion: false,
         firstAnswer: false,
@@ -146,6 +156,23 @@ export default {
           .then(args[1])
           .then(() => this.$store.dispatch('fetchComments'))
     },
+    submitAnswerClicked(answerNumber) {
+      if (this.checkpoints.answerSubmitted) {
+        this.showSnackbar('An answer was already submitted')
+        return
+      }
+      this.checkpoints.answerSubmitted = true
+      if (this.loggedIn.value === false) {
+        this.$store.commit('startLoading', this.question.answers[answerNumber].color)
+        this.$store.dispatch('updateQuestion')
+            .then(() => {
+              let userAnswer = this.question.answers[answerNumber]
+              userAnswer.count += 1
+              this.$store.commit('setUserAnswer', userAnswer)})
+            .then(() => this.$store.commit('stopLoading'))
+
+      } else this.submitAnswer(answerNumber)
+    },
     submitAnswer(answerNumber) {
       this.$store.commit('startLoading', this.question.answers[answerNumber].color)
       this.$store.dispatch('reauthenticate')
@@ -155,9 +182,9 @@ export default {
                 if (this.question !== undefined && this.question !== null) this.$store.dispatch('updateQuestion')
               })
               .then(() => this.$store.dispatch('fetchUserAnswer'))
-              .then(() => {
-                this.$store.commit('stopLoading')
-              }).catch((error) => {
+              .then(() => this.$store.commit('stopLoading'))
+              .catch((error) => {
+                this.checkpoints.answerSubmitted = false
                 this.showSnackbar(error.response.data)
                 this.$store.commit('stopLoading')
               }))
@@ -173,6 +200,7 @@ export default {
       this.$store.commit('setUserAnswer', undefined)
       this.$store.dispatch('fetchQuestion')
           .then(this.stopLoading)
+          .then(() => this.checkpoints.answerSubmitted = false)
           .catch(() => this.showSnackbar('Error downloading questions'))
     },
     stopLoading() {
