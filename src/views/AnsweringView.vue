@@ -80,7 +80,7 @@
     </v-row>
     <v-spacer></v-spacer>
     <v-fade-transition>
-      <CommentSection v-on:delete-comment="deleteComment" v-if="commentsVisible" :comments="comments"></CommentSection>
+      <CommentSection v-on:delete-comment="deleteComment" v-if="commentsVisible"></CommentSection>
     </v-fade-transition>
   </v-container>
 </template>
@@ -106,9 +106,6 @@ export default {
     question() {
       return this.$store.getters.getCurrentQuestion
     },
-    comments() {
-      return this.$store.getters.getComments
-    },
     loggedIn() {
       return this.$store.getters.getLoggedIn
     },
@@ -116,7 +113,6 @@ export default {
       return this.$store.getters.getAuthToken
     },
     commentsVisible() {
-      console.log(this.loggedIn.value === false || (!!this.userAnswer && this.answerSubmitted))
       return this.loggedIn.value === false || (!!this.userAnswer && this.answerSubmitted)
     },
     answerSubmitted() {

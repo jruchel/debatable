@@ -42,6 +42,16 @@ export function register(user) {
     )
 }
 
+export function getCommentsPage(questionId, page, size) {
+    return sendRequest(
+        backendAddress,
+        '/questions/' + questionId + '/comments?page=' + page + '&pageSize=' + size,
+        'get',
+        {},
+        {}
+    )
+}
+
 export function authenticate(user) {
     return sendRequest(
         backendAddress,

@@ -27,7 +27,7 @@ export default new Vuex.Store({
         },
         question: {},
         userAnswer: undefined,
-        comments: [],
+        comments: {},
         loggedIn: {value: false},
         authToken: {token: ""},
         user: {username: "", password: "", email: ""},
@@ -92,8 +92,10 @@ export default new Vuex.Store({
         },
         fetchComments(context) {
             return getCommentsOfQuestion(context.getters.getCurrentQuestion.id)
-                .then(response => context.commit('setComments', response.data))
-                .catch(() => context.commit('setComments', []))
+                .then(response => {
+                    context.commit('setComments', response.data)
+                })
+                .catch(() => context.commit('setComments', {}))
 
         },
         fetchUser(context) {
