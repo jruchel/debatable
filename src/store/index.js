@@ -7,7 +7,7 @@ import {
     getRandomQuestion,
     getUser,
     updateQuestion,
-    fetchUserAnswer
+    fetchUserAnswer, getCommentsPage
 } from "@/api/api";
 
 Vue.use(Vuex)
@@ -91,12 +91,17 @@ export default new Vuex.Store({
 
         },
         fetchComments(context) {
-            return getCommentsOfQuestion(context.getters.getCurrentQuestion.id)
-                .then(response => {
-                    context.commit('setComments', response.data)
-                })
-                .catch(() => context.commit('setComments', {}))
-
+            let comments = context.getters.getComments
+            if (comments.number === undefined || comments.number === null || comments.size === undefined || comments.size === null) {
+                return getCommentsOfQuestion(context.getters.getCurrentQuestion.id)
+                    .then(response => {
+                        context.commit('setComments', response.data)
+                    })
+                    .catch(() => context.commit('setComments', {}))
+            }
+            return getCommentsPage(context.getters.getCurrentQuestion.id, comments.number + 1, comments.size).then(response => {
+                context.commit('setComments', response.data)
+            })
         },
         fetchUser(context) {
             return getUser(context.getters.getAuthToken).then(response => {

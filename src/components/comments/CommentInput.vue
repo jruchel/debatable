@@ -96,10 +96,7 @@ export default {
       }
       return postComment(this.question, this.comment, this.token).then(this.notifyCommentPosted)
           .catch(this.notifyError)
-          .then(this.fetchComments)
-    },
-    fetchComments() {
-      return this.$store.dispatch('fetchComments')
+          .then(() => this.$store.dispatch('fetchComments'))
     },
     notifyError(error) {
       this.showSnackbar(error.response.data)
