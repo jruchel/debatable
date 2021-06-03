@@ -9,16 +9,26 @@
           :color="loading.color.active"
       ></v-progress-linear>
       <v-row>
-        <v-col cols="4">
-          <Return></Return>
+        <v-col cols="3">
+          <v-btn icon @click="$router.go(-1)">
+            <v-icon size="30">
+              mdi-arrow-left
+            </v-icon>
+          </v-btn>
+          <v-btn icon @click="$router.push('/')">
+            <v-icon size="35">
+              mdi-home-circle
+            </v-icon>
+          </v-btn>
         </v-col>
+        <v-spacer></v-spacer>
         <v-col cols="4" class="d-flex justify-space-around">
           <h1>
             {{ getCurrentRouteName() }}
           </h1>
         </v-col>
         <v-col cols="4" class="d-flex justify-end">
-          <LoginDialog></LoginDialog>
+          <login-dialog></login-dialog>
           <user-avatar v-on:perform-logout="performLogout" v-if="loggedIn.value"></user-avatar>
         </v-col>
       </v-row>
@@ -36,12 +46,11 @@
 <script>
 
 import LoginDialog from "@/components/login/LoginDialog";
-import Return from "@/components/Return";
 import UserAvatar from "@/components/user/UserAvatar";
 
 export default {
   name: 'App',
-  components: {UserAvatar, Return, LoginDialog},
+  components: {UserAvatar, LoginDialog},
   mounted() {
     this.$store.dispatch('fetchQuestion')
   },
