@@ -11,7 +11,7 @@
       <Return></Return>
       <v-spacer></v-spacer>
       <LoginDialog></LoginDialog>
-      <v-btn v-if="loggedIn.value" outlined @click="performLogout">Logout</v-btn>
+      <user-avatar v-on:perform-logout="performLogout" v-if="loggedIn.value"></user-avatar>
     </v-app-bar>
     <v-spacer></v-spacer>
     <v-main data-app>
@@ -27,10 +27,11 @@
 
 import LoginDialog from "@/components/login/LoginDialog";
 import Return from "@/components/Return";
+import UserAvatar from "@/components/user/UserAvatar";
 
 export default {
   name: 'App',
-  components: {Return, LoginDialog},
+  components: {UserAvatar, Return, LoginDialog},
   mounted() {
     this.$store.dispatch('fetchQuestion')
   },
