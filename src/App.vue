@@ -8,10 +8,20 @@
           bottom
           :color="loading.color.active"
       ></v-progress-linear>
-      <Return></Return>
-      <v-spacer></v-spacer>
-      <LoginDialog></LoginDialog>
-      <user-avatar v-on:perform-logout="performLogout" v-if="loggedIn.value"></user-avatar>
+      <v-row>
+        <v-col cols="4">
+          <Return></Return>
+        </v-col>
+        <v-col cols="4" class="d-flex justify-space-around">
+          <h1>
+            {{ getCurrentRouteName() }}
+          </h1>
+        </v-col>
+        <v-col cols="4" class="d-flex justify-end">
+          <LoginDialog></LoginDialog>
+          <user-avatar v-on:perform-logout="performLogout" v-if="loggedIn.value"></user-avatar>
+        </v-col>
+      </v-row>
     </v-app-bar>
     <v-spacer></v-spacer>
     <v-main data-app>
@@ -53,11 +63,14 @@ export default {
     }
   },
   methods: {
+    getCurrentRouteName() {
+      return this.$router.history.current.name
+    },
     performLogout() {
       this.$store.commit('setCurrentToken', {token: ''})
       this.$store.commit('setLoggedIn', {value: false})
       this.$store.commit('setUser', {username: "", password: "", email: ""})
-      this.$store.dispatch('fetchUserAnswer')
+      this.$store.dispatch('fetchUser').then(() => this.$store.dispatch('fetchUserAnswer'))
     }
   }
 };
@@ -68,6 +81,11 @@ export default {
   font-family: $font-name;
   src: local($font-name),
   url(./assets/fonts/#{$font-name}.ttf) format("truetype");
+}
+
+.bottom-navigation {
+  bottom: 0;
+  position: absolute;
 }
 
 @font-face {

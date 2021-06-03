@@ -7,7 +7,7 @@ import {
     getRandomQuestion,
     getUser,
     updateQuestion,
-    fetchUserAnswer, getCommentsPage
+    fetchUserAnswer, getCommentsPage, fetchUserQuestions
 } from "@/api/api";
 
 Vue.use(Vuex)
@@ -26,6 +26,7 @@ export default new Vuex.Store({
             snackbar: {name: 'blue-grey darken-2', hex: '#455A64'}
         },
         question: {},
+        userQuestions: [],
         userAnswer: undefined,
         comments: {},
         loggedIn: {value: false},
@@ -57,6 +58,9 @@ export default new Vuex.Store({
         setComments(state, payload) {
             state.comments = payload
         },
+        setUserQuestions(state, payload) {
+            state.userQuestions = payload
+        },
         setUser(state, payload) {
             if (payload === undefined || payload === null || payload === {}) state.user = {
                 username: "",
@@ -76,6 +80,12 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        fetchUserQuestions(context) {
+            return fetchUserQuestions(context.getters.getAuthToken)
+                .then(response => {
+                    context.commit('setUserQuestions', response.data)})
+                .catch(() => context.commit('setUserQuestions', []))
+        },
         fetchUserAnswer(context) {
             return fetchUserAnswer(context.getters.getCurrentQuestion.id, context.getters.getAuthToken)
                 .then(response => context.commit('setUserAnswer', response.data))
@@ -112,6 +122,7 @@ export default new Vuex.Store({
                     context.commit('setUser', {username: "", password: "", email: ""})
                 })
                 .then(() => context.dispatch('updateQuestion'))
+                .then(() => context.dispatch('fetchUserQuestions'))
 
         },
         updateQuestion(context) {
@@ -142,6 +153,9 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getUserQuestions(state) {
+            return state.userQuestions
+        },
         getLoading(state) {
             return state.loading
         },

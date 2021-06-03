@@ -157,7 +157,6 @@ export default {
         this.showSnackbar('An answer was already submitted')
         return
       }
-      this.answerSubmitted = true
       if (this.loggedIn.value === false) {
         this.$store.commit('startLoading', this.question.answers[answerNumber].color)
         this.$store.dispatch('updateQuestion')
@@ -180,7 +179,6 @@ export default {
               .then(() => this.$store.dispatch('fetchUserAnswer'))
               .then(() => this.$store.commit('stopLoading'))
               .catch((error) => {
-                this.answerSubmitted = false
                 this.showSnackbar(error.response.data)
                 this.$store.commit('stopLoading')
               }))
@@ -196,7 +194,6 @@ export default {
       this.$store.commit('setUserAnswer', undefined)
       this.$store.dispatch('fetchQuestion')
           .then(this.stopLoading)
-          .then(() => this.answerSubmitted = false)
           .catch(() => this.showSnackbar('Error downloading questions'))
     },
     stopLoading() {

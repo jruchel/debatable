@@ -229,7 +229,7 @@ export default {
     },
     postQuestionToUser() {
       postQuestion(this.question, this.authToken).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
-          .then(() => this.$store.commit('stopLoading'))
+          .then(() => this.$store.commit('stopLoading')).then(() => this.$store.dispatch('fetchUserQuestions'))
     },
     handleErrorResponse(error) {
       this.showSnackbar(error.response.data)

@@ -1,20 +1,18 @@
 <template>
-  <v-menu bottom offset-y="true">
+  <v-menu bottom :offset-y="true">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn
-          icon
-          dark
+      <v-chip
+          :color="color.primary.name"
+          large
           v-bind="attrs"
-          v-on="on"
-      >
-        <v-icon size="50" color="white">
-          mdi-account-circle
-        </v-icon>
-      </v-btn>
+          v-on="on">
+        <span  style="margin-right: 10px; font-size: 20px">{{ user.username }}</span>
+          <v-icon size="40">mdi-account-circle</v-icon>
+      </v-chip>
     </template>
     <v-list rounded>
       <v-list-item-group>
-        <v-list-item>
+        <v-list-item @click="$router.push('/user/questions')">
           <v-list-item-icon>
             <v-icon>
               mdi-help
@@ -23,6 +21,12 @@
           <v-list-item-title>
             Questions
           </v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="$router.push('/user')">
+          <v-list-item-icon>
+            <v-icon>mdi-account-cog</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Edit profile</v-list-item-title>
         </v-list-item>
         <v-list-item @click="$emit('perform-logout')">
           <v-list-item-icon>
@@ -38,6 +42,14 @@
 <script>
 export default {
   name: "UserAvatar",
+  computed: {
+    color() {
+      return this.$store.getters.getColors
+    },
+    user() {
+      return this.$store.getters.getUser
+    }
+  },
   data() {
     return {
       expanded: false

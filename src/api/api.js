@@ -141,3 +141,13 @@ export function fetchUserAnswer(questionId, token) {
         token
     )
 }
+
+export function fetchUserQuestions(token) {
+    return sendRequest(
+        backendAddress,
+        '/questions/user',
+        'get',
+        {},
+        token
+    )
+}
