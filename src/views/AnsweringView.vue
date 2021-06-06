@@ -146,7 +146,7 @@ export default {
       return (answer1.answer === answer2.answer && answer1.color === answer2.color && answer1.count === answer2.count && answer1.id === answer2.id)
     },
     deleteComment(args) {
-      deleteComment(args[0], this.token)
+      deleteComment(args[0].id, this.token)
           .then(() => this.showSnackbar('Comment deleted'))
           .catch(this.showErrorSnackbar)
           .then(args[1])
@@ -163,7 +163,8 @@ export default {
             .then(() => {
               let userAnswer = this.question.answers[answerNumber]
               userAnswer.count += 1
-              this.$store.commit('setUserAnswer', userAnswer)})
+              this.$store.commit('setUserAnswer', userAnswer)
+            })
             .then(() => this.$store.commit('stopLoading'))
 
       } else this.submitAnswer(answerNumber)

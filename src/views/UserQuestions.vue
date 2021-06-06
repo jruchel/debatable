@@ -23,11 +23,15 @@
 
 <script>
 import QuestionPreview from "@/components/questions/QuestionPreview";
+import {deleteQuestion} from "@/api/api";
 
 export default {
   name: "UserQuestions",
   components: {QuestionPreview},
   computed: {
+    token() {
+      return this.$store.getters.getAuthToken
+    },
     colors() {
       return this.$store.getters.getColors
     },
@@ -40,9 +44,7 @@ export default {
   },
   methods: {
     deleteQuestion(question) {
-      console.log('question to delete', question)
-      //deleting question through the api
-      this.$store.dispatch('fetchUserQuestions')
+      deleteQuestion(question.id, this.token).then(() => this.$store.dispatch('fetchUserQuestions'))
     }
   }
 }

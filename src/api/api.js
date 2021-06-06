@@ -92,12 +92,12 @@ export function postComment(question, comment, token) {
     )
 }
 
-export function deleteComment(comment, token) {
+export function deleteComment(commentId, token) {
     return sendRequest(
         backendAddress,
-        '/comments',
+        '/comments/' + commentId,
         'delete',
-        comment,
+        {},
         token,
     )
 }
@@ -147,6 +147,16 @@ export function fetchUserQuestions(token) {
         backendAddress,
         '/questions/user',
         'get',
+        {},
+        token
+    )
+}
+
+export function deleteQuestion(questionId, token) {
+    return sendRequest(
+        backendAddress,
+        '/questions/' + questionId,
+        'delete',
         {},
         token
     )
