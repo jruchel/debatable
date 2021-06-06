@@ -1,15 +1,5 @@
 <template>
   <v-container style="margin-top: 200px">
-    <v-snackbar
-        v-if="snackbar.show"
-        top
-        :style="marginTop"
-        v-model="snackbar.show"
-        :color=$store.getters.getColors.snackbar.name
-        timeout="3500"
-    >
-      {{ snackbar.text }}
-    </v-snackbar>
     <v-row class="justify-center">
       <v-col cols="12" xl="6">
         <v-slide-x-transition>
@@ -89,6 +79,7 @@
 import Option from "@/components/questions/Option";
 import CommentSection from "@/components/comments/CommentSection";
 import {deleteComment, submitAnswer} from "@/api/api";
+import EventBus from "@/event-bus/EventBus";
 
 export default {
   name: "AnsweringView",
@@ -132,7 +123,6 @@ export default {
         firstAnswer: false,
         secondAnswer: false
       },
-      snackbar: {show: false, text: "d00pa"}
     }
   },
   methods: {
@@ -204,9 +194,7 @@ export default {
       return this.question.question
     },
     showSnackbar(text) {
-      this.snackbar.show = false
-      this.snackbar.text = text
-      this.snackbar.show = true
+      EventBus.$emit('show-snackbar', text)
     },
     showErrorSnackbar(response) {
       this.showSnackbar(response.data)

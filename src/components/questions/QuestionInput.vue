@@ -4,15 +4,6 @@
       <v-row class='justify-center'>
         <v-col cols='12' sm='8' xl='6'>
           <v-card>
-            <v-snackbar
-                top
-                :style='marginTop()'
-                v-model='snackbar.show'
-                :color=$store.getters.getColors.snackbar.name
-                timeout='3500'
-            >
-              {{ snackbar.text }}
-            </v-snackbar>
             <v-card-title style='height: 100%' class='justify-center'>
               <v-text-field height='100%'
                             v-model='question.question'
@@ -146,6 +137,7 @@
 
 <script>
 import {postQuestion, postTrialQuestion} from '@/api/api';
+import EventBus from "@/event-bus/EventBus";
 
 export default {
   name: 'QuestionInput',
@@ -170,7 +162,6 @@ export default {
           }
         ]
       },
-      snackbar: {show: false, text: 'd00pa'},
       colors: ['red', 'blue', 'green', 'grey', 'white'],
       postingQuestion: false,
       rules: {
@@ -204,9 +195,7 @@ export default {
       return /xs|sm/i.test(this.$vuetify.breakpoint.name)
     },
     showSnackbar(text) {
-      this.snackbar.show = false
-      this.snackbar.text = text
-      this.snackbar.show = true
+      EventBus.$emit('show-snackbar', text)
     },
     reauthenticateAndPost() {
       this.$store.commit('startLoading')

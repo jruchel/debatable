@@ -1,5 +1,12 @@
 <template>
   <v-app :style=backgroundStyle>
+    <v-snackbar
+        top
+        style="margin-top: 2%"
+        v-model="snackbar.show"
+        :color="colors.snackbar.name">
+      {{ snackbar.text }}
+    </v-snackbar>
     <v-app-bar dark :color=$store.getters.getColors.primary.name absolute>
       <v-progress-linear
           :active="loading.value"
@@ -47,14 +54,29 @@
 
 import LoginDialog from "@/components/login/LoginDialog";
 import UserAvatar from "@/components/user/UserAvatar";
+import EventBus from "@/event-bus/EventBus";
 
 export default {
   name: 'App',
   components: {UserAvatar, LoginDialog},
   mounted() {
+    EventBus.$on('show-snackbar', args => {
+      this.showSnackbar(args)
+    })
     this.$store.dispatch('fetchQuestion')
   },
+  data() {
+    return {
+      snackbar: {
+        show: false,
+        text: ""
+      }
+    }
+  },
   computed: {
+    colors() {
+      return this.$store.getters.getColors
+    },
     loading() {
       return this.$store.getters.getLoading
     },
@@ -72,6 +94,10 @@ export default {
     }
   },
   methods: {
+    showSnackbar(text) {
+      this.snackbar.text = text
+      this.snackbar.show = true
+    },
     getCurrentRouteName() {
       return this.$router.history.current.name
     },

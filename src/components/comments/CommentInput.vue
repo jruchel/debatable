@@ -1,13 +1,5 @@
 <template>
   <v-container>
-    <v-snackbar
-        :color=$store.getters.getColors.snackbar.name
-        top
-        :style='marginTop()'
-        v-model='snackbar.show'
-    >
-      {{ snackbar.text }}
-    </v-snackbar>
     <v-form v-model='valid' ref='form'>
       <v-text-field
           append-icon='mdi-send'
@@ -49,7 +41,6 @@ export default {
     return {
       valid: false,
       comment: '',
-      snackbar: {show: false, text: 'd00pa'},
       loading: false,
       rules: {
         comment: [
@@ -72,9 +63,7 @@ export default {
       return /xs|sm/i.test(this.$vuetify.breakpoint.name)
     },
     showSnackbar(text) {
-      this.snackbar.show = false
-      this.snackbar.text = text
-      this.snackbar.show = true
+      this.$emit('show-snackbar', text)
     },
     reauthenticateAndPost() {
       if (this.comment === undefined) {

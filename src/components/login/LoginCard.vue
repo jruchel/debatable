@@ -1,15 +1,5 @@
 <template>
   <v-card>
-    <v-snackbar
-        v-if="snackbar.show"
-        top
-        :style="marginTop()"
-        v-model="snackbar.show"
-        :color=$store.getters.getColors.snackbar.name
-        timeout="3500"
-    >
-      {{ snackbar.text }}
-    </v-snackbar>
     <v-toolbar dark flat class="sticky-toolbar" :color=$store.getters.getColors.primary.name>
       <v-spacer></v-spacer>
       <span>Please log in</span>
@@ -50,6 +40,7 @@
 
 <script>
 import {authenticate, register} from "@/api/api";
+import EventBus from "@/event-bus/EventBus";
 
 
 export default {
@@ -74,7 +65,6 @@ export default {
       loadingLogin: false,
       loadingRegister: false,
       emailInput: false,
-      snackbar: {show: false, text: "d00pa"},
       valid: false,
       rules: {
         email: [
@@ -109,9 +99,7 @@ export default {
       return /xs|sm/i.test(this.$vuetify.breakpoint.name)
     },
     showSnackbar(text) {
-      this.snackbar.show = false
-      this.snackbar.text = text
-      this.snackbar.show = true
+      EventBus.$emit('show-snackbar', text)
     },
     showLoginDialog() {
       this.loginDialog = true

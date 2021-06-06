@@ -13,6 +13,7 @@
                 <v-dialog :width="dialogWidth" v-model="dialog">
                   <template v-slot:activator="{on, attrs}">
                     <v-btn
+                        :loading="loading.delete === true"
                         v-bind="attrs"
                         v-on="on"
                         icon style="float: right">
@@ -34,7 +35,8 @@
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn text outlined rounded color="green lighten-1" @click="questionDeletionConfirmed">Yes
+                      <v-btn text outlined rounded color="green lighten-1"
+                             @click="questionDeletionConfirmed">Yes
                       </v-btn>
                       <v-btn text outlined rounded color="red lighten-1" @click="dialog = false">No</v-btn>
                     </v-card-actions>
@@ -66,6 +68,7 @@
 
 <script>
 import QuestionPreviewAnswer from "@/components/questions/QuestionPreviewAnswer";
+import EventBus from "@/event-bus/EventBus";
 
 export default {
   name: "QuestionPreview",
@@ -90,13 +93,25 @@ export default {
     }
   },
   methods: {
+    onComplete(response) {
+      EventBus.$emit('show-snackbar', response)
+      this.loading.delete = false
+    },
     questionDeletionConfirmed() {
-      this.$emit('delete-question', this.question)
+      this.loading.delete = true
+      this.$emit('delete-question', {
+        question: this.question,
+        onComplete: this.onComplete,
+        onError: this.onComplete
+      })
       this.dialog = false
-    }
+    },
   },
   data() {
     return {
+      loading: {
+        delete: false
+      },
       dialog: false
     }
   }
