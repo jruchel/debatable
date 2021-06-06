@@ -40,7 +40,7 @@
     <v-spacer></v-spacer>
     <v-main data-app>
       <v-fade-transition mode="out-in">
-        <router-view></router-view>
+        <router-view :style=marginTop></router-view>
       </v-fade-transition>
     </v-main>
     <v-spacer></v-spacer>
@@ -71,6 +71,18 @@ export default {
     }
   },
   computed: {
+    marginTop() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 'margin-top: 20%;'
+        case 'sm':
+          return 'margin-top: 20%;'
+        case 'md':
+          return 'margin-top: 10%;'
+        default:
+          return 'margin-top: 5%;'
+      }
+    },
     snackbarTopMargin() {
       let margin = '2%'
       if(this.isMobile) {

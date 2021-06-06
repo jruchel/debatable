@@ -1,15 +1,21 @@
 <template>
-  <v-container style="margin-top: 100px">
+  <v-container>
     <v-row v-if="loading" class="justify-center">
-      <v-col cols="12" md="8" xl="6" v-for="i in [1, 2, 3]" :key="i">
-        <v-sheet
-            rounded
-            color="grey"
-        >
-          <v-skeleton-loader
-              type="image"
-          ></v-skeleton-loader>
-        </v-sheet>
+      <v-col cols="12" md="8" v-for="i in [1, 2, 3]" :key="i">
+        <v-container>
+          <v-row class="justify-center">
+            <v-col cols="12">
+              <v-sheet
+                  rounded
+                  color="grey"
+              >
+                <v-skeleton-loader
+                    type="image"
+                ></v-skeleton-loader>
+              </v-sheet>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
     </v-row>
     <v-container v-else>
@@ -20,7 +26,7 @@
         </v-col>
       </v-row>
       <v-row class="justify-center" v-if="!hasQuestions">
-        <v-col cols="12">
+        <v-col cols="12" md="8" xl="6">
           <v-card>
             <v-card-title class="justify-center">
               No questions so far

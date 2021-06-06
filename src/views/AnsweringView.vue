@@ -1,5 +1,5 @@
 <template>
-  <v-container style="margin-top: 20%">
+  <v-container>
     <v-row class="justify-center">
       <v-col cols="12" md="8" xl="6">
         <v-slide-x-transition>
@@ -85,15 +85,6 @@ export default {
   name: "AnsweringView",
   components: {CommentSection, Option},
   computed: {
-    marginTop() {
-      if (this.isMobile) {
-        return "margin-top: 15%"
-      }
-      return "margin-top: 0%"
-    },
-    isMobile() {
-      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
-    },
     question() {
       return this.$store.getters.getCurrentQuestion
     },

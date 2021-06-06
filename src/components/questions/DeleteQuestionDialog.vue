@@ -39,12 +39,18 @@ export default {
   name: "DeleteQuestionDialog",
   props: ['question'],
   computed: {
-    isMobile() {
-      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
-    },
     dialogWidth() {
-      if (this.isMobile) return '100%'
-      return '30%'
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return '100%'
+        case 'sm':
+          return '100%'
+        case 'md':
+          return '60%'
+        default:
+          return '30%'
+      }
+
     },
     dialogTitleColor() {
       return this.$store.getters.getColors.primary
