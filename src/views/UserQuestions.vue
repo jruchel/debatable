@@ -69,9 +69,10 @@ export default {
       let question = payload.question
       let onComplete = payload.onComplete
       let onError = payload.onError
-      deleteQuestion(question.id, this.token)
+      this.$store.dispatch('reauthenticate').then(() => deleteQuestion(question.id, this.token))
           .then(() => this.$store.dispatch('fetchUserQuestions'))
-          .then(() => onComplete('Question deleted')).catch((error) => onError(error.response.data))
+          .then((response) => onComplete(response))
+          .catch((error) => onError(error.response.data))
     }
   }
 }
