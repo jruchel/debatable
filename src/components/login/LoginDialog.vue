@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="loginDialog" width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn :style="getButtonStyle" v-bind="attrs" v-on="on" outlined @click=showLoginDialog>Login</v-btn>
+      <v-btn style="margin-top: 5px"  :style="getButtonStyle" v-bind="attrs" v-on="on" outlined @click=showLoginDialog>Login</v-btn>
     </template>
     <LoginCard></LoginCard>
   </v-dialog>

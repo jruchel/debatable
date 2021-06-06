@@ -2,7 +2,7 @@
   <v-app :style=backgroundStyle>
     <v-snackbar
         top
-        style="margin-top: 2%"
+        :style=snackbarTopMargin
         v-model="snackbar.show"
         :color="colors.snackbar.name">
       {{ snackbar.text }}
@@ -16,12 +16,14 @@
           :color="loading.color.active"
       ></v-progress-linear>
       <v-row>
-        <v-col cols="3">
+        <v-col cols="2" md="1" >
           <v-btn icon @click="$router.go(-1)">
             <v-icon size="30">
               mdi-arrow-left
             </v-icon>
           </v-btn>
+        </v-col>
+        <v-col cols="1">
           <v-btn icon @click="$router.push('/')">
             <v-icon size="35">
               mdi-home-circle
@@ -29,14 +31,9 @@
           </v-btn>
         </v-col>
         <v-spacer></v-spacer>
-        <v-col cols="4" class="d-flex justify-space-around">
-          <h1>
-            {{ getCurrentRouteName() }}
-          </h1>
-        </v-col>
-        <v-col cols="4" class="d-flex justify-end">
-          <login-dialog></login-dialog>
-          <user-avatar v-on:perform-logout="performLogout" v-if="loggedIn.value"></user-avatar>
+        <v-col cols="5" md="2" class="d-flex justify-end">
+          <login-dialog v-if="!loggedIn.value"></login-dialog>
+          <user-avatar v-else v-on:perform-logout="performLogout"></user-avatar>
         </v-col>
       </v-row>
     </v-app-bar>
@@ -74,6 +71,16 @@ export default {
     }
   },
   computed: {
+    snackbarTopMargin() {
+      let margin = '2%'
+      if(this.isMobile) {
+        margin = '15%'
+      }
+      return 'margin-top: ' + margin + ';'
+    },
+    isMobile() {
+      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
+    },
     colors() {
       return this.$store.getters.getColors
     },
@@ -97,9 +104,6 @@ export default {
     showSnackbar(text) {
       this.snackbar.text = text
       this.snackbar.show = true
-    },
-    getCurrentRouteName() {
-      return this.$router.history.current.name
     },
     performLogout() {
       this.$store.commit('setCurrentToken', {token: ''})

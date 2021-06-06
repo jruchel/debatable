@@ -1,7 +1,7 @@
 <template>
   <v-container style="margin-top: 100px">
     <v-row v-if="loading" class="justify-center">
-      <v-col cols="8" v-for="i in [1, 2, 3]" :key="i">
+      <v-col cols="12" md="8" xl="6" v-for="i in [1, 2, 3]" :key="i">
         <v-sheet
             rounded
             color="grey"
@@ -14,11 +14,13 @@
     </v-row>
     <v-container v-else>
       <v-row class="justify-center" v-if="hasQuestions">
-        <question-preview v-on:delete-question="deleteQuestion" v-for="question in userQuestions" :key="question.id"
-                          :question="question"></question-preview>
+        <v-col cols="12" md="8" xl="6">
+          <question-preview v-on:delete-question="deleteQuestion" v-for="question in userQuestions" :key="question.id"
+                            :question="question"></question-preview>
+        </v-col>
       </v-row>
       <v-row class="justify-center" v-if="!hasQuestions">
-        <v-col cols="4">
+        <v-col cols="12">
           <v-card>
             <v-card-title class="justify-center">
               No questions so far

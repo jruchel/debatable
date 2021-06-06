@@ -1,7 +1,7 @@
 <template>
-  <v-container style="margin-top: 200px">
+  <v-container style="margin-top: 20%">
     <v-row class="justify-center">
-      <v-col cols="12" xl="6">
+      <v-col cols="12" md="8" xl="6">
         <v-slide-x-transition>
           <v-card>
             <v-card-title class="justify-center" style="height: 100%">{{ getQuestionContent() }}</v-card-title>
@@ -10,13 +10,13 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="6" xl="3">
+      <v-col cols="6" md="4" xl="3">
         <v-slide-x-transition>
           <Option :user-answer="isUserAnswer(0)" :answer="question.answers[0]"
                   v-on:option-picked="submitAnswerClicked(0)"></Option>
         </v-slide-x-transition>
       </v-col>
-      <v-col cols="6" xl="3">
+      <v-col cols="6" md="4" xl="3">
         <v-slide-x-transition>
           <Option :user-answer="isUserAnswer(1)" :answer="question.answers[1]"
                   v-on:option-picked="submitAnswerClicked(1)"></Option>
@@ -25,7 +25,7 @@
     </v-row>
     <v-slide-x-transition>
       <v-row class="justify-center" v-if="userAnswer">
-        <v-col cols="12" xl="6">
+        <v-col cols="12" md="8" xl="6">
           <h2 v-if="userAnswer"
               style="text-align: center; color: #191919">
             {{ calculateUserAnswerPercentage(getAnswerCount(0), getAnswerCount(1), userAnswer.count) }}%
@@ -51,7 +51,7 @@
       </v-row>
     </v-slide-x-transition>
     <v-row class="justify-center">
-      <v-col cols="12" xl="6">
+      <v-col cols="12" md="8" xl="6">
         <v-slide-x-transition>
           <v-card :color=$store.getters.getColors.buttonPrimary.name dark @click="getNextQuestion">
             <template slot="progress">
