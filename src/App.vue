@@ -16,7 +16,7 @@
           :color="loading.color.active"
       ></v-progress-linear>
       <v-row>
-        <v-col cols="2" md="1" >
+        <v-col cols="2" md="1">
           <v-btn icon @click="$router.go(-1)">
             <v-icon size="30">
               mdi-arrow-left
@@ -85,7 +85,7 @@ export default {
     },
     snackbarTopMargin() {
       let margin = '2%'
-      if(this.isMobile) {
+      if (this.isMobile) {
         margin = '15%'
       }
       return 'margin-top: ' + margin + ';'
@@ -122,6 +122,9 @@ export default {
       this.$store.commit('setLoggedIn', {value: false})
       this.$store.commit('setUser', {username: "", password: "", email: ""})
       this.$store.dispatch('fetchUser').then(() => this.$store.dispatch('fetchUserAnswer'))
+      if (this.$route.path.includes('/user')) {
+        this.$router.push('/')
+      }
     }
   }
 };
