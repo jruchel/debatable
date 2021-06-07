@@ -10,9 +10,19 @@
         <v-text-field outlined style="margin-left: 10px; margin-right: 10px"
                       label="username" v-model="user.username" :rules="rules.username"
         ></v-text-field>
-        <v-text-field type="password" outlined style="margin-left: 10px; margin-right: 10px"
+        <v-text-field :type="passwordFieldType" outlined style="margin-left: 10px; margin-right: 10px"
                       label="password" v-model="user.password" :rules="rules.password"
-        ></v-text-field>
+        >
+          <template v-slot:append>
+            <v-icon v-if="passwordVisible" :color="appendIconColor" @mouseup="passwordVisible = false"
+                    @mousedown="passwordVisible = true">
+              mdi-eye
+            </v-icon>
+            <v-icon v-else @mouseup="passwordVisible = false" @mousedown="passwordVisible = true">
+              mdi-eye-off
+            </v-icon>
+          </template>
+        </v-text-field>
         <v-fade-transition>
           <v-text-field v-if="emailInput" outlined style="margin-left: 10px; margin-right: 10px"
                         label="email" v-model="user.email" :rules="rules.email"
@@ -49,6 +59,18 @@ export default {
     this.$refs.form.resetValidation()
   },
   computed: {
+    appendIconColor() {
+      if (this.passwordVisible) {
+        return 'blue darken-1'
+      }
+      return 'grey'
+    },
+    passwordFieldType() {
+      if (this.passwordVisible) {
+        return ''
+      }
+      return 'password'
+    },
     loggedIn() {
       return this.$store.getters.getLoggedIn;
     },
@@ -61,6 +83,7 @@ export default {
   },
   data() {
     return {
+      passwordVisible: false,
       loginDialog: false,
       loadingLogin: false,
       loadingRegister: false,
