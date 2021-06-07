@@ -14,11 +14,11 @@
                       label="password" v-model="user.password" :rules="rules.password"
         >
           <template v-slot:append>
-            <v-icon v-if="passwordVisible" :color="appendIconColor" @mouseup="passwordVisible = false"
+            <v-icon v-if="passwordVisible" :color="appendIconColor" @mouseup="passwordVisible = false" @mouseleave="passwordVisible = false"
                     @mousedown="passwordVisible = true">
               mdi-eye
             </v-icon>
-            <v-icon v-else @mouseup="passwordVisible = false" @mousedown="passwordVisible = true">
+            <v-icon v-else @mouseup="passwordVisible = false" @mousedown="passwordVisible = true" @mouseleave="passwordVisible = false">
               mdi-eye-off
             </v-icon>
           </template>
@@ -30,10 +30,10 @@
         </v-fade-transition>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingLogin" @click="performLogin">
+          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" outlined rounded :loading="loadingLogin" @click="performLogin">
             Login
           </v-btn>
-          <v-btn style="margin-bottom: 2px" v-if="!this.loggedIn.value" :loading="loadingRegister"
+          <v-btn style="margin-bottom: 2px" outlined rounded v-if="!this.loggedIn.value" :loading="loadingRegister"
                  @click="performRegistration">
             Register
           </v-btn>

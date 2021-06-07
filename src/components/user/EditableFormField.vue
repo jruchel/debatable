@@ -4,6 +4,7 @@
       <v-row>
         <v-col cols="9">
           <v-text-field
+              ref="textField"
               :loading="loading"
               :label="label"
               :type="type === 'password' && !passwordVisible ? 'password' : 'text'"
@@ -30,7 +31,7 @@
           </v-text-field>
         </v-col>
         <v-col cols="1">
-          <v-btn icon class="button" :disabled="editing" @click="editing = true">
+          <v-btn icon class="button" :disabled="editing" @click="startEditing">
             <v-icon size=30>
               mdi-pencil
             </v-icon>
@@ -77,6 +78,10 @@ export default {
     }
   },
   methods: {
+    startEditing() {
+      this.editing = true
+      this.$refs.textField.focus()
+    },
     cancelEditing() {
       this.editing = false
       this.$emit('edit-canceled')
