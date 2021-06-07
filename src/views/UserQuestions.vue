@@ -50,12 +50,27 @@ import {deleteQuestion} from "@/api/api";
 export default {
   name: "UserQuestions",
   components: {QuestionPreview},
+  beforeMount() {
+    if (!this.loggedIn.value) {
+      this.$router.push('/')
+    }
+  },
+  watch: {
+    loggedIn: function (val) {
+      if (!val.value) {
+        this.$router.push('/')
+      }
+    }
+  },
   data() {
     return {
       loading: true
     }
   },
   computed: {
+    loggedIn() {
+      return this.$store.getters.getLoggedIn
+    },
     token() {
       return this.$store.getters.getAuthToken
     },

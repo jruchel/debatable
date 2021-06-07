@@ -2,6 +2,7 @@
   <v-app :style=backgroundStyle>
     <v-snackbar
         top
+        timeout="1200"
         :style=snackbarTopMargin
         v-model="snackbar.show"
         :color="colors.snackbar.name">
