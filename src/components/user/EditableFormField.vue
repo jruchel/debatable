@@ -4,6 +4,7 @@
       <v-row>
         <v-col cols="9">
           <v-text-field
+              :loading="loading"
               :label="label"
               :type="type === 'password' && !passwordVisible ? 'password' : 'text'"
               :rules="rules" v-model="value"
@@ -17,7 +18,8 @@
                         @mousedown="passwordVisible = true">
                   mdi-eye
                 </v-icon>
-                <v-icon v-else @mouseup="passwordVisible = false" @mousedown="passwordVisible = true">
+                <v-icon v-else @mouseup="passwordVisible = false" @mouseleave="passwordVisible = false"
+                        @mousedown="passwordVisible = true">
                   mdi-eye-off
                 </v-icon>
               </div>
@@ -38,7 +40,7 @@
           <v-col v-if="editing" cols="1">
             <v-btn icon class="button">
               <v-icon size="35" color="green darken-1" @click="confirmEditing" :disabled="!valid">
-                mdi-checkbox-marked-circle-outline
+                mdi-checkbox-marked-circle
               </v-icon>
             </v-btn>
           </v-col>
@@ -47,7 +49,7 @@
           <v-col v-if="editing" cols="1">
             <v-btn icon class="button" @click="cancelEditing">
               <v-icon size="35" color="red darken-1">
-                mdi-minus-circle-outline
+                mdi-minus-circle
               </v-icon>
             </v-btn>
           </v-col>
@@ -61,7 +63,7 @@
 
 export default {
   name: "EditableRow",
-  props: ['rules', 'value', 'label', 'type', 'onEditCancel', 'onEditConfirm', 'appendIcon'],
+  props: ['rules', 'value', 'loading', 'label', 'type', 'onEditCancel', 'onEditConfirm', 'appendIcon'],
   watch: {
     editing: function (value) {
       this.$emit('editing-value-changed', value)
@@ -81,7 +83,7 @@ export default {
     },
     confirmEditing() {
       this.editing = false
-      this.$emit('edit-confirmed')
+      this.$emit('edit-confirmed', this.value)
     }
   }
 }

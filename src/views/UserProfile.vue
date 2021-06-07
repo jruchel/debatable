@@ -14,12 +14,13 @@
               </v-col>
               <v-col cols="10">
                 <editable-form-field
+                    :loading="loading.username"
                     label="username"
                     append-icon="mdi-account-box"
                     :rules="rules.username"
                     :value="cacheUser.username"
                     @edit-canceled="resetCacheUser"
-                    @edit-confirmed="confirmEditingUsername"
+                    @edit-confirmed="confirmUsernameChange"
                 >
                 </editable-form-field>
               </v-col>
@@ -29,12 +30,13 @@
               </v-col>
               <v-col cols="10">
                 <editable-form-field
+                    :loading="loading.email"
                     label="email"
                     :rules="rules.email"
                     :value="cacheUser.email"
                     append-icon="mdi-email"
                     @edit-canceled="resetCacheUser"
-                    @edit-confirmed="confirmEditingEmail"
+                    @edit-confirmed="confirmEmailChange"
                 >
                 </editable-form-field>
               </v-col>
@@ -45,12 +47,15 @@
               </v-col>
               <v-col cols="10">
                 <editable-form-field
+                    :loading="loading.password"
                     label="password"
                     type="password"
                     @editing-value-changed="setEditingPassword"
                     append-icon="mdi-lock"
                     :rules="rules.password.current"
                     :value="cacheUser.password"
+                    @edit-canceled="resetCacheUser"
+                    @edit-confirmed="confirmPasswordChange"
                 >
                 </editable-form-field>
               </v-col>
@@ -65,7 +70,7 @@
 <script>
 import EditableFormField from "@/components/user/EditableFormField";
 import EventBus from "@/event-bus/EventBus";
-import {editEmail, editUsername} from "@/api/api";
+import {changeEmail, changePassword, changeUsername} from "@/api/api";
 
 export default {
   name: "UserProfile",
@@ -87,6 +92,11 @@ export default {
   },
   data() {
     return {
+      loading: {
+        username: false,
+        email: false,
+        password: false
+      },
       editingPassword: false,
       valid: true,
       regex: {
@@ -96,6 +106,8 @@ export default {
         password: {
           current: [
             v => !!v || 'Password cannot be empty',
+            v => v.length >= 5 || 'Password must bo at least 5 characters long',
+            v => v.length < 20 || 'Password cannot be longer than 20 characters'
           ]
         },
         username: [
@@ -135,36 +147,71 @@ export default {
     },
     resetCacheUser() {
       this.cacheUser = JSON.parse(JSON.stringify(this.user))
-      this.cacheUser.password = 'password'
     },
-    confirmEditingUsername(value) {
+    confirmUsernameChange(value) {
       if (value === this.user.username) return
+      this.loading.username = true
       this.resetCacheUser()
-      editUsername(this.token, value)
-          .then(() => {
-            EventBus.$emit('show-snackbar', 'Username changed')
-          })
+      this.$store.dispatch('reauthenticate').then(() => {
+            return changeUsername(this.token, value)
+          }
+      ).then(() => {
+        EventBus.$emit('show-snackbar', 'Username changed')
+        this.cacheUser.username = value
+        this.$store.commit('setUser', this.cacheUser)
+        this.loading.username = false
+        this.resetCacheUser()
+        return this.$store.dispatch('reauthenticate')
+      })
           .catch((error) => {
             EventBus.$emit('show-snackbar', error.response.data)
           })
           .catch(() => {
             EventBus.$emit('show-snackbar', 'Could not change username')
-          })
+          }).then(() => this.loading.username = false)
     },
-    confirmEditingEmail(value) {
+    confirmEmailChange(value) {
       if (value === this.user.email) return
+      this.loading.email = true
       this.resetCacheUser()
-      editEmail(this.token, value)
+      this.$store.dispatch('reauthenticate').then(() => {
+        return changeEmail(this.token, value)
+      })
           .then(() => {
             EventBus.$emit('show-snackbar', 'Email changed, please verify your new email before using your account')
+            this.cacheUser.email = value
+            this.$store.commit('setUser', this.cacheUser)
           })
           .catch((error) => {
             EventBus.$emit('show-snackbar', error.response.data)
           })
           .catch(() => {
             EventBus.$emit('show-snackbar', 'Could not change email')
-          })
+          }).then(() => this.loading.email = false)
     },
+    confirmPasswordChange(value) {
+      if (value === this.user.password) return
+      this.loading.password = true
+      this.resetCacheUser()
+      this.$store.dispatch('reauthenticate').then(() => {
+        changePassword(this.token, {
+          currentPassword: this.cacheUser.password,
+          newPassword: value,
+          confirmPassword: value
+        })
+      }).then(() => {
+        EventBus.$emit('show-snackbar', 'Password changed')
+        this.cacheUser.password = value
+        this.$store.commit('setUser', this.cacheUser)
+      })
+          .catch((error) => {
+            EventBus.$emit('show-snackbar', error.response.data)
+          })
+          .catch(() => {
+            EventBus.$emit('show-snackbar', 'Could not change password')
+          })
+          .then(() => this.loading.password = false)
+    }
   }
 }
 </script>

@@ -162,7 +162,17 @@ export function deleteQuestion(questionId, token) {
     )
 }
 
-export function editEmail(token, email) {
+export function changePassword(token, passwordDTO) {
+    return sendRequest(
+        backendAddress,
+        '/user/password',
+        'put',
+        passwordDTO,
+        token
+    )
+}
+
+export function changeEmail(token, email) {
     return sendRequest(
         backendAddress,
         '/user/email',
@@ -172,7 +182,7 @@ export function editEmail(token, email) {
     )
 }
 
-export function editUsername(token, username) {
+export function changeUsername(token, username) {
     return sendRequest(
         backendAddress,
         '/user/username',
