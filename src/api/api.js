@@ -161,3 +161,23 @@ export function deleteQuestion(questionId, token) {
         token
     )
 }
+
+export function editEmail(token, email) {
+    return sendRequest(
+        backendAddress,
+        '/user/email',
+        'put',
+        email,
+        token
+    )
+}
+
+export function editUsername(token, username) {
+    return sendRequest(
+        backendAddress,
+        '/user/username',
+        'put',
+        username,
+        token
+    )
+}

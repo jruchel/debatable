@@ -1,17 +1,57 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="12" style="text-align: center">
-        <h1>{{ user.username }}</h1>
-        <v-btn @click="$store.commit('setLoggedIn', {value: false})"></v-btn>
+      <v-col cols="12" lg="8" xl="6" style="text-align: center">
+        <v-sheet rounded elevation="2">
+          <v-container style="padding-bottom: 0; padding-top: 0">
+            <v-row>
+              <v-col cols="2">
+                <v-avatar color="blue" style="margin-top: 20px">
+                  <v-icon dark>
+                    mdi-account-circle
+                  </v-icon>
+                </v-avatar>
+              </v-col>
+              <v-col cols="10">
+                <editable-form-field
+                    :rules="rules.username"
+                    :value="cacheUser.username"
+                    @edit-canceled="resetCacheUser"
+                    @edit-confirmed="confirmEditingUsername"
+                >
+                </editable-form-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="2">
+
+              </v-col>
+              <v-col cols="10">
+                <editable-form-field
+                    :rules="rules.email"
+                    :value="cacheUser.email"
+                    @edit-canceled="resetCacheUser"
+                    @edit-confirmed="confirmEditingEmail"
+                >
+
+                </editable-form-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-sheet>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import EditableFormField from "@/components/user/EditableFormField";
+import EventBus from "@/event-bus/EventBus";
+import {editEmail, editUsername} from "@/api/api";
+
 export default {
   name: "UserProfile",
+  components: {EditableFormField},
   beforeMount() {
     if (!this.loggedIn.value) {
       this.$router.push('/')
@@ -24,17 +64,81 @@ export default {
       }
     }
   },
+  mounted() {
+    this.resetCacheUser()
+  },
+  data() {
+    return {
+      valid: true,
+      regex: {
+        email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      },
+      rules: {
+        username: [
+          v => !!v || 'Username cannot be empty',
+          v => v.length >= 4 || 'Username cannot be shorter than 4 characters',
+          v => v.length < 10 || 'Username cannot be longer than 10 characters'
+        ],
+        email: [
+          v => !!v || 'Email cannot be empty',
+          v => this.regex.email.test(v) === true || 'Email must be a valid one'
+        ]
+      },
+      cacheUser: {
+        username: '',
+        password: '',
+        email: '',
+      },
+    }
+  },
   computed: {
+    token() {
+      return this.$store.getters.getAuthToken
+    },
     loggedIn() {
       return this.$store.getters.getLoggedIn
     },
     user() {
       return this.$store.getters.getUser
     }
+  },
+  methods: {
+    resetCacheUser() {
+      this.cacheUser = JSON.parse(JSON.stringify(this.user))
+    },
+    confirmEditingUsername(value) {
+      if (value === this.user.username) return
+      this.resetCacheUser()
+      editUsername(this.token, value)
+          .then(() => {
+            EventBus.$emit('show-snackbar', 'Username changed')
+          })
+          .catch((error) => {
+            EventBus.$emit('show-snackbar', error.response.data)
+          })
+          .catch(() => {
+            EventBus.$emit('show-snackbar', 'Could not change username')
+          })
+    },
+    confirmEditingEmail(value) {
+      if (value === this.user.email) return
+      this.resetCacheUser()
+      editEmail(this.token, value)
+          .then(() => {
+            EventBus.$emit('show-snackbar', 'Email changed, please verify your new email before using your account')
+          })
+          .catch((error) => {
+            EventBus.$emit('show-snackbar', error.response.data)
+          })
+          .catch(() => {
+            EventBus.$emit('show-snackbar', 'Could not change email')
+          })
+    },
   }
 }
 </script>
 
 <style scoped>
+
 
 </style>
