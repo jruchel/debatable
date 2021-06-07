@@ -50,7 +50,6 @@ export default {
         default:
           return '30%'
       }
-
     },
     dialogTitleColor() {
       return this.$store.getters.getColors.primary

@@ -88,7 +88,7 @@ export default {
       loadingLogin: false,
       loadingRegister: false,
       emailInput: false,
-      valid: false,
+      valid: true,
       rules: {
         email: [
           v => v !== undefined || 'E-mail is required',

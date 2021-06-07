@@ -151,5 +151,10 @@ export default {
   font-family: Nunito-Black, serif;
 }
 
+.rounded-card{
+  border-radius:50px;
+}
+
+
 </style>
 

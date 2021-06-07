@@ -2,11 +2,11 @@
   <v-container>
     <v-row class="justify-center">
       <v-col cols="12" lg="8" xl="6" style="text-align: center">
-        <v-sheet rounded elevation="2">
+        <v-sheet style="border-radius: 50px" elevation="6">
           <v-container style="padding-bottom: 0; padding-top: 0">
-            <v-row>
+            <v-row class="justify-center">
               <v-col cols="2">
-                <v-avatar color="blue" style="margin-top: 20px">
+                <v-avatar color="blue" style="margin-top: 10px">
                   <v-icon dark>
                     mdi-account-circle
                   </v-icon>
@@ -14,6 +14,7 @@
               </v-col>
               <v-col cols="10">
                 <editable-form-field
+                    append-icon="mdi-account-box"
                     :rules="rules.username"
                     :value="cacheUser.username"
                     @edit-canceled="resetCacheUser"
@@ -24,16 +25,30 @@
             </v-row>
             <v-row>
               <v-col cols="2">
-
               </v-col>
               <v-col cols="10">
                 <editable-form-field
                     :rules="rules.email"
                     :value="cacheUser.email"
+                    append-icon="mdi-email"
                     @edit-canceled="resetCacheUser"
                     @edit-confirmed="confirmEditingEmail"
                 >
+                </editable-form-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="2">
 
+              </v-col>
+              <v-col cols="10">
+                <editable-form-field
+                    type="password"
+                    @editing-value-changed="setEditingPassword"
+                    append-icon="mdi-lock"
+                    :rules="rules.password.current"
+                    :value="cacheUser.password"
+                >
                 </editable-form-field>
               </v-col>
             </v-row>
@@ -69,11 +84,17 @@ export default {
   },
   data() {
     return {
+      editingPassword: false,
       valid: true,
       regex: {
         email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       },
       rules: {
+        password: {
+          current: [
+            v => !!v || 'Password cannot be empty',
+          ]
+        },
         username: [
           v => !!v || 'Username cannot be empty',
           v => v.length >= 4 || 'Username cannot be shorter than 4 characters',
@@ -92,6 +113,9 @@ export default {
     }
   },
   computed: {
+    colors() {
+      return this.$store.getters.getColors
+    },
     token() {
       return this.$store.getters.getAuthToken
     },
@@ -103,8 +127,12 @@ export default {
     }
   },
   methods: {
+    setEditingPassword(value) {
+      this.editingPassword = value
+    },
     resetCacheUser() {
       this.cacheUser = JSON.parse(JSON.stringify(this.user))
+      this.cacheUser.password = 'password'
     },
     confirmEditingUsername(value) {
       if (value === this.user.username) return

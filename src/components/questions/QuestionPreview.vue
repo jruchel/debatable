@@ -2,7 +2,7 @@
   <v-container style="padding-left: 0; padding-right: 0">
     <v-row class="justify-center">
       <v-col cols="12">
-        <v-sheet color="#9e9d9d" rounded>
+        <v-sheet color="#9e9d9d" style="border-radius: 12px">
           <v-container>
             <v-row>
               <v-col cols="8">

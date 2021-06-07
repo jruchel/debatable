@@ -83,7 +83,8 @@ export default new Vuex.Store({
         fetchUserQuestions(context) {
             return fetchUserQuestions(context.getters.getAuthToken)
                 .then(response => {
-                    context.commit('setUserQuestions', response.data)})
+                    context.commit('setUserQuestions', response.data)
+                })
                 .catch(() => context.commit('setUserQuestions', []))
         },
         fetchUserAnswer(context) {
@@ -179,7 +180,7 @@ export default new Vuex.Store({
         },
         getLoggedIn(state) {
             return state.loggedIn
-        }
+        },
     }
 })
 
