@@ -14,6 +14,7 @@
               </v-col>
               <v-col cols="10">
                 <editable-form-field
+                    label="username"
                     append-icon="mdi-account-box"
                     :rules="rules.username"
                     :value="cacheUser.username"
@@ -28,6 +29,7 @@
               </v-col>
               <v-col cols="10">
                 <editable-form-field
+                    label="email"
                     :rules="rules.email"
                     :value="cacheUser.email"
                     append-icon="mdi-email"
@@ -43,6 +45,7 @@
               </v-col>
               <v-col cols="10">
                 <editable-form-field
+                    label="password"
                     type="password"
                     @editing-value-changed="setEditingPassword"
                     append-icon="mdi-lock"

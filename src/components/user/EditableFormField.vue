@@ -4,6 +4,7 @@
       <v-row>
         <v-col cols="9">
           <v-text-field
+              :label="label"
               :type="type === 'password' && !passwordVisible ? 'password' : 'text'"
               :rules="rules" v-model="value"
               :readonly="!editing"
@@ -60,7 +61,7 @@
 
 export default {
   name: "EditableRow",
-  props: ['rules', 'value', 'type', 'onEditCancel', 'onEditConfirm', 'appendIcon'],
+  props: ['rules', 'value', 'label', 'type', 'onEditCancel', 'onEditConfirm', 'appendIcon'],
   watch: {
     editing: function (value) {
       this.$emit('editing-value-changed', value)
