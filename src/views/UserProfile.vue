@@ -60,7 +60,7 @@
                     @edit-canceled="cancelPasswordChange"
                     @edit-confirmed="confirmPasswordChange"
                     @field-value-changed="currentPasswordValueChanged"
-                    @valid-value-changed="revalidate"
+                    @valid-value-changed="revalidatePassword"
                 >
                 </editable-form-field>
               </v-col>
@@ -78,7 +78,7 @@
                       :value="password.newPassword"
                       always-edit="true"
                       @field-value-changed="newPasswordValueChanged"
-                      @valid-value-changed="revalidate"
+                      @valid-value-changed="revalidatePassword"
                   ></editable-form-field>
                 </v-col>
               </v-row>
@@ -97,7 +97,7 @@
                       :rules="rules.password.confirm"
                       :value="password.confirmPassword"
                       @field-value-changed="confirmPasswordValueChanged"
-                      @valid-value-changed="revalidate"
+                      @valid-value-changed="revalidatePassword"
                   ></editable-form-field>
                 </v-col>
               </v-row>
@@ -214,10 +214,15 @@ export default {
     }
   },
   methods: {
-    revalidate() {
+    revalidatePassword() {
       this.$refs['password'].form.validate()
       if (this.$refs['new-password']) this.$refs['new-password'].form.validate()
       if (this.$refs['confirm-password']) this.$refs['confirm-password'].form.validate()
+    },
+    resetPasswordValidation() {
+      this.$refs['password'].form.resetValidation()
+      if (this.$refs['new-password']) this.$refs['new-password'].form.resetValidation()
+      if (this.$refs['confirm-password']) this.$refs['confirm-password'].form.resetValidation()
     },
     newPasswordValueChanged(value) {
       this.password.newPassword = value
@@ -254,6 +259,7 @@ export default {
     },
     cancelPasswordChange() {
       this.resetPassword()
+      this.resetPasswordValidation()
     },
     confirmUsernameChange(value) {
       if (value === this.user.username) return
@@ -296,11 +302,7 @@ export default {
             EventBus.$emit('show-snackbar', 'Could not change email')
           }).then(() => this.loading.email = false)
     },
-    confirmPasswordChange(value) {
-      if (value !== this.user.password) {
-        EventBus.$emit('show-snackbar', 'Incorrect password')
-        return
-      }
+    confirmPasswordChange() {
       this.loading.password = true
       return this.$store.dispatch('reauthenticate').then(() => {
         console.log(this.password)
@@ -311,7 +313,9 @@ export default {
         })
       }).then(() => {
         EventBus.$emit('show-snackbar', 'Password changed')
-        this.cacheUser.password = value
+        this.cacheUser.password = this.password.newPassword
+        console.log('cache-user', this.cacheUser)
+        console.log('saved-user', this.user)
         this.$store.commit('setUser', JSON.parse(JSON.stringify(this.cacheUser)))
       }).catch((error) => {
         EventBus.$emit('show-snackbar', error.response.data)
@@ -320,6 +324,7 @@ export default {
       }).then(() => {
         this.resetPassword()
         this.loading.password = false
+        this.resetPasswordValidation()
       })
     }
   }
