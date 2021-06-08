@@ -174,7 +174,7 @@ export default {
       if (value === this.user.email) return
       this.loading.email = true
       this.resetCacheUser()
-      this.$store.dispatch('reauthenticate').then(() => {
+      return this.$store.dispatch('reauthenticate').then(() => {
         return changeEmail(this.token, value)
       })
           .then(() => {
@@ -193,7 +193,7 @@ export default {
       if (value === this.user.password) return
       this.loading.password = true
       this.resetCacheUser()
-      this.$store.dispatch('reauthenticate').then(() => {
+      return this.$store.dispatch('reauthenticate').then(() => {
         changePassword(this.token, {
           currentPassword: this.cacheUser.password,
           newPassword: value,

@@ -72,7 +72,7 @@ export default {
       this.$refs.form.validate()
       if (this.valid === true) {
         this.loading = true
-        this.$store.dispatch('reauthenticate').then(this.postComment).then(this.resetForm)
+        return this.$store.dispatch('reauthenticate').then(this.postComment).then(this.resetForm)
       }
     },
     resetForm() {
@@ -85,7 +85,9 @@ export default {
       }
       return postComment(this.question, this.comment, this.token).then(this.notifyCommentPosted)
           .catch(this.notifyError)
-          .then(() => this.$store.dispatch('fetchComments'))
+          .then(() => {
+            return this.$store.dispatch('fetchComments')
+          })
     },
     notifyError(error) {
       this.showSnackbar(error.response.data)

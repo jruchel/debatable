@@ -122,23 +122,33 @@ export default new Vuex.Store({
                 .catch(() => {
                     context.commit('setUser', {username: "", password: "", email: ""})
                 })
-                .then(() => context.dispatch('updateQuestion'))
-                .then(() => context.dispatch('fetchUserQuestions'))
+                .then(() => {
+                    return context.dispatch('updateQuestion')
+                })
+                .then(() => {
+                    return context.dispatch('fetchUserQuestions')
+                })
 
         },
         updateQuestion(context) {
             return updateQuestion(context.getters.getCurrentQuestion.id).then(response => {
                 context.commit('setCurrentQuestion', response.data)
-            }).then(() => context.dispatch('fetchUserAnswer'))
-                .then(() => context.dispatch('fetchComments'))
+            }).then(() => {
+                return context.dispatch('fetchUserAnswer')
+            })
+                .then(() => {
+                    return context.dispatch('fetchComments')
+                })
         },
         fetchQuestion(context) {
             let question = null
             return getRandomQuestion(context.getters.getCurrentQuestion.id)
                 .then(response => question = response.data)
                 .then(() => context.commit('setCurrentQuestion', question))
-                .then(() => context.dispatch('fetchUserAnswer'))
-                .then(() => context.dispatch('fetchComments'))
+                .then(() => context.dispatch('fetchUserAnswer')
+                )
+                .then(() => context.dispatch('fetchComments')
+                )
                 .catch(() => {
                     context.commit('setCurrentQuestion', {
                         question: 'Pepsi or Coke?',

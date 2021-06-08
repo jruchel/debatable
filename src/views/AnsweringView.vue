@@ -131,7 +131,9 @@ export default {
           .then(() => this.showSnackbar('Comment deleted'))
           .catch(this.showErrorSnackbar)
           .then(args[1])
-          .then(() => this.$store.dispatch('fetchComments'))
+          .then(() => {
+            return this.$store.dispatch('fetchComments')
+          })
     },
     submitAnswerClicked(answerNumber) {
       if (this.answerSubmitted) {
@@ -153,17 +155,23 @@ export default {
     submitAnswer(answerNumber) {
       this.$store.commit('startLoading', this.question.answers[answerNumber].color)
       this.$store.dispatch('reauthenticate')
-          .then(() => submitAnswer(this.question, answerNumber, this.token)
-              .then(() => this.showSnackbar('Answer submitted'))
-              .then(() => {
-                if (this.question !== undefined && this.question !== null) this.$store.dispatch('updateQuestion')
-              })
-              .then(() => this.$store.dispatch('fetchUserAnswer'))
-              .then(() => this.$store.commit('stopLoading'))
-              .catch((error) => {
-                this.showSnackbar(error.response.data)
-                this.$store.commit('stopLoading')
-              }))
+          .then(() => {
+            return submitAnswer(this.question, answerNumber, this.token)
+          })
+          .then(() => this.showSnackbar('Answer submitted'))
+          .then(() => {
+            if (this.question !== undefined && this.question !== null) {
+              return this.$store.dispatch('updateQuestion')
+            }
+          })
+          .then(() => {
+            return this.$store.dispatch('fetchUserAnswer')
+          })
+          .then(() => this.$store.commit('stopLoading'))
+          .catch((error) => {
+            this.showSnackbar(error.response.data)
+            this.$store.commit('stopLoading')
+          })
     },
     getAnswerCount(number) {
       return this.question.answers[number].count
@@ -174,7 +182,7 @@ export default {
     getNextQuestion() {
       this.$store.commit('startLoading')
       this.$store.commit('setUserAnswer', undefined)
-      this.$store.dispatch('fetchQuestion')
+      return this.$store.dispatch('fetchQuestion')
           .then(this.stopLoading)
           .catch(() => this.showSnackbar('Error downloading questions'))
     },

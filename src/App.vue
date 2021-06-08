@@ -122,7 +122,9 @@ export default {
       this.$store.commit('setCurrentToken', {token: ''})
       this.$store.commit('setLoggedIn', {value: false})
       this.$store.commit('setUser', {username: "", password: "", email: ""})
-      this.$store.dispatch('fetchUser').then(() => this.$store.dispatch('fetchUserAnswer'))
+      this.$store.dispatch('fetchUser').then(() => {
+        return this.$store.dispatch('fetchUserAnswer')
+      })
       if (this.$route.path.includes('/user')) {
         this.$router.push('/')
       }
@@ -151,8 +153,8 @@ export default {
   font-family: Nunito-Black, serif;
 }
 
-.rounded-card{
-  border-radius:50px;
+.rounded-card {
+  border-radius: 50px;
 }
 
 

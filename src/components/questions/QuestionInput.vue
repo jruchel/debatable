@@ -214,11 +214,13 @@ export default {
       }
     },
     postTrialQuestion() {
-      postTrialQuestion(this.question).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
+      return postTrialQuestion(this.question).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
     },
     postQuestionToUser() {
-      postQuestion(this.question, this.authToken).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
-          .then(() => this.$store.commit('stopLoading')).then(() => this.$store.dispatch('fetchUserQuestions'))
+      return postQuestion(this.question, this.authToken).then(this.handleSuccessResponse).catch(this.handleErrorResponse)
+          .then(() => this.$store.commit('stopLoading')).then(() => {
+            return this.$store.dispatch('fetchUserQuestions')
+          })
     },
     handleErrorResponse(error) {
       this.showSnackbar(error.response.data)

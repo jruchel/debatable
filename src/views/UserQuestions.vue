@@ -85,16 +85,26 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('reauthenticate').then(() => this.$store.dispatch('fetchUserQuestions')).then(() => this.loading = false)
+    this.$store.dispatch('reauthenticate')
+        .then(() => {
+          return this.$store.dispatch('fetchUserQuestions')
+        }).then(() => this.loading = false)
   },
   methods: {
     deleteQuestion(payload) {
       let question = payload.question
       let onComplete = payload.onComplete
       let onError = payload.onError
-      this.$store.dispatch('reauthenticate').then(() => deleteQuestion(question.id, this.token))
-          .then(() => this.$store.dispatch('fetchUserQuestions'))
-          .then(() => onComplete('Question deleted'))
+      this.$store.dispatch('reauthenticate')
+          .then(() => {
+            return deleteQuestion(question.id, this.token)
+          })
+          .then(() => {
+            return this.$store.dispatch('fetchUserQuestions')
+          })
+          .then(() => {
+            return onComplete('Question deleted')
+          })
           .catch((error) => onError(error.response.data))
     }
   }
