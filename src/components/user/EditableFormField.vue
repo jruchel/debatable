@@ -9,7 +9,7 @@
               :label="label"
               :type="type === 'password' && !passwordVisible ? 'password' : 'text'"
               :rules="rules" v-model="value"
-              :readonly="!editing"
+              :readonly="readOnly"
               :append-icon="appendIcon"
           >
             <template v-slot:append>
@@ -30,7 +30,7 @@
             </template>
           </v-text-field>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="1" v-if="!alwaysEdit">
           <v-btn icon class="button" :disabled="editing" @click="startEditing">
             <v-icon size=30>
               mdi-pencil
@@ -63,11 +63,31 @@
 <script>
 
 export default {
-  name: "EditableRow",
-  props: ['rules', 'value', 'loading', 'label', 'type', 'onEditCancel', 'onEditConfirm', 'appendIcon'],
+  name: "EditableFormField",
+  props: ['rules', 'value', 'loading', 'label', 'type', 'appendIcon', 'alwaysEdit'],
+  mounted() {
+    if (this.alwaysEdit === undefined || this.alwaysEdit === null) {
+      this.alwaysEdit = false
+    }
+  },
   watch: {
+    valid: function (value) {
+      this.$emit('valid-value-changed', value)
+    },
     editing: function (value) {
       this.$emit('editing-value-changed', value)
+    },
+    value: function (value) {
+      this.$emit('field-value-changed', value)
+    }
+  },
+  computed: {
+    form() {
+      return this.$refs['form']
+    },
+    readOnly() {
+      if (this.alwaysEdit) return false
+      return !this.editing;
     }
   },
   data() {
