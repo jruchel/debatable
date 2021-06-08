@@ -154,7 +154,7 @@ export default {
         if (this.valid === true) {
           this.loadingRegister = true
           this.$refs.form.resetValidation()
-          register(this.user).then(this.handleLoginSuccess).catch(this.handleLoginError).then(() => {
+          register(this.user).then(this.handleRegistrationSuccess).catch(this.handleLoginError).then(() => {
             this.loadingLogin = false
             this.loadingRegister = false
           })
@@ -168,10 +168,13 @@ export default {
         this.showSnackbar(ex)
       }
     },
+    handleRegistrationSuccess(response) {
+      this.showSnackbar(response.data)
+    },
     handleLoginSuccess(response) {
       this.saveToken(response.data)
+      this.showSnackbar("Login successful")
       this.$store.dispatch('fetchUser')
-          .then(() => this.showSnackbar("Login successful"))
     },
     saveToken(token) {
       this.$store.commit('setCurrentToken', token)

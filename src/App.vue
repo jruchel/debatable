@@ -17,14 +17,26 @@
           :color="loading.color.active"
       ></v-progress-linear>
       <v-row>
-        <v-col cols="2" md="1">
+        <v-col cols="1" v-if="['xs'].includes(breakpoint)">
           <v-btn icon @click="$router.go(-1)">
             <v-icon size="30">
               mdi-arrow-left
             </v-icon>
           </v-btn>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="1" v-if="['xs'].includes(breakpoint)">
+          <v-btn icon @click="$router.push('/')">
+            <v-icon size="35">
+              mdi-home-circle
+            </v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="3" v-if="!['xs'].includes(breakpoint)">
+          <v-btn icon @click="$router.go(-1)">
+            <v-icon size="30">
+              mdi-arrow-left
+            </v-icon>
+          </v-btn>
           <v-btn icon @click="$router.push('/')">
             <v-icon size="35">
               mdi-home-circle
@@ -72,8 +84,11 @@ export default {
     }
   },
   computed: {
+    breakpoint() {
+      return this.$vuetify.breakpoint.name
+    },
     marginTop() {
-      switch (this.$vuetify.breakpoint.name) {
+      switch (this.breakpoint) {
         case 'xs':
           return 'margin-top: 20%;'
         case 'sm':
@@ -92,7 +107,7 @@ export default {
       return 'margin-top: ' + margin + ';'
     },
     isMobile() {
-      return /xs|sm/i.test(this.$vuetify.breakpoint.name)
+      return /xs|sm/i.test(this.breakpoint)
     },
     colors() {
       return this.$store.getters.getColors
