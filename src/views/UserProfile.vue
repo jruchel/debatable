@@ -12,7 +12,12 @@
                   </v-icon>
                 </v-avatar>
               </v-col>
-              <v-col cols="10">
+            </v-row>
+            <v-row class="justify-center">
+              <v-col cols="2" v-if="!['xs'].includes(breakpoint)">
+
+              </v-col>
+              <v-col cols="12" sm="10">
                 <editable-form-field
                     ref="username"
                     :loading="loading.username"
@@ -27,9 +32,9 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="2">
+              <v-col v-if="!['xs'].includes(breakpoint)" cols="2">
               </v-col>
-              <v-col cols="10">
+              <v-col cols="12" sm="10">
                 <editable-form-field
                     ref="email"
                     :loading="loading.email"
@@ -44,10 +49,10 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="2">
+              <v-col v-if="!['xs'].includes(breakpoint)" cols="2">
 
               </v-col>
-              <v-col cols="10">
+              <v-col cols="12" sm="10">
                 <editable-form-field
                     ref="password"
                     :loading="loading.password"
@@ -67,8 +72,8 @@
             </v-row>
             <v-slide-y-transition>
               <v-row v-if="editingPassword">
-                <v-col cols="2"></v-col>
-                <v-col cols="10">
+                <v-col v-if="!['xs'].includes(breakpoint)" cols="2"></v-col>
+                <v-col cols="12" sm="10">
                   <editable-form-field
                       ref="new-password"
                       label="New password"
@@ -85,8 +90,8 @@
             </v-slide-y-transition>
             <v-slide-y-transition>
               <v-row v-if="editingPassword">
-                <v-col cols="2"></v-col>
-                <v-col cols="10">
+                <v-col v-if="!['xs'].includes(breakpoint)" cols="0"></v-col>
+                <v-col cols="12" sm="10">
                   <editable-form-field
                       ref="confirm-password"
                       always-edit="true"
@@ -148,7 +153,7 @@ export default {
         password: {
           current: [
             v => {
-              return (!!v || 'Password cannot be empty')
+              return (!!v || 'Current password cannot be empty')
             },
             v => {
               return (v.length >= 5 || 'Password must bo at least 5 characters long')
@@ -157,9 +162,11 @@ export default {
               return (v.length < 20 || 'Password cannot be longer than 20 characters')
             },
             () => {
+              if (this.$refs['new-password'] === undefined) return true
               return (this.$refs['new-password'] && !!this.password.newPassword || 'New password cannot be empty')
             },
             () => {
+              if (this.$refs['confirm-password'] === undefined) return true
               return (this.$refs['confirm-password'] && !!this.password.confirmPassword || 'Confirm password cannot be empty')
             },
             () => {
@@ -211,6 +218,9 @@ export default {
     },
     user() {
       return this.$store.getters.getUser
+    },
+    breakpoint() {
+      return this.$vuetify.breakpoint.name
     }
   },
   methods: {
@@ -305,7 +315,6 @@ export default {
     confirmPasswordChange() {
       this.loading.password = true
       return this.$store.dispatch('reauthenticate').then(() => {
-        console.log(this.password)
         return changePassword(this.token, {
           currentPassword: this.password.currentPassword,
           newPassword: this.password.newPassword,
