@@ -1,8 +1,12 @@
 <template>
   <v-container style="padding-left: 0; padding-right: 0">
     <v-row class="justify-center">
-      <v-col cols="12">
-        <v-card hover color="#9e9d9d" style="border-radius: 12px" @click="routeToQuestion">
+      <v-col cols="12" @mousemove="onMouseMove" @mouseleave="onMouseLeave">
+        <v-card width="100%" height="100%" ref="card" :style="hover ? hoverClass : ''"
+                @mouseenter="hover = true"
+                @mouseleave="hover = false" hover
+                color="#9e9d9d" style="border-radius: 12px"
+                @click="routeToQuestion">
           <v-container>
             <v-row>
               <v-col cols="8">
@@ -47,9 +51,44 @@ export default {
   computed: {
     colors() {
       return this.$store.getters.getColors
+    },
+    hoverClass() {
+
+      return 'perspective(100px)\n' +
+          'rotateX(' + this.cursor.x + 'deg) \n' +
+          'rotateY(' + this.cursor.y + 'deg)'
+    }
+  },
+  data() {
+    return {
+      initialPosition: {x: undefined, y: undefined},
+      hover: false
     }
   },
   methods: {
+    onMouseLeave() {
+      this.$refs['card'].$el.style.transform = ''
+    },
+    onMouseMove(event) {
+      let ex1Layer = this.$refs['card'].$el
+      let xy = [event.clientX, event.clientY];
+      let position = xy.concat([ex1Layer]);
+      window.requestAnimationFrame(() => {
+        this.transformElement(ex1Layer, position);
+      });
+    },
+    transformElement(el, xyEl) {
+      el.style.transform = this.transforms.apply(null, xyEl);
+    },
+    transforms(x, y, el) {
+      let constraint = 5000
+      let box = el.getBoundingClientRect();
+      let calcX = -(y - box.y - (box.height / 2)) / constraint;
+      let calcY = -(x - box.x - (box.width / 2)) / constraint;
+      return "perspective(100px) "
+          + "   rotateX(" + calcX + "deg) "
+          + "   rotateY(" + calcY + "deg) ";
+    },
     passDeleteEvent(args) {
       this.$emit('delete-question', args)
     },
