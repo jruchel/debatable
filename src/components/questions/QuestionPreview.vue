@@ -2,7 +2,7 @@
   <v-container style="padding-left: 0; padding-right: 0">
     <v-row class="justify-center">
       <v-col cols="12">
-        <v-sheet color="#9e9d9d" style="border-radius: 12px">
+        <v-card hover color="#9e9d9d" style="border-radius: 12px" @click="routeToQuestion">
           <v-container>
             <v-row>
               <v-col cols="8">
@@ -30,7 +30,7 @@
               </v-col>
             </v-row>
           </v-container>
-        </v-sheet>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -53,6 +53,10 @@ export default {
     passDeleteEvent(args) {
       this.$emit('delete-question', args)
     },
+    routeToQuestion() {
+      this.$store.commit('setCurrentQuestion', this.question)
+      this.$router.push('/answer')
+    }
   },
 }
 </script>

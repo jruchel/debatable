@@ -104,9 +104,6 @@ export default {
       return this.$store.getters.getUserAnswer
     }
   },
-  mounted() {
-    this.$store.dispatch('fetchQuestion')
-  },
   data() {
     return {
       loading: {
