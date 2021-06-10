@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="12" lg="8" xl="6" style="text-align: center">
+      <v-col cols="12" sm="10" lg="8" xl="6" style="text-align: center">
         <v-sheet style="border-radius: 50px" elevation="6">
           <v-container style="padding-bottom: 0; padding-top: 0">
             <v-row class="justify-center">
