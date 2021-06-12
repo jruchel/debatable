@@ -49,7 +49,7 @@
               mdi-home-circle
             </v-icon>
           </v-btn>
-          <v-btn icon @click="$router.push('/help')">
+          <v-btn icon @click="$router.push('/issues')">
             <v-icon size="35">
               mdi-help-circle-outline
             </v-icon>

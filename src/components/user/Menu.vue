@@ -38,7 +38,7 @@
           </v-list-item-icon>
           <v-list-item-title>Edit profile</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="$router.push('/help')">
+        <v-list-item @click="$router.push('/user/issues')">
           <v-list-item-icon>
             <v-icon :size="iconSize">
               mdi-help

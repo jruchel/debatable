@@ -15,7 +15,6 @@
             </v-row>
             <v-row class="justify-center">
               <v-col cols="2" v-if="!['xs'].includes(breakpoint)">
-
               </v-col>
               <v-col cols="12" sm="10">
                 <editable-form-field

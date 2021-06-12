@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row v-if="loading" class="justify-center">
-      <v-col cols="12" md="8" v-for="i in [1, 2, 3]" :key="i">
+      <v-col cols="12" md="8" xl="6" v-for="i in [1, 2, 3]" :key="i">
         <v-container>
           <v-row class="justify-center">
             <v-col cols="12">
@@ -20,23 +20,14 @@
     </v-row>
     <v-container v-else>
       <v-row class="justify-center" v-if="hasQuestions">
-        <v-col cols="12" md="8" xl="6">
-          <question-preview v-on:delete-question="deleteQuestion" v-for="question in userQuestions" :key="question.id"
+        <v-col cols="12" md="8" xl="6" v-for="question in userQuestions" :key="question.id">
+          <question-preview v-on:delete-question="deleteQuestion"
                             :question="question"></question-preview>
         </v-col>
       </v-row>
       <v-row class="justify-center" v-if="!hasQuestions">
         <v-col cols="12" md="8" xl="6">
-          <v-card>
-            <v-card-title class="justify-center">
-              No questions so far
-            </v-card-title>
-            <v-card-actions class="justify-center">
-              <v-btn @click="$router.push('/ask')" :color="colors.buttonSecondary.name" dark>
-                Go ahead and ask!
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+          <empty-questions/>
         </v-col>
       </v-row>
     </v-container>
@@ -46,10 +37,11 @@
 <script>
 import QuestionPreview from "@/components/questions/QuestionPreview";
 import {deleteQuestion} from "@/api/api";
+import EmptyQuestions from "@/components/questions/EmptyQuestions";
 
 export default {
   name: "UserQuestions",
-  components: {QuestionPreview},
+  components: {EmptyQuestions, QuestionPreview},
   beforeMount() {
     if (!this.loggedIn.value) {
       this.$router.push('/')

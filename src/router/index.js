@@ -5,7 +5,8 @@ import AnsweringView from "@/views/AnsweringView";
 import DecisionView from "@/views/DecisionView";
 import UserQuestions from "@/views/UserQuestions";
 import UserProfile from "@/views/UserProfile";
-import HelpView from "@/views/HelpView";
+import IssueFormView from "@/views/HelpView";
+import UserIssuesView from "@/views/UserIssuesView";
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,8 @@ const routes = [
     {path: '/', component: DecisionView, alias: [''], name: ''},
     {path: '/user/questions', component: UserQuestions, name: 'Your questions'},
     {path: '/user', component: UserProfile, name: 'Your profile'},
-    {path: '/help', component: HelpView}
+    {path: '/issues', component: IssueFormView},
+    {path: '/user/issues', component: UserIssuesView}
 ]
 
 const router = new VueRouter({

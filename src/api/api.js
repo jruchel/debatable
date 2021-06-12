@@ -4,7 +4,7 @@ import {sendRequest} from "@/utils/requests";
 let backendAddress = 'https://debatable-server.herokuapp.com'
 
 export function getRandomQuestion(questionId) {
-    if (!!questionId === true)
+    if (questionId)
         return sendRequest(
             backendAddress,
             '/questions/random/' + questionId,
@@ -241,6 +241,16 @@ export function fetchUserIssues(token) {
         backendAddress,
         '/user/issues',
         'get',
+        {},
+        token
+    )
+}
+
+export function deleteUserIssue(token, id) {
+    return sendRequest(
+        backendAddress,
+        '/user/issues/' + id,
+        'delete',
         {},
         token
     )

@@ -7,7 +7,7 @@ import {
     getRandomQuestion,
     getUser,
     updateQuestion,
-    fetchUserAnswer, getCommentsPage, fetchUserQuestions
+    fetchUserAnswer, getCommentsPage, fetchUserQuestions, fetchUserIssues
 } from "@/api/api";
 
 Vue.use(Vuex)
@@ -32,6 +32,7 @@ export default new Vuex.Store({
         loggedIn: {value: false},
         authToken: {token: ""},
         user: {username: "", password: "", email: ""},
+        userIssues: [],
         loading: {
             value: false,
             color: {
@@ -77,9 +78,18 @@ export default new Vuex.Store({
         },
         setLoggedIn(state, payload) {
             state.loggedIn = payload
+        },
+        setUserIssues(state, payload) {
+            state.userIssues = payload
         }
     },
     actions: {
+        fetchUserIssues(context) {
+            return fetchUserIssues(context.getters.getAuthToken).then((response) => {
+                console.log(response.data)
+                context.commit('setUserIssues', response.data)
+            })
+        },
         fetchUserQuestions(context) {
             return fetchUserQuestions(context.getters.getAuthToken)
                 .then(response => {
@@ -164,6 +174,9 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getUserIssues(state) {
+            return state.userIssues
+        },
         getUserQuestions(state) {
             return state.userQuestions
         },
