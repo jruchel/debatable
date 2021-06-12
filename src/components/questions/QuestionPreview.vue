@@ -19,6 +19,12 @@
               </v-col>
             </v-row>
             <v-row>
+              <v-col cols="8" style="margin-top: -35px">
+                <span style="font-size: 14px">Comments: {{ question.commentCount }}</span>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
+            <v-row>
               <v-col cols="12">
                 <v-card>
                   <v-card-title class="justify-center">{{ question.question }}</v-card-title>

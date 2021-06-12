@@ -299,12 +299,12 @@ export default {
       this.resetCacheUser()
       return this.$store.dispatch('reauthenticate').then(() => {
         return changeEmail(this.token, value)
+            .then((response) => {
+              EventBus.$emit('show-snackbar', response.data)
+              this.cacheUser.email = value
+              this.$store.commit('setUser', this.cacheUser)
+            })
       })
-          .then(() => {
-            EventBus.$emit('show-snackbar', 'Email changed, please verify your new email before using your account')
-            this.cacheUser.email = value
-            this.$store.commit('setUser', this.cacheUser)
-          })
           .catch((error) => {
             EventBus.$emit('show-snackbar', error.response.data)
           })
