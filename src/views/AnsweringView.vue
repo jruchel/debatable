@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!loading.page">
     <v-row class="justify-center">
       <v-col cols="12" md="8" xl="6">
         <v-slide-x-transition>
@@ -84,6 +84,11 @@ import EventBus from "@/event-bus/EventBus";
 export default {
   name: "AnsweringView",
   components: {CommentSection, Option},
+  mounted() {
+    this.$store.dispatch('fetchUserAnswer').then(() => this.loading.page = false)
+        .catch((error) => this.showSnackbar(error.response.data))
+        .catch(() => this.showSnackbar('Failed to fetch answer'))
+  },
   computed: {
     question() {
       return this.$store.getters.getCurrentQuestion
@@ -107,6 +112,7 @@ export default {
   data() {
     return {
       loading: {
+        page: true,
         nextQuestion: false,
         firstAnswer: false,
         secondAnswer: false

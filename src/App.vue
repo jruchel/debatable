@@ -21,7 +21,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.go(-1)"
-                     v-bin="attrs"
+                     v-bind="attrs"
                      v-on="on"
               >
                 <v-icon size="30">
@@ -36,7 +36,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.push('/')"
-                     v-bin="attrs"
+                     v-bind="attrs"
                      v-on="on"
               >
                 <v-icon size="35">
@@ -51,7 +51,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.push('/issues')"
-                     v-bin="attrs"
+                     v-bind="attrs"
                      v-on="on"
               >
                 <v-icon size="35">
@@ -66,7 +66,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.go(-1)"
-                     v-bin="attrs"
+                     v-bind="attrs"
                      v-on="on"
               >
                 <v-icon size="30">
@@ -79,7 +79,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.push('/')"
-                     v-bin="attrs"
+                     v-bind="attrs"
                      v-on="on"
               >
                 <v-icon size="35">
@@ -92,7 +92,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.push('/issues')"
-                     v-bin="attrs"
+                     v-bind="attrs"
                      v-on="on"
               >
                 <v-icon size="35">

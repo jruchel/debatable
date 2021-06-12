@@ -1,12 +1,8 @@
 <template>
-  <v-container>
+  <v-container v-if="!loadingPage">
     <v-row class="justify-center">
       <v-col cols="12" lg="8" xl="6" style="text-align: center">
-        <v-skeleton-loader
-            v-if="loadingPage"
-            type="article, actions"
-        ></v-skeleton-loader>
-        <v-card style="border-radius: 50px" v-if="!loadingPage">
+        <v-card style="border-radius: 50px">
           <v-form v-model="form.valid" ref="form" lazy-validation>
             <v-container>
               <v-row class="justify-center">
