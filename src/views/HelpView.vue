@@ -222,8 +222,8 @@ export default {
       if (this.form.valid) {
         this.form.sending = true
         this.$store.dispatch('reauthenticate').then(() => submitIssue(this.issue, this.token)
-            .then((response) => {
-              EventBus.$emit('show-snackbar', response.data)
+            .then(() => {
+              EventBus.$emit('show-snackbar', 'Issue submitted')
               this.refForm.reset()
             }).catch((error) => {
               EventBus.$emit('show-snackbar', error.response.data)
@@ -238,6 +238,8 @@ export default {
   }
 
 }
+
+//TODO: make useAccountEmail true if the user logs in while on the page or navigates to it while being logged in
 </script>
 
 <style scoped>

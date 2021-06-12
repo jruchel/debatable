@@ -219,3 +219,46 @@ export function fetchIssueSubjects() {
         {}
     )
 }
+
+export function fetchIssues(subject, email, description, union) {
+    let parameters = new Map()
+    parameters.set('subject', subject)
+    parameters.set('email', email)
+    parameters.set('description', description)
+    parameters.set('union', union)
+
+    return sendRequest(
+        backendAddress,
+        constructEndpoint('/issues', [], parameters),
+        'get',
+        {},
+        {}
+    )
+}
+
+export function fetchUserIssues(token) {
+    return sendRequest(
+        backendAddress,
+        '/user/issues',
+        'get',
+        {},
+        token
+    )
+}
+
+function constructEndpoint(endpoint, pathVariables, pathParameters) {
+    let result = endpoint
+    for (let variable of pathVariables) {
+        result += '/' + variable
+    }
+    let initialVariable = true
+    for (let [key, value] of pathParameters) {
+        if (initialVariable) {
+            result += '?' + key + '=' + value
+            initialVariable = false
+        } else {
+            result += '&' + key + '=' + value
+        }
+    }
+    return result
+}
