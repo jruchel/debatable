@@ -31,6 +31,13 @@
             </v-icon>
           </v-btn>
         </v-col>
+        <v-col cols="1" v-if="['xs'].includes(breakpoint)">
+          <v-btn icon @click="$router.push('/help')">
+            <v-icon size="35">
+              mdi-help-circle-outline
+            </v-icon>
+          </v-btn>
+        </v-col>
         <v-col cols="3" v-if="!['xs'].includes(breakpoint)">
           <v-btn icon @click="$router.go(-1)">
             <v-icon size="30">
@@ -42,11 +49,16 @@
               mdi-home-circle
             </v-icon>
           </v-btn>
+          <v-btn icon @click="$router.push('/help')">
+            <v-icon size="35">
+              mdi-help-circle-outline
+            </v-icon>
+          </v-btn>
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="5" md="2" class="d-flex justify-end">
           <login-dialog v-if="!loggedIn.value"></login-dialog>
-          <user-avatar v-else v-on:perform-logout="performLogout"></user-avatar>
+          <Menu v-else v-on:perform-logout="performLogout"></Menu>
         </v-col>
       </v-row>
     </v-app-bar>
@@ -63,12 +75,12 @@
 <script>
 
 import LoginDialog from "@/components/login/LoginDialog";
-import UserAvatar from "@/components/user/UserAvatar";
+import Menu from "@/components/user/Menu";
 import EventBus from "@/event-bus/EventBus";
 
 export default {
   name: 'App',
-  components: {UserAvatar, LoginDialog},
+  components: {Menu, LoginDialog},
   mounted() {
     EventBus.$on('show-snackbar', args => {
       this.showSnackbar(args)

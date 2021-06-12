@@ -191,3 +191,31 @@ export function changeUsername(token, username) {
         token
     )
 }
+
+export function submitIssue(issue, token) {
+    if (!token) {
+        return sendRequest(
+            backendAddress,
+            '/issues',
+            'post',
+            {}
+        )
+    }
+    return sendRequest(
+        backendAddress,
+        '/user/issues',
+        'post',
+        issue,
+        token
+    )
+}
+
+export function fetchIssueSubjects() {
+    return sendRequest(
+        backendAddress,
+        '/issues/subjects',
+        'get',
+        {},
+        {}
+    )
+}
