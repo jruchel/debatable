@@ -18,42 +18,90 @@
       ></v-progress-linear>
       <v-row>
         <v-col cols="1" v-if="['xs'].includes(breakpoint)">
-          <v-btn icon @click="$router.go(-1)">
-            <v-icon size="30">
-              mdi-arrow-left
-            </v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn icon @click="$router.go(-1)"
+                     v-bin="attrs"
+                     v-on="on"
+              >
+                <v-icon size="30">
+                  mdi-arrow-left
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Go back</span>
+          </v-tooltip>
         </v-col>
         <v-col cols="1" v-if="['xs'].includes(breakpoint)">
-          <v-btn icon @click="$router.push('/')">
-            <v-icon size="35">
-              mdi-home-circle
-            </v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn icon @click="$router.push('/')"
+                     v-bin="attrs"
+                     v-on="on"
+              >
+                <v-icon size="35">
+                  mdi-home-circle
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Home</span>
+          </v-tooltip>
         </v-col>
         <v-col cols="1" v-if="['xs'].includes(breakpoint)">
-          <v-btn icon @click="$router.push('/help')">
-            <v-icon size="35">
-              mdi-help-circle-outline
-            </v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn icon @click="$router.push('/issues')"
+                     v-bin="attrs"
+                     v-on="on"
+              >
+                <v-icon size="35">
+                  mdi-help-circle-outline
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Submit issue</span>
+          </v-tooltip>
         </v-col>
         <v-col cols="3" v-if="!['xs'].includes(breakpoint)">
-          <v-btn icon @click="$router.go(-1)">
-            <v-icon size="30">
-              mdi-arrow-left
-            </v-icon>
-          </v-btn>
-          <v-btn icon @click="$router.push('/')">
-            <v-icon size="35">
-              mdi-home-circle
-            </v-icon>
-          </v-btn>
-          <v-btn icon @click="$router.push('/issues')">
-            <v-icon size="35">
-              mdi-help-circle-outline
-            </v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn icon @click="$router.go(-1)"
+                     v-bin="attrs"
+                     v-on="on"
+              >
+                <v-icon size="30">
+                  mdi-arrow-left
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Go back</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn icon @click="$router.push('/')"
+                     v-bin="attrs"
+                     v-on="on"
+              >
+                <v-icon size="35">
+                  mdi-home-circle
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Home</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn icon @click="$router.push('/issues')"
+                     v-bin="attrs"
+                     v-on="on"
+              >
+                <v-icon size="35">
+                  mdi-help-circle-outline
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Submit issue</span>
+          </v-tooltip>
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="5" md="2" class="d-flex justify-end">

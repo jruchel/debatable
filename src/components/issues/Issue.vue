@@ -33,14 +33,15 @@
             </v-row>
             <v-row class="justify-center">
               <v-col cols="10" sm="8" style="margin-top: 15px">
-                <v-text-field outlined label="Subject" v-model="issue.subject" readonly></v-text-field>
-                <v-text-field outlined label="E-mail" v-model="issue.email" readonly></v-text-field>
+                <v-text-field outlined label="Subject" v-model="issue.subject" readonly/>
+                <v-text-field outlined label="E-mail" v-model="issue.email" readonly/>
+                <v-text-field outlined label="Submitted at" v-model="issue.createdDate" readonly/>
               </v-col>
             </v-row>
             <v-row class="justify-center">
               <v-col cols="12" sm="10">
                 <v-textarea outlined no-resize label="Description" v-model="issue.description"
-                            readonly></v-textarea>
+                            readonly/>
               </v-col>
             </v-row>
           </v-container>

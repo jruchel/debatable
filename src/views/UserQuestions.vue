@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row v-if="loading" class="justify-center">
-      <v-col cols="12" md="8" xl="6" v-for="i in [1, 2, 3]" :key="i">
+      <v-col cols="12" md="8" xl="6" v-for="i in [1, 2, 3, 4]" :key="i">
         <v-container>
           <v-row class="justify-center">
             <v-col cols="12">
