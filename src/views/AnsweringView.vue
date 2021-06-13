@@ -159,7 +159,7 @@ export default {
       this.$store.commit('startLoading', this.question.answers[answerNumber].color)
       this.$store.dispatch('reauthenticate')
           .then(() => {
-            return submitAnswer(this.question, answerNumber, this.token)
+            return submitAnswer(this.question.id, answerNumber === 0 ? 'first' : 'second', this.token)
           })
           .then(() => this.showSnackbar('Answer submitted'))
           .then(() => {

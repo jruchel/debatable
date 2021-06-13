@@ -7,7 +7,7 @@ import {
     getRandomQuestion,
     getUser,
     updateQuestion,
-    fetchUserAnswer, getCommentsPage, fetchUserQuestions, fetchUserIssues
+    fetchUserAnswer, getCommentsPage, fetchUserQuestions, fetchUserIssues, fetchUserRoles
 } from "@/api/api";
 
 Vue.use(Vuex)
@@ -26,6 +26,7 @@ export default new Vuex.Store({
             snackbar: {name: 'blue-grey darken-2', hex: '#455A64'}
         },
         question: {},
+        userRoles: [],
         userQuestions: [],
         userAnswer: undefined,
         comments: {},
@@ -42,6 +43,19 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        performLogout(state) {
+            state.userRoles = []
+            state.userIssues = []
+            state.user = {username: "", password: "", email: ""}
+            state.authToken = {token: ""}
+            state.userQuestions = []
+            state.userAnswer = undefined
+            state.loggedIn.value = false
+
+        },
+        setUserRoles(state, payload) {
+            state.userRoles = payload
+        },
         startLoading(state, payload) {
             if (!payload) {
                 state.loading.color.active = state.loading.color.default
@@ -84,9 +98,14 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        fetchUserRoles(context) {
+            return fetchUserRoles(context.getters.getAuthToken)
+                .then((response) => {
+                    context.commit('setUserRoles', response.data)
+                })
+        },
         fetchUserIssues(context) {
             return fetchUserIssues(context.getters.getAuthToken).then((response) => {
-                console.log(response.data)
                 context.commit('setUserIssues', response.data)
             })
         },
@@ -131,6 +150,10 @@ export default new Vuex.Store({
             })
                 .catch(() => {
                     context.commit('setUser', {username: "", password: "", email: ""})
+                }).then(() => {
+                    context.dispatch('fetchUserRoles').then((response) => {
+                        context.commit('setUserRoles', response.data)
+                    })
                 })
                 .then(() => {
                     return context.dispatch('updateQuestion')
@@ -174,6 +197,9 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getUserRoles(state) {
+            return state.userRoles
+        },
         getUserIssues(state) {
             return state.userIssues
         },

@@ -82,12 +82,12 @@ export function postQuestion(question, token) {
     )
 }
 
-export function postComment(question, comment, token) {
+export function postComment(questionId, comment, token) {
     return sendRequest(
         backendAddress,
-        '/comments',
+        '/comments/' + questionId,
         'post',
-        {key: question, value: {content: comment}},
+        {comment},
         token,
     )
 }
@@ -112,12 +112,12 @@ export function getUser(token) {
     )
 }
 
-export function submitAnswer(question, answerNumber, token) {
+export function submitAnswer(questionId, answer, token) {
     return sendRequest(
         backendAddress,
-        '/answers',
+        '/answers/' + questionId + '?answer=' + answer,
         'post',
-        {key: question, value: answerNumber},
+        {},
         token
     )
 }
@@ -136,6 +136,16 @@ export function fetchUserAnswer(questionId, token) {
     return sendRequest(
         backendAddress,
         '/user/answer/' + questionId,
+        'get',
+        {},
+        token
+    )
+}
+
+export function fetchUserRoles(token) {
+    return sendRequest(
+        backendAddress,
+        '/user/roles',
         'get',
         {},
         token

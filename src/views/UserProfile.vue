@@ -13,6 +13,11 @@
                 </v-avatar>
               </v-col>
             </v-row>
+            <v-row class="justify-center" v-if="roles.includes('moderator')">
+              <v-col cols="12">
+                Moderator
+              </v-col>
+            </v-row>
             <v-row class="justify-center">
               <v-col cols="2" v-if="!['xs'].includes(breakpoint)">
               </v-col>
@@ -206,6 +211,9 @@ export default {
     }
   },
   computed: {
+    roles() {
+      return this.$store.getters.getUserRoles
+    },
     colors() {
       return this.$store.getters.getColors
     },

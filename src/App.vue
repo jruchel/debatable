@@ -194,12 +194,7 @@ export default {
       this.snackbar.show = true
     },
     performLogout() {
-      this.$store.commit('setCurrentToken', {token: ''})
-      this.$store.commit('setLoggedIn', {value: false})
-      this.$store.commit('setUser', {username: "", password: "", email: ""})
-      this.$store.dispatch('fetchUser').then(() => {
-        return this.$store.dispatch('fetchUserAnswer')
-      })
+      this.$store.commit('performLogout')
       if (this.$route.path.includes('/user')) {
         this.$router.push('/')
       }
