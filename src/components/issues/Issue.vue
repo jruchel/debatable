@@ -12,13 +12,13 @@
                   <v-card-title :style="cardTitleStyle(getStatusColor(issue.status))">
                     <v-container>
                       <v-row class="justify-center">
-                        <v-col cols="2" md="1">
+                        <v-col cols="2">
 
                         </v-col>
-                        <v-col cols="6" md="10" style="text-align: center">
+                        <v-col cols="8" style="text-align: center">
                           <span>Status: {{ issue.status }}</span>
                         </v-col>
-                        <v-col cols="2" md="1">
+                        <v-col cols="2">
                           <v-btn dark icon @click="deleteIssue" :loading="deleting">
                             <v-icon size="35">
                               mdi-close-circle-outline

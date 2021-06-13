@@ -17,7 +17,7 @@
           :color="loading.color.active"
       ></v-progress-linear>
       <v-row>
-        <v-col cols="1" v-if="['xs'].includes(breakpoint)">
+        <v-col cols="1" v-if="['xs', 'sm'].includes(breakpoint)">
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.go(-1)"
@@ -32,7 +32,7 @@
             <span>Go back</span>
           </v-tooltip>
         </v-col>
-        <v-col cols="1" v-if="['xs'].includes(breakpoint)">
+        <v-col cols="1" v-if="['xs', 'sm'].includes(breakpoint)">
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.push('/')"
@@ -47,7 +47,7 @@
             <span>Home</span>
           </v-tooltip>
         </v-col>
-        <v-col cols="1" v-if="['xs'].includes(breakpoint)">
+        <v-col cols="1" v-if="['xs', 'sm'].includes(breakpoint)">
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.push('/issues')"
@@ -55,14 +55,14 @@
                      v-on="on"
               >
                 <v-icon size="35">
-                  mdi-help-circle-outline
+                  mdi-alert-circle-outline
                 </v-icon>
               </v-btn>
             </template>
             <span>Submit issue</span>
           </v-tooltip>
         </v-col>
-        <v-col cols="3" v-if="!['xs'].includes(breakpoint)">
+        <v-col cols="3" v-if="!['xs', 'sm'].includes(breakpoint)">
           <v-tooltip bottom>
             <template v-slot:activator="{on, attrs}">
               <v-btn icon @click="$router.go(-1)"
@@ -96,7 +96,7 @@
                      v-on="on"
               >
                 <v-icon size="35">
-                  mdi-help-circle-outline
+                  mdi-alert-circle-outline
                 </v-icon>
               </v-btn>
             </template>
@@ -149,7 +149,7 @@ export default {
     },
     marginTop() {
       switch (this.breakpoint) {
-        case 'xs':
+        case 'xs', 'sm':
           return 'margin-top: 20%;'
         case 'sm':
           return 'margin-top: 20%;'

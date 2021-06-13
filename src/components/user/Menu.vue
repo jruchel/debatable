@@ -41,7 +41,7 @@
         <v-list-item @click="$router.push('/user/issues')">
           <v-list-item-icon>
             <v-icon :size="iconSize">
-              mdi-help
+              mdi-alert-circle-outline
             </v-icon>
           </v-list-item-icon>
           <v-list-item-title>

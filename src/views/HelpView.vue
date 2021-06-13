@@ -8,8 +8,8 @@
               <v-row class="justify-center">
                 <v-col cols="2">
                   <v-avatar color="blue" style="margin-top: 10px">
-                    <v-icon size="35" dark>
-                      mdi-help-circle
+                    <v-icon size="30" dark style="margin-bottom: 3px">
+                      mdi-alert-circle-outline
                     </v-icon>
                   </v-avatar>
                 </v-col>
@@ -73,7 +73,7 @@
           <v-row class="justify-center">
             <v-col cols="12">
               <v-btn style="margin-right: 5px" :loading="form.sending" @click="onSend" outlined rounded height="50px">
-                Send issue
+                Submit issue
               </v-btn>
               <v-btn style="margin-left: 5px" @click="resetForm" outlined rounded height="50px">
                 Reset

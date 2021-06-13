@@ -7,7 +7,7 @@
     </v-card-text>
     <v-card-actions class="justify-center" style="margin-top: 20px">
       <v-btn outlined rounded style="margin-bottom: 10px" @click="$router.push('/issues')">
-        Issues
+        Submit issue
       </v-btn>
     </v-card-actions>
   </v-card>

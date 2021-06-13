@@ -87,7 +87,7 @@ export function postComment(questionId, comment, token) {
         backendAddress,
         '/comments/' + questionId,
         'post',
-        {comment},
+        comment,
         token,
     )
 }

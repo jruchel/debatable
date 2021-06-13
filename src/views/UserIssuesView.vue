@@ -2,7 +2,7 @@
   <v-container>
     <v-row v-if="loading" class="justify-center">
       <v-col cols="12" sm="10" lg="6" v-for="i in [1, 2, 3, 4]" :key="i">
-        <v-skeleton-loader  style="margin-top: 20px"
+        <v-skeleton-loader style="margin-top: 20px"
                            type="article, actions"></v-skeleton-loader>
       </v-col>
     </v-row>
@@ -13,7 +13,7 @@
         </v-col>
       </v-row>
       <v-row v-else class="justify-center">
-        <v-col cols="10" md="6" xl="5" v-for="issue in issues" :key="issue.id">
+        <v-col cols="10" sm="6" lg="5" xl="4" v-for="issue in issues" :key="issue.id">
           <issue @delete-issue="deleteIssue" :issue="issue"></issue>
         </v-col>
       </v-row>

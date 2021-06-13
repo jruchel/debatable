@@ -83,7 +83,9 @@ export default {
       if (this.comment === null || this.comment === undefined) {
         this.comment = ''
       }
-      return postComment(this.question.id, this.comment, this.token).then(this.notifyCommentPosted)
+      return postComment(this.question.id, {
+        content: this.comment
+      }, this.token).then(this.notifyCommentPosted)
           .catch(this.notifyError)
           .then(() => {
             return this.$store.dispatch('fetchComments')
