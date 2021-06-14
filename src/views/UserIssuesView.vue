@@ -7,7 +7,7 @@
       </v-col>
     </v-row>
     <v-container v-else>
-      <v-row v-if="issues.length === 0" class="justify-center">
+      <v-row v-if="!issues || issues.length === 0" class="justify-center">
         <v-col cols="12" md="8" xl="6">
           <empty-issues/>
         </v-col>
@@ -36,7 +36,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('fetchUserIssues').then(() => this.loading = false)
+    this.$store.dispatch('fetchUserIssues').then(() => this.loading = false).then(() => console.log(this.issues))
   },
   computed: {
     issues() {

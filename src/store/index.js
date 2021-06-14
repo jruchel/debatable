@@ -7,7 +7,7 @@ import {
     getRandomQuestion,
     getUser,
     updateQuestion,
-    fetchUserAnswer, getCommentsPage, fetchUserQuestions, fetchUserIssues, fetchUserRoles
+    fetchUserAnswer, getCommentsPage, fetchUserQuestions, fetchUserIssues, fetchUserRoles, fetchModeratorIssues
 } from "@/api/api";
 
 Vue.use(Vuex)
@@ -33,7 +33,8 @@ export default new Vuex.Store({
         loggedIn: {value: false},
         authToken: {token: ""},
         user: {username: "", password: "", email: ""},
-        userIssues: [],
+        moderatorIssues: {},
+        userIssues: {},
         loading: {
             value: false,
             color: {
@@ -93,6 +94,9 @@ export default new Vuex.Store({
         setLoggedIn(state, payload) {
             state.loggedIn = payload
         },
+        setModeratorIssues(state, payload) {
+            state.moderatorIssues = payload
+        },
         setUserIssues(state, payload) {
             state.userIssues = payload
         }
@@ -102,6 +106,13 @@ export default new Vuex.Store({
             return fetchUserRoles(context.getters.getAuthToken)
                 .then((response) => {
                     context.commit('setUserRoles', response.data)
+                })
+        },
+        fetchModeratorIssues(context) {
+            return fetchModeratorIssues(context.getters.getAuthToken)
+                .then((response) => context.commit('setModeratorIssues', response.data))
+                .catch(() => {
+                    context.commit('setModeratorIssues', {content: []})
                 })
         },
         fetchUserIssues(context) {
@@ -197,11 +208,14 @@ export default new Vuex.Store({
     },
     modules: {},
     getters: {
+        getModeratorIssues(state) {
+            return state.moderatorIssues.content
+        },
         getUserRoles(state) {
             return state.userRoles
         },
         getUserIssues(state) {
-            return state.userIssues
+            return state.userIssues.content
         },
         getUserQuestions(state) {
             return state.userQuestions

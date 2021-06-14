@@ -63,45 +63,11 @@
           </v-tooltip>
         </v-col>
         <v-col cols="3" v-if="!['xs', 'sm'].includes(breakpoint)">
-          <v-tooltip bottom>
-            <template v-slot:activator="{on, attrs}">
-              <v-btn icon @click="$router.go(-1)"
-                     v-bind="attrs"
-                     v-on="on"
-              >
-                <v-icon size="30">
-                  mdi-arrow-left
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Go back</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{on, attrs}">
-              <v-btn icon @click="$router.push('/')"
-                     v-bind="attrs"
-                     v-on="on"
-              >
-                <v-icon size="35">
-                  mdi-home-circle
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Home</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{on, attrs}">
-              <v-btn icon @click="$router.push('/issues')"
-                     v-bind="attrs"
-                     v-on="on"
-              >
-                <v-icon size="35">
-                  mdi-alert-circle-outline
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Submit issue</span>
-          </v-tooltip>
+          <app-bar-menu-icon icon="mdi-arrow-left" text="Go back" :go="{value: -1}"/>
+          <app-bar-menu-icon icon="mdi-home-circle" text="Home" path="/"/>
+          <app-bar-menu-icon icon="mdi-alert-circle-outline" text="Submit issue" path="/issues"/>
+          <app-bar-menu-icon v-if="roles.includes('moderator')" icon="mdi-check-underline" text="Resolve issues"
+                             path="/moderator/issues"/>
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="5" md="2" class="d-flex justify-end">
@@ -125,10 +91,11 @@
 import LoginDialog from "@/components/login/LoginDialog";
 import Menu from "@/components/user/Menu";
 import EventBus from "@/event-bus/EventBus";
+import AppBarMenuIcon from "@/components/AppBarMenuItem";
 
 export default {
   name: 'App',
-  components: {Menu, LoginDialog},
+  components: {AppBarMenuIcon, Menu, LoginDialog},
   mounted() {
     EventBus.$on('show-snackbar', args => {
       this.showSnackbar(args)
@@ -144,12 +111,15 @@ export default {
     }
   },
   computed: {
+    roles() {
+      return this.$store.getters.getUserRoles
+    },
     breakpoint() {
       return this.$vuetify.breakpoint.name
     },
     marginTop() {
       switch (this.breakpoint) {
-        case 'xs', 'sm':
+        case 'xs':
           return 'margin-top: 20%;'
         case 'sm':
           return 'margin-top: 20%;'

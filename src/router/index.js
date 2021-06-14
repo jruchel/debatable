@@ -7,6 +7,7 @@ import UserQuestions from "@/views/UserQuestions";
 import UserProfile from "@/views/UserProfile";
 import IssueFormView from "@/views/HelpView";
 import UserIssuesView from "@/views/UserIssuesView";
+import ModeratorIssuesView from "@/views/ModeratorIssuesView";
 
 Vue.use(VueRouter)
 
@@ -17,7 +18,8 @@ const routes = [
     {path: '/user/questions', component: UserQuestions, name: 'Your questions'},
     {path: '/user', component: UserProfile, name: 'Your profile'},
     {path: '/issues', component: IssueFormView},
-    {path: '/user/issues', component: UserIssuesView}
+    {path: '/user/issues', component: UserIssuesView},
+    {path: '/moderator/issues', component: ModeratorIssuesView}
 ]
 
 const router = new VueRouter({

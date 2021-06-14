@@ -176,7 +176,7 @@ export function changePassword(token, passwordDTO) {
     return sendRequest(
         backendAddress,
         '/user/password',
-        'put',
+        'patch',
         passwordDTO,
         token
     )
@@ -186,7 +186,7 @@ export function changeEmail(token, email) {
     return sendRequest(
         backendAddress,
         '/user/email',
-        'put',
+        'patch',
         email,
         token
     )
@@ -196,7 +196,7 @@ export function changeUsername(token, username) {
     return sendRequest(
         backendAddress,
         '/user/username',
-        'put',
+        'patch',
         username,
         token
     )
@@ -261,6 +261,45 @@ export function deleteUserIssue(token, id) {
         backendAddress,
         '/user/issues/' + id,
         'delete',
+        {},
+        token
+    )
+}
+
+export function fetchModeratorIssues(token, page, size) {
+    if (page && size) {
+        return sendRequest(
+            backendAddress,
+            '/issues?page=' + page + '&size=' + size,
+            'get',
+            {},
+            token
+        )
+    }
+    return sendRequest(
+        backendAddress,
+        '/issues',
+        'get',
+        {},
+        token
+    )
+}
+
+export function resolveIssue(token, issueId) {
+    return sendRequest(
+        backendAddress,
+        '/issues/' + issueId + '?status=Resolved',
+        'patch',
+        {},
+        token
+    )
+}
+
+export function closeIssue(token, issueId) {
+    return sendRequest(
+        backendAddress,
+        '/issues/' + issueId + '?status=Closed',
+        'patch',
         {},
         token
     )
