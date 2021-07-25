@@ -288,7 +288,7 @@ export function fetchModeratorIssues(token, page, size) {
 export function resolveIssue(token, issueId) {
     return sendRequest(
         backendAddress,
-        '/issues/' + issueId + '?status=Resolved',
+        '/issues/resolve/' + issueId,
         'patch',
         {},
         token
@@ -298,9 +298,43 @@ export function resolveIssue(token, issueId) {
 export function closeIssue(token, issueId) {
     return sendRequest(
         backendAddress,
-        '/issues/' + issueId + '?status=Closed',
+        '/issues/close/' + issueId,
         'patch',
         {},
+        token
+    )
+}
+
+export function getRatingAdjectives() {
+    return sendRequest(
+        backendAddress,
+        '/ratings/adjectives',
+        'get',
+        {}
+    )
+}
+
+export function getCommentRatingData(commentId) {
+    return sendRequest(
+        backendAddress,
+        '/ratings/comment/' + commentId
+    )
+}
+
+export function getQuestionRatingData(questionId) {
+    return sendRequest(
+        backendAddress,
+        '/ratings/question/' + questionId,
+        'get',
+        {}
+    )
+}
+
+export function postRating(rating, questionId, token) {
+    return sendRequest(
+        backendAddress,
+        '/ratings/' + questionId + '?rating=' + rating,
+        'post',
         token
     )
 }
